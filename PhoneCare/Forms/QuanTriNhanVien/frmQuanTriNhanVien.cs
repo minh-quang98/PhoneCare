@@ -45,5 +45,12 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             dgvNhanVien.AutoGenerateColumns = true;
             LoadNhanVien();
         }
+
+        private void ctmThemMoi_Click(object sender, EventArgs e)
+        {
+            Forms.QuanTriNhanVien.frmThemMoiNhanVien f = new Forms.QuanTriNhanVien.frmThemMoiNhanVien();
+            f.StartPosition = FormStartPosition.CenterScreen;
+            f.Show();
+        }
     }
 }

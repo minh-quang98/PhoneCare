@@ -69,6 +69,7 @@
             this.mnuChangePassword.Name = "mnuChangePassword";
             this.mnuChangePassword.Size = new System.Drawing.Size(180, 22);
             this.mnuChangePassword.Text = "Đổi mật khẩu";
+            this.mnuChangePassword.Click += new System.EventHandler(this.mnuChangePassword_Click);
             // 
             // mnuQuanTri
             // 
@@ -81,7 +82,7 @@
             // mnuQuanTriNhanVien
             // 
             this.mnuQuanTriNhanVien.Name = "mnuQuanTriNhanVien";
-            this.mnuQuanTriNhanVien.Size = new System.Drawing.Size(180, 22);
+            this.mnuQuanTriNhanVien.Size = new System.Drawing.Size(170, 22);
             this.mnuQuanTriNhanVien.Text = "Quán lý nhân viên";
             this.mnuQuanTriNhanVien.Click += new System.EventHandler(this.mnuQuanTriNhanVien_Click);
             // 

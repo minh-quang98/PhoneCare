@@ -41,12 +41,21 @@ namespace PhoneCare
 
         private void mnuLogIn_Click(object sender, EventArgs e)
         {
-           
+            frmDangNhap f = new frmDangNhap();
+            f.StartPosition = FormStartPosition.CenterScreen;
+            f.Show();
         }
 
         private void mnuQuanTriNhanVien_Click(object sender, EventArgs e)
         {
             Forms.QuanTriNhanVien.frmQuanTriNhanVien f = new Forms.QuanTriNhanVien.frmQuanTriNhanVien();
+            f.StartPosition = FormStartPosition.CenterScreen;
+            f.Show();
+        }
+
+        private void mnuChangePassword_Click(object sender, EventArgs e)
+        {
+            Forms.frmDoiMatKhau f = new Forms.frmDoiMatKhau();
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
         }
