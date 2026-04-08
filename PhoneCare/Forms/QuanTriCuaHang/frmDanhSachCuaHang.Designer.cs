@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.thêmMớiCửaHàngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuThemMoi = new System.Windows.Forms.ToolStripMenuItem();
             this.cậpNhậtCửaHàngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -50,16 +50,17 @@
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.thêmMớiCửaHàngToolStripMenuItem,
+            this.mnuThemMoi,
             this.cậpNhậtCửaHàngToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 48);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 70);
             // 
-            // thêmMớiCửaHàngToolStripMenuItem
+            // mnuThemMoi
             // 
-            this.thêmMớiCửaHàngToolStripMenuItem.Name = "thêmMớiCửaHàngToolStripMenuItem";
-            this.thêmMớiCửaHàngToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.thêmMớiCửaHàngToolStripMenuItem.Text = "Thêm mới cửa hàng";
+            this.mnuThemMoi.Name = "mnuThemMoi";
+            this.mnuThemMoi.Size = new System.Drawing.Size(181, 22);
+            this.mnuThemMoi.Text = "Thêm mới cửa hàng";
+            this.mnuThemMoi.Click += new System.EventHandler(this.mnuThemMoi_Click);
             // 
             // cậpNhậtCửaHàngToolStripMenuItem
             // 
@@ -85,7 +86,7 @@
 
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem thêmMớiCửaHàngToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuThemMoi;
         private System.Windows.Forms.ToolStripMenuItem cậpNhậtCửaHàngToolStripMenuItem;
     }
 }

@@ -16,5 +16,12 @@ namespace PhoneCare.Forms.QuanTriCuaHang
         {
             InitializeComponent();
         }
+
+        private void mnuThemMoi_Click(object sender, EventArgs e)
+        {
+            frmThemMoiCuaHang f = new frmThemMoiCuaHang();
+            f.StartPosition = FormStartPosition.CenterParent;
+            f.Show();
+        }
     }
 }
