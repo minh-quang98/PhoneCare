@@ -81,6 +81,12 @@
     <Compile Include="Forms\QuanTriDonHang\frmDanhSachDonHang.Designer.cs">
       <DependentUpon>frmDanhSachDonHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\QuanTriDonHang\frmThemMoiDonHang.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\QuanTriDonHang\frmThemMoiDonHang.Designer.cs">
+      <DependentUpon>frmThemMoiDonHang.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\QuanTriNhanVien\frmQuanTriNhanVien.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +129,9 @@
     <EmbeddedResource Include="Forms\QuanTriDonHang\frmDanhSachDonHang.resx">
       <DependentUpon>frmDanhSachDonHang.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\QuanTriDonHang\frmThemMoiDonHang.resx">
+      <DependentUpon>frmThemMoiDonHang.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\QuanTriNhanVien\frmQuanTriNhanVien.resx">
       <DependentUpon>frmQuanTriNhanVien.cs</DependentUpon>
     </EmbeddedResource>
@@ -162,7 +171,9 @@
   <ItemGroup>
     <None Include="Image\LogoLogIn.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Image\floppy-disk-solid.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

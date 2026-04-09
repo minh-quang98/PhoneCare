@@ -63,6 +63,16 @@ namespace PhoneCare.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap floppy_disk_solid {
+            get {
+                object obj = ResourceManager.GetObject("floppy-disk-solid", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap LogoLogIn {
             get {
                 object obj = ResourceManager.GetObject("LogoLogIn", resourceCulture);
