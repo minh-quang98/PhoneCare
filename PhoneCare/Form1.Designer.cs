@@ -64,14 +64,14 @@
             // mnuLogIn
             // 
             this.mnuLogIn.Name = "mnuLogIn";
-            this.mnuLogIn.Size = new System.Drawing.Size(180, 22);
+            this.mnuLogIn.Size = new System.Drawing.Size(145, 22);
             this.mnuLogIn.Text = "Đăng nhập";
             this.mnuLogIn.Click += new System.EventHandler(this.mnuLogIn_Click);
             // 
             // mnuChangePassword
             // 
             this.mnuChangePassword.Name = "mnuChangePassword";
-            this.mnuChangePassword.Size = new System.Drawing.Size(180, 22);
+            this.mnuChangePassword.Size = new System.Drawing.Size(145, 22);
             this.mnuChangePassword.Text = "Đổi mật khẩu";
             this.mnuChangePassword.Click += new System.EventHandler(this.mnuChangePassword_Click);
             // 
