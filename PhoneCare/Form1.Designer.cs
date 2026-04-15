@@ -36,6 +36,7 @@
             this.mnuQuanTriNhanVien = new System.Windows.Forms.ToolStripMenuItem();
             this.đơnHàngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.trợGiúpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuQuanLyCuaHang = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,7 +79,8 @@
             // mnuQuanTri
             // 
             this.mnuQuanTri.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mnuQuanTriNhanVien});
+            this.mnuQuanTriNhanVien,
+            this.mnuQuanLyCuaHang});
             this.mnuQuanTri.Name = "mnuQuanTri";
             this.mnuQuanTri.Size = new System.Drawing.Size(62, 20);
             this.mnuQuanTri.Text = "Quản trị";
@@ -86,7 +88,7 @@
             // mnuQuanTriNhanVien
             // 
             this.mnuQuanTriNhanVien.Name = "mnuQuanTriNhanVien";
-            this.mnuQuanTriNhanVien.Size = new System.Drawing.Size(170, 22);
+            this.mnuQuanTriNhanVien.Size = new System.Drawing.Size(180, 22);
             this.mnuQuanTriNhanVien.Text = "Quán lý nhân viên";
             this.mnuQuanTriNhanVien.Click += new System.EventHandler(this.mnuQuanTriNhanVien_Click);
             // 
@@ -101,6 +103,13 @@
             this.trợGiúpToolStripMenuItem.Name = "trợGiúpToolStripMenuItem";
             this.trợGiúpToolStripMenuItem.Size = new System.Drawing.Size(63, 20);
             this.trợGiúpToolStripMenuItem.Text = "Trợ giúp";
+            // 
+            // mnuQuanLyCuaHang
+            // 
+            this.mnuQuanLyCuaHang.Name = "mnuQuanLyCuaHang";
+            this.mnuQuanLyCuaHang.Size = new System.Drawing.Size(180, 22);
+            this.mnuQuanLyCuaHang.Text = "Quản lý cửa hàng";
+            this.mnuQuanLyCuaHang.Click += new System.EventHandler(this.mnuQuanLyCuaHang_Click);
             // 
             // Form1
             // 
@@ -130,6 +139,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuQuanTriNhanVien;
         private System.Windows.Forms.ToolStripMenuItem đơnHàngToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem trợGiúpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuQuanLyCuaHang;
     }
 }
 

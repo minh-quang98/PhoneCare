@@ -29,29 +29,29 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvCoSo = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuThemMoi = new System.Windows.Forms.ToolStripMenuItem();
-            this.cậpNhậtCửaHàngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.mnuCapNhat = new System.Windows.Forms.ToolStripMenuItem();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCoSo)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dgvCoSo
             // 
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ContextMenuStrip = this.contextMenuStrip1;
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(800, 450);
-            this.dataGridView1.TabIndex = 0;
+            this.dgvCoSo.AllowUserToDeleteRows = false;
+            this.dgvCoSo.ContextMenuStrip = this.contextMenuStrip1;
+            this.dgvCoSo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCoSo.Location = new System.Drawing.Point(0, 0);
+            this.dgvCoSo.Name = "dgvCoSo";
+            this.dgvCoSo.Size = new System.Drawing.Size(800, 450);
+            this.dgvCoSo.TabIndex = 0;
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuThemMoi,
-            this.cậpNhậtCửaHàngToolStripMenuItem});
+            this.mnuCapNhat});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(182, 70);
             // 
@@ -62,21 +62,23 @@
             this.mnuThemMoi.Text = "Thêm mới cửa hàng";
             this.mnuThemMoi.Click += new System.EventHandler(this.mnuThemMoi_Click);
             // 
-            // cậpNhậtCửaHàngToolStripMenuItem
+            // mnuCapNhat
             // 
-            this.cậpNhậtCửaHàngToolStripMenuItem.Name = "cậpNhậtCửaHàngToolStripMenuItem";
-            this.cậpNhậtCửaHàngToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.cậpNhậtCửaHàngToolStripMenuItem.Text = "Cập nhật cửa hàng";
+            this.mnuCapNhat.Name = "mnuCapNhat";
+            this.mnuCapNhat.Size = new System.Drawing.Size(181, 22);
+            this.mnuCapNhat.Text = "Cập nhật cửa hàng";
+            this.mnuCapNhat.Click += new System.EventHandler(this.mnuCapNhat_Click);
             // 
             // frmDanhSachCuaHang
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgvCoSo);
             this.Name = "frmDanhSachCuaHang";
             this.Text = "frmDanhSachCuaHang";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.Load += new System.EventHandler(this.frmDanhSachCuaHang_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCoSo)).EndInit();
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -84,9 +86,9 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvCoSo;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem mnuThemMoi;
-        private System.Windows.Forms.ToolStripMenuItem cậpNhậtCửaHàngToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mnuCapNhat;
     }
 }

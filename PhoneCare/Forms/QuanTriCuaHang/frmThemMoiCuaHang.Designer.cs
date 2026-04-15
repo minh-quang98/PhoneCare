@@ -155,6 +155,7 @@
             this.btnCancel.TabIndex = 14;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // btnSave
             // 
@@ -164,6 +165,7 @@
             this.btnSave.TabIndex = 15;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // frmThemMoiCuaHang
             // 
@@ -186,6 +188,7 @@
             this.Controls.Add(this.label1);
             this.Name = "frmThemMoiCuaHang";
             this.Text = "frmThemMoiCuaHang";
+            this.Load += new System.EventHandler(this.frmThemMoiCuaHang_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

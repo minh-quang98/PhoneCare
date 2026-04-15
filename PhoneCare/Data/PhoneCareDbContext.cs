@@ -13,7 +13,7 @@ namespace PhoneCare.Data
         public PhoneCareDbContext(): base("name=PhoneCareDbContext")
         {
 
-        }
+        }   
         public DbSet<CoSoCuaHang> CoSoCuaHangs { get; set; }
         public DbSet<NhanVien> NhanViens { get; set; }
         public DbSet<DonHang> DonHangs { get; set; }
@@ -21,7 +21,10 @@ namespace PhoneCare.Data
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<CoSoCuaHang>().ToTable("COSOCUAHANG");
+            modelBuilder.Entity<NhanVien>().ToTable("NHANVIEN");
+            modelBuilder.Entity<DonHang>().ToTable("DONHANG");
+            modelBuilder.Entity<DichVu>().ToTable("DICHVU");
 
             // COSOCUAHANG - NHANVIEN
             modelBuilder.Entity<NhanVien>()
@@ -33,7 +36,7 @@ namespace PhoneCare.Data
             // NHANVIEN - DONHANG
             modelBuilder.Entity<DonHang>()
                 .HasRequired(dh => dh.NhanVien)
-                .WithMany(nv => nv.DonHangs)
+                .WithMany(nv => nv.DonHangsNhan)
                 .HasForeignKey(dh => dh.IdNguoiNhan)
                 .WillCascadeOnDelete(false);
 

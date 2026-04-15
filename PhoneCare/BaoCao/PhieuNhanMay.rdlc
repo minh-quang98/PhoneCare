@@ -9,7 +9,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>HÓA ĐƠN THANH TOÁN</Value>
+                <Value>PHIẾU NHẬN MÁY</Value>
                 <Style>
                   <FontSize>12pt</FontSize>
                 </Style>
@@ -20,8 +20,8 @@
             </Style>
           </Paragraph>
         </Paragraphs>
-        <Top>0.11806in</Top>
-        <Left>0.64458in</Left>
+        <Top>0.06944in</Top>
+        <Left>0.55729in</Left>
         <Height>0.25in</Height>
         <Width>2.10417in</Width>
         <Style>
@@ -48,8 +48,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>0.49306in</Top>
-        <Left>0.17583in</Left>
+        <Top>0.44444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>1</ZIndex>
@@ -77,8 +77,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>0.74306in</Top>
-        <Left>0.17583in</Left>
+        <Top>0.69444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>2</ZIndex>
@@ -106,8 +106,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>0.99306in</Top>
-        <Left>0.17583in</Left>
+        <Top>0.94444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>3</ZIndex>
@@ -135,8 +135,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>1.24306in</Top>
-        <Left>0.17583in</Left>
+        <Top>1.19444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>4</ZIndex>
@@ -164,8 +164,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>1.49306in</Top>
-        <Left>0.17583in</Left>
+        <Top>1.44444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>5</ZIndex>
@@ -193,8 +193,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>1.74306in</Top>
-        <Left>0.17583in</Left>
+        <Top>1.69444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>6</ZIndex>
@@ -222,8 +222,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>1.99306in</Top>
-        <Left>0.17583in</Left>
+        <Top>1.94444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>7</ZIndex>
@@ -251,8 +251,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>2.24306in</Top>
-        <Left>0.17583in</Left>
+        <Top>2.19444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>8</ZIndex>
@@ -280,8 +280,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>2.49306in</Top>
-        <Left>0.17583in</Left>
+        <Top>2.44444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>9</ZIndex>
@@ -309,8 +309,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>2.74306in</Top>
-        <Left>0.17583in</Left>
+        <Top>2.69444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>3.19792in</Width>
         <ZIndex>10</ZIndex>
@@ -338,8 +338,8 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>2.99306in</Top>
-        <Left>0.17583in</Left>
+        <Top>2.94444in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>1.20833in</Width>
         <ZIndex>11</ZIndex>
@@ -367,11 +367,72 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>2.99306in</Top>
-        <Left>1.38417in</Left>
+        <Top>2.95833in</Top>
+        <Left>1.29688in</Left>
         <Height>0.25in</Height>
         <Width>1.98958in</Width>
         <ZIndex>12</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="txtGhiChu">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value />
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <Top>3.31125in</Top>
+        <Left>0.08854in</Left>
+        <Height>0.69792in</Height>
+        <Width>3.19792in</Width>
+        <ZIndex>13</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox18">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>BÁO GIÁ</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox18</rd:DefaultName>
+        <Top>4.155in</Top>
+        <Left>0.89458in</Left>
+        <Height>0.1875in</Height>
+        <Width>1.30208in</Width>
+        <ZIndex>14</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -614,11 +675,11 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
-        <Top>3.50347in</Top>
-        <Left>0.19667in</Left>
+        <Top>4.5in</Top>
+        <Left>0.08854in</Left>
         <Height>0.5in</Height>
         <Width>3.17708in</Width>
-        <ZIndex>13</ZIndex>
+        <ZIndex>15</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -639,11 +700,11 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>4.14931in</Top>
-        <Left>0.92583in</Left>
+        <Top>5.14584in</Top>
+        <Left>0.8177in</Left>
         <Height>0.25in</Height>
         <Width>2.44792in</Width>
-        <ZIndex>14</ZIndex>
+        <ZIndex>16</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -661,6 +722,36 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
+                <Value>Lưu ý: Cửa hàng chỉ bảo quán máy trong 3 tháng. Máy để quá 3 tháng thất lạc cửa hàng không chịu trách nhiệm.</Value>
+                <Style />
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <rd:DefaultName>Textbox30</rd:DefaultName>
+        <Top>5.63417in</Top>
+        <Left>0.08854in</Left>
+        <Height>0.57292in</Height>
+        <Width>3.17708in</Width>
+        <ZIndex>17</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="Textbox31">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
                 <Value>Người nhận máy</Value>
                 <Style />
               </TextRun>
@@ -671,11 +762,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox30</rd:DefaultName>
-        <Top>4.54514in</Top>
-        <Left>0.17583in</Left>
+        <Top>6.33333in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>1.53819in</Width>
-        <ZIndex>15</ZIndex>
+        <ZIndex>18</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -703,11 +794,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox32</rd:DefaultName>
-        <Top>4.54514in</Top>
-        <Left>1.71403in</Left>
+        <Top>6.33333in</Top>
+        <Left>1.62674in</Left>
         <Height>0.25in</Height>
         <Width>1.65972in</Width>
-        <ZIndex>16</ZIndex>
+        <ZIndex>19</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -732,11 +823,11 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>5.43056in</Top>
-        <Left>0.17583in</Left>
+        <Top>7.21875in</Top>
+        <Left>0.08854in</Left>
         <Height>0.25in</Height>
         <Width>1.53819in</Width>
-        <ZIndex>17</ZIndex>
+        <ZIndex>20</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -761,11 +852,11 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <Top>5.43056in</Top>
-        <Left>1.71403in</Left>
+        <Top>7.21875in</Top>
+        <Left>1.62674in</Left>
         <Height>0.25in</Height>
         <Width>1.65972in</Width>
-        <ZIndex>18</ZIndex>
+        <ZIndex>21</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -777,13 +868,13 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>5.75in</Height>
+    <Height>9.45833in</Height>
     <Style />
   </Body>
-  <Width>3.55208in</Width>
+  <Width>3.375in</Width>
   <Page>
     <PageHeader>
-      <Height>1.62028in</Height>
+      <Height>1.70833in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -791,8 +882,8 @@
           <Source>Embedded</Source>
           <Value>LogoLogIn</Value>
           <Sizing>FitProportional</Sizing>
-          <Top>0.11333in</Top>
-          <Left>0.75917in</Left>
+          <Top>0.15625in</Top>
+          <Left>0.67188in</Left>
           <Height>0.35417in</Height>
           <Width>1.88542in</Width>
           <Style>
@@ -815,8 +906,8 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>0.53694in</Top>
-          <Left>0.92583in</Left>
+          <Top>0.57986in</Top>
+          <Left>0.83854in</Left>
           <Height>0.25in</Height>
           <Width>1.5625in</Width>
           <ZIndex>1</ZIndex>
@@ -845,8 +936,8 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>0.89458in</Top>
-          <Left>0.17583in</Left>
+          <Top>0.9375in</Top>
+          <Left>0.08854in</Left>
           <Height>0.25in</Height>
           <Width>3.19792in</Width>
           <ZIndex>2</ZIndex>
@@ -874,8 +965,8 @@
               <Style />
             </Paragraph>
           </Paragraphs>
-          <Top>1.23833in</Top>
-          <Left>0.17583in</Left>
+          <Top>1.28125in</Top>
+          <Left>0.08854in</Left>
           <Height>0.25in</Height>
           <Width>3.19792in</Width>
           <ZIndex>3</ZIndex>
@@ -896,48 +987,6 @@
         </Border>
       </Style>
     </PageHeader>
-    <PageFooter>
-      <Height>1in</Height>
-      <PrintOnFirstPage>true</PrintOnFirstPage>
-      <PrintOnLastPage>true</PrintOnLastPage>
-      <ReportItems>
-        <Textbox Name="txtNoteFooter">
-          <CanGrow>true</CanGrow>
-          <KeepTogether>true</KeepTogether>
-          <Paragraphs>
-            <Paragraph>
-              <TextRuns>
-                <TextRun>
-                  <Value>Lưu ý: Quý khách vui lòng kiểm tra máy trước khi rời khỏi cửa hàng</Value>
-                  <Style>
-                    <FontStyle>Italic</FontStyle>
-                  </Style>
-                </TextRun>
-              </TextRuns>
-              <Style />
-            </Paragraph>
-          </Paragraphs>
-          <Top>0.15972in</Top>
-          <Left>0.14458in</Left>
-          <Height>0.625in</Height>
-          <Width>3.22917in</Width>
-          <Style>
-            <Border>
-              <Style>None</Style>
-            </Border>
-            <PaddingLeft>2pt</PaddingLeft>
-            <PaddingRight>2pt</PaddingRight>
-            <PaddingTop>2pt</PaddingTop>
-            <PaddingBottom>2pt</PaddingBottom>
-          </Style>
-        </Textbox>
-      </ReportItems>
-      <Style>
-        <Border>
-          <Style>None</Style>
-        </Border>
-      </Style>
-    </PageFooter>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>
     <TopMargin>1in</TopMargin>
@@ -963,5 +1012,5 @@ ZJwBeBmLKZXr/2vsLe9y27jMJURJDfsvxYLmZf7fQyRHjJe5tAjgfwPaVq/NyW2LbwAAAABJRU5ErkJg
     </EmbeddedImage>
   </EmbeddedImages>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
-  <rd:ReportID>fb2f7480-a75b-431b-a931-8d0439e28542</rd:ReportID>
+  <rd:ReportID>570494ee-9598-4a87-a383-4c631e02675d</rd:ReportID>
 </Report>

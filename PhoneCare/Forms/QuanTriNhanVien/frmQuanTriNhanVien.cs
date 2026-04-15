@@ -23,7 +23,6 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             using (var db = new PhoneCareDbContext())
             {
                 var list = db.NhanViens
-                             .Where(x => x.IsDelete == 0) // nếu có soft delete
                              .Select(x => new
                              {
                                  x.Id,

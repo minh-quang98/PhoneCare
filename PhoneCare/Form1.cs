@@ -59,5 +59,12 @@ namespace PhoneCare
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
         }
+
+        private void mnuQuanLyCuaHang_Click(object sender, EventArgs e)
+        {
+            Forms.QuanTriCuaHang.frmDanhSachCuaHang f = new Forms.QuanTriCuaHang.frmDanhSachCuaHang();
+            f.StartPosition = FormStartPosition.CenterScreen;
+            f.Show();
+        }
     }
 }

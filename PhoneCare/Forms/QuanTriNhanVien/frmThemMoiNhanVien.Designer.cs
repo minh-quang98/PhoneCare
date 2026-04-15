@@ -43,7 +43,7 @@
             this.txtNickName = new System.Windows.Forms.TextBox();
             this.txtEmail = new System.Windows.Forms.TextBox();
             this.txtSDT = new System.Windows.Forms.TextBox();
-            this.cbxCoSoLamViec = new System.Windows.Forms.ComboBox();
+            this.cboCoSoLamViec = new System.Windows.Forms.ComboBox();
             this.chkKhoaTaiKhoan = new System.Windows.Forms.CheckBox();
             this.rbtAdmin = new System.Windows.Forms.RadioButton();
             this.rbtSale = new System.Windows.Forms.RadioButton();
@@ -187,13 +187,13 @@
             this.txtSDT.Size = new System.Drawing.Size(383, 20);
             this.txtSDT.TabIndex = 1;
             // 
-            // cbxCoSoLamViec
+            // cboCoSoLamViec
             // 
-            this.cbxCoSoLamViec.FormattingEnabled = true;
-            this.cbxCoSoLamViec.Location = new System.Drawing.Point(216, 240);
-            this.cbxCoSoLamViec.Name = "cbxCoSoLamViec";
-            this.cbxCoSoLamViec.Size = new System.Drawing.Size(383, 21);
-            this.cbxCoSoLamViec.TabIndex = 2;
+            this.cboCoSoLamViec.FormattingEnabled = true;
+            this.cboCoSoLamViec.Location = new System.Drawing.Point(216, 240);
+            this.cboCoSoLamViec.Name = "cboCoSoLamViec";
+            this.cboCoSoLamViec.Size = new System.Drawing.Size(383, 21);
+            this.cboCoSoLamViec.TabIndex = 2;
             // 
             // chkKhoaTaiKhoan
             // 
@@ -267,6 +267,7 @@
             this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnCancel
             // 
@@ -290,7 +291,7 @@
             this.Controls.Add(this.rbtMarketting);
             this.Controls.Add(this.rbtAdmin);
             this.Controls.Add(this.chkKhoaTaiKhoan);
-            this.Controls.Add(this.cbxCoSoLamViec);
+            this.Controls.Add(this.cboCoSoLamViec);
             this.Controls.Add(this.txtSDT);
             this.Controls.Add(this.txtEmail);
             this.Controls.Add(this.txtNickName);
@@ -308,6 +309,7 @@
             this.Controls.Add(this.label1);
             this.Name = "frmThemMoiNhanVien";
             this.Text = "Thêm mới nhân viên";
+            this.Load += new System.EventHandler(this.frmThemMoiNhanVien_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -330,7 +332,7 @@
         private System.Windows.Forms.TextBox txtNickName;
         private System.Windows.Forms.TextBox txtEmail;
         private System.Windows.Forms.TextBox txtSDT;
-        private System.Windows.Forms.ComboBox cbxCoSoLamViec;
+        private System.Windows.Forms.ComboBox cboCoSoLamViec;
         private System.Windows.Forms.CheckBox chkKhoaTaiKhoan;
         private System.Windows.Forms.RadioButton rbtAdmin;
         private System.Windows.Forms.RadioButton rbtSale;
