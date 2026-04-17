@@ -33,6 +33,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuThemMoi = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuCapNhat = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuXoa = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCoSo)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -51,9 +52,10 @@
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnuThemMoi,
-            this.mnuCapNhat});
+            this.mnuCapNhat,
+            this.mnuXoa});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(182, 92);
             // 
             // mnuThemMoi
             // 
@@ -68,6 +70,13 @@
             this.mnuCapNhat.Size = new System.Drawing.Size(181, 22);
             this.mnuCapNhat.Text = "Cập nhật cửa hàng";
             this.mnuCapNhat.Click += new System.EventHandler(this.mnuCapNhat_Click);
+            // 
+            // mnuXoa
+            // 
+            this.mnuXoa.Name = "mnuXoa";
+            this.mnuXoa.Size = new System.Drawing.Size(181, 22);
+            this.mnuXoa.Text = "Xóa cửa hàng";
+            this.mnuXoa.Click += new System.EventHandler(this.mnuXoa_Click);
             // 
             // frmDanhSachCuaHang
             // 
@@ -90,5 +99,6 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem mnuThemMoi;
         private System.Windows.Forms.ToolStripMenuItem mnuCapNhat;
+        private System.Windows.Forms.ToolStripMenuItem mnuXoa;
     }
 }

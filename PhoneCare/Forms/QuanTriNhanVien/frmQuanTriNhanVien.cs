@@ -1,4 +1,5 @@
 ﻿using PhoneCare.Data;
+using PhoneCare.Forms.QuanTriCuaHang;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,9 +48,56 @@ namespace PhoneCare.Forms.QuanTriNhanVien
 
         private void ctmThemMoi_Click(object sender, EventArgs e)
         {
-            Forms.QuanTriNhanVien.frmThemMoiNhanVien f = new Forms.QuanTriNhanVien.frmThemMoiNhanVien();
+            frmThemMoiNhanVien f = new frmThemMoiNhanVien(this);
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
+        }
+
+        private void ctmChinhSua_Click(object sender, EventArgs e)
+        {
+            if (dgvNhanVien.CurrentRow == null) return;
+
+            int id = Convert.ToInt32(dgvNhanVien.CurrentRow.Cells["Id"].Value);
+            frmThemMoiNhanVien f = new frmThemMoiNhanVien(this, id);
+            f.StartPosition = FormStartPosition.CenterParent;
+            f.ShowDialog();
+        }
+
+        private void ctmXoa_Click(object sender, EventArgs e)
+        {
+            if (dgvNhanVien.CurrentRow == null) return;
+
+            int id = Convert.ToInt32(dgvNhanVien.CurrentRow.Cells["Id"].Value);
+
+            var result = MessageBox.Show(
+                "Bạn có chắc chắn muốn xóa cửa hàng này không?",
+                "Xác nhận Xóa",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning
+            );
+
+            if (result == DialogResult.No) return;
+
+            using (var db = new PhoneCareDbContext())
+            {
+                var nhanvien = db.NhanViens.FirstOrDefault(x => x.Id == id);
+
+                if (nhanvien == null)
+                {
+                    MessageBox.Show("Không tìm thấy dữ liệu!");
+                    return;
+                }
+
+                nhanvien.IsDeleted = true;
+                nhanvien.DateModify = DateTime.Now;
+                nhanvien.UserModify = 1;
+
+                db.SaveChanges();
+            }
+
+            MessageBox.Show("Xóa thành công!");
+
+            LoadNhanVien();
         }
     }
 }

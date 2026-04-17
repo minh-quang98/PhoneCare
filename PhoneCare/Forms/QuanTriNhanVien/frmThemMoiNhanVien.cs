@@ -15,9 +15,13 @@ namespace PhoneCare.Forms.QuanTriNhanVien
 {
     public partial class frmThemMoiNhanVien : Form
     {
-        public frmThemMoiNhanVien()
+        private frmQuanTriNhanVien _parentForm;
+        private int? _id = null;
+        public frmThemMoiNhanVien(frmQuanTriNhanVien parent, int? id = null)
         {
             InitializeComponent();
+            _parentForm = parent;
+            _id = id;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -38,6 +42,32 @@ namespace PhoneCare.Forms.QuanTriNhanVien
                 cboCoSoLamViec.DisplayMember = "TenCoSo"; // tên hiển thị
                 cboCoSoLamViec.ValueMember = "Id";        // giá trị
             }
+        }
+
+        private bool ValidateInput()
+        {
+            bool validate = true;
+            if (string.IsNullOrWhiteSpace(txtTaiKhoan.Text))
+            {
+                errorProvider1.SetError(txtTaiKhoan, "Tài khoản không được để trống!");
+                validate = false;
+            }
+            if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
+            {
+                errorProvider1.SetError(txtMatKhau, "Mật khẩu không được để trống!");
+                validate = false;
+            }
+            if (string.IsNullOrWhiteSpace(txtHoTen.Text))
+            {
+                errorProvider1.SetError(txtHoTen, "Họ và tên không được để trống!");
+                validate = false;
+            }
+            return validate;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

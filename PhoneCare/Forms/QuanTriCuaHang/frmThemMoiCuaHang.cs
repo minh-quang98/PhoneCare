@@ -15,10 +15,10 @@ namespace PhoneCare.Forms.QuanTriCuaHang
     
     public partial class frmThemMoiCuaHang : Form
     {
-        private Forms.QuanTriCuaHang.frmDanhSachCuaHang _parentForm;
+        private frmDanhSachCuaHang _parentForm;
         private int? _id = null;
 
-        public frmThemMoiCuaHang(Forms.QuanTriCuaHang.frmDanhSachCuaHang parent, int? id = null)
+        public frmThemMoiCuaHang(frmDanhSachCuaHang parent, int? id = null)
         {
             InitializeComponent();
             _parentForm = parent;
@@ -27,19 +27,23 @@ namespace PhoneCare.Forms.QuanTriCuaHang
 
         private bool ValidateInput()
         {
+            bool validate = true;
             if (string.IsNullOrWhiteSpace(txtCode.Text))
             {
-                MessageBox.Show("Vui lòng nhập mã cơ sở");
-                return false;
+                errorProvider1.SetError(txtCode, "Code không được để trống!");
+                validate = false;
             }
-
             if (string.IsNullOrWhiteSpace(txtName.Text))
             {
-                MessageBox.Show("Vui lòng nhập tên cơ sở");
-                return false;
+                errorProvider1.SetError(txtName, "Name không được để trống!");
+                validate = false;
             }
-
-            return true;
+            if (string.IsNullOrWhiteSpace(txtAddress.Text))
+            {
+                errorProvider1.SetError(txtAddress, "Address không được để trống!");
+                validate = false;
+            }
+            return validate;
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
