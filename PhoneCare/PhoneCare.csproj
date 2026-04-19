@@ -178,6 +178,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class\CurrentUser.cs" />
     <Compile Include="Data\PhoneCareDbContext.cs" />
     <Compile Include="Forms\frmDoiMatKhau.cs">
       <SubType>Form</SubType>
@@ -247,6 +248,14 @@
     <Compile Include="Migrations\202604151519013_Init.Designer.cs">
       <DependentUpon>202604151519013_Init.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202604191557037_Update_KhoaTaiKhoan_To_Bit.cs" />
+    <Compile Include="Migrations\202604191557037_Update_KhoaTaiKhoan_To_Bit.Designer.cs">
+      <DependentUpon>202604191557037_Update_KhoaTaiKhoan_To_Bit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202604191601565_Update_IsDelete_To_Bit.cs" />
+    <Compile Include="Migrations\202604191601565_Update_IsDelete_To_Bit.Designer.cs">
+      <DependentUpon>202604191601565_Update_IsDelete_To_Bit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CoSoCuaHang.cs" />
     <Compile Include="Models\DichVu.cs" />
@@ -292,6 +301,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202604151519013_Init.resx">
       <DependentUpon>202604151519013_Init.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202604191557037_Update_KhoaTaiKhoan_To_Bit.resx">
+      <DependentUpon>202604191557037_Update_KhoaTaiKhoan_To_Bit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202604191601565_Update_IsDelete_To_Bit.resx">
+      <DependentUpon>202604191601565_Update_IsDelete_To_Bit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

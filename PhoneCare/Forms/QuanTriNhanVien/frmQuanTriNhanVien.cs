@@ -19,7 +19,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             InitializeComponent();
         }
 
-        private void LoadNhanVien()
+        public void LoadNhanVien()
         {
             using (var db = new PhoneCareDbContext())
             {
@@ -35,7 +35,6 @@ namespace PhoneCare.Forms.QuanTriNhanVien
                                  WorkPlaceName = x.CoSoCuaHang.Name
                              })
                              .ToList();
-                Console.WriteLine("kiem tra list: "+ list.Count());
                 dgvNhanVien.DataSource = list;
             }
         }
@@ -44,6 +43,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
         {
             dgvNhanVien.AutoGenerateColumns = true;
             LoadNhanVien();
+            dgvNhanVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         private void ctmThemMoi_Click(object sender, EventArgs e)
@@ -95,7 +95,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
                 db.SaveChanges();
             }
 
-            MessageBox.Show("Xóa thành công!");
+            MessageBox.Show("Xóa nhân viên thành công!");
 
             LoadNhanVien();
         }
