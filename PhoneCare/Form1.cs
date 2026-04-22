@@ -17,20 +17,24 @@ namespace PhoneCare
             InitializeComponent();
         }
 
-        public static class Session
+        public void UpdateMenu()
         {
-            public static bool IsLoggedIn = false;
-
-        }
-
-        private void UpdateMenu()
-        {
-            if (Session.IsLoggedIn)
+            if (Class.CurrentUser.Id != 0)
             {
-                mnuAuthen.Visible = false;
+                mnuLogIn.Visible = false;
+                mnuChangePassword.Visible = true;
+                mnuDangXuat.Visible = true;
+                mnuQuanTri.Visible = true;
+                mnuDonHang.Visible = true;
+                mnuTroGiup.Visible = true;
             } else
             {
-                mnuAuthen.Visible = true;
+                mnuLogIn.Visible = true;
+                mnuChangePassword.Visible = false;
+                mnuDangXuat.Visible = false;
+                mnuQuanTri.Visible = false;
+                mnuDonHang.Visible = false;
+                mnuTroGiup.Visible = false;
             }
         }
 
@@ -41,7 +45,7 @@ namespace PhoneCare
 
         private void mnuLogIn_Click(object sender, EventArgs e)
         {
-            frmDangNhap f = new frmDangNhap();
+            frmDangNhap f = new frmDangNhap(this);
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
         }
@@ -63,6 +67,13 @@ namespace PhoneCare
         private void mnuQuanLyCuaHang_Click(object sender, EventArgs e)
         {
             Forms.QuanTriCuaHang.frmDanhSachCuaHang f = new Forms.QuanTriCuaHang.frmDanhSachCuaHang();
+            f.StartPosition = FormStartPosition.CenterScreen;
+            f.Show();
+        }
+
+        private void mnuDonHang_Click(object sender, EventArgs e)
+        {
+            Forms.QuanTriDonHang.frmDanhSachDonHang f = new Forms.QuanTriDonHang.frmDanhSachDonHang();
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
         }

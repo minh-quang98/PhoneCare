@@ -85,7 +85,7 @@ namespace PhoneCare.Forms.QuanTriCuaHang
                 // 🔥 Soft delete
                 coso.IsDeleted = true;
                 coso.DateModify = DateTime.Now;
-                coso.UserModify = 1; // TODO: user hiện tại
+                coso.UserModify = Class.CurrentUser.Id; // TODO: user hiện tại
 
                 db.SaveChanges();
             }

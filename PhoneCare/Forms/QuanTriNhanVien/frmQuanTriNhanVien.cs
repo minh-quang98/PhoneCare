@@ -90,7 +90,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
 
                 nhanvien.IsDeleted = true;
                 nhanvien.DateModify = DateTime.Now;
-                nhanvien.UserModify = 1;
+                nhanvien.UserModify = Class.CurrentUser.Id;
 
                 db.SaveChanges();
             }

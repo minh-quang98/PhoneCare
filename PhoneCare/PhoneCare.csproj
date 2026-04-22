@@ -256,6 +256,10 @@
     <Compile Include="Migrations\202604191601565_Update_IsDelete_To_Bit.Designer.cs">
       <DependentUpon>202604191601565_Update_IsDelete_To_Bit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202604221526177_Add_FK_DonHang_CoSo.cs" />
+    <Compile Include="Migrations\202604221526177_Add_FK_DonHang_CoSo.Designer.cs">
+      <DependentUpon>202604221526177_Add_FK_DonHang_CoSo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CoSoCuaHang.cs" />
     <Compile Include="Models\DichVu.cs" />
@@ -307,6 +311,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202604191601565_Update_IsDelete_To_Bit.resx">
       <DependentUpon>202604191601565_Update_IsDelete_To_Bit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202604221526177_Add_FK_DonHang_CoSo.resx">
+      <DependentUpon>202604221526177_Add_FK_DonHang_CoSo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

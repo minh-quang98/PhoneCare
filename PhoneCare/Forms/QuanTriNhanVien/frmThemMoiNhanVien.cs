@@ -76,7 +76,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
                     nhanvien.KhoaTaiKhoan = chkKhoaTaiKhoan.Checked;
                     nhanvien.LoaiNhanVien = this.GetTypeEmployee();
                     nhanvien.DateModify = DateTime.Now;
-                    nhanvien.UserModify = 1;
+                    nhanvien.UserModify = Class.CurrentUser.Id;
                     nhanvien.IsDeleted = false;
 
                     db.SaveChanges();
@@ -100,7 +100,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
                         KhoaTaiKhoan = chkKhoaTaiKhoan.Checked,
                         LoaiNhanVien = this.GetTypeEmployee(),
                         DateCreated = DateTime.Now,
-                        UserCreated = 1,
+                        UserCreated = Class.CurrentUser.Id,
                         IsDeleted = false
                     });
 

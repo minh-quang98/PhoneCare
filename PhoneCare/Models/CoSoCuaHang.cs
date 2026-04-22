@@ -27,5 +27,6 @@ namespace PhoneCare.Models
 
         // Navigation
         public virtual ICollection<NhanVien> NhanViens { get; set; }
+        public virtual ICollection<DonHang> DonHangs { get; set; }
     }
 }

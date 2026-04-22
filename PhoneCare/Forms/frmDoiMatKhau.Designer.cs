@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.lblOldPassword = new System.Windows.Forms.Label();
             this.txtOldPassword = new System.Windows.Forms.TextBox();
             this.lblNewPassword = new System.Windows.Forms.Label();
@@ -36,6 +37,9 @@
             this.txtReNewPassword = new System.Windows.Forms.TextBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.btnShowHide = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // lblOldPassword
@@ -52,6 +56,7 @@
             // 
             this.txtOldPassword.Location = new System.Drawing.Point(218, 41);
             this.txtOldPassword.Name = "txtOldPassword";
+            this.txtOldPassword.PasswordChar = '*';
             this.txtOldPassword.Size = new System.Drawing.Size(285, 20);
             this.txtOldPassword.TabIndex = 1;
             // 
@@ -69,6 +74,7 @@
             // 
             this.txtNewPassword.Location = new System.Drawing.Point(218, 81);
             this.txtNewPassword.Name = "txtNewPassword";
+            this.txtNewPassword.PasswordChar = '*';
             this.txtNewPassword.Size = new System.Drawing.Size(285, 20);
             this.txtNewPassword.TabIndex = 1;
             // 
@@ -86,12 +92,13 @@
             // 
             this.txtReNewPassword.Location = new System.Drawing.Point(218, 121);
             this.txtReNewPassword.Name = "txtReNewPassword";
+            this.txtReNewPassword.PasswordChar = '*';
             this.txtReNewPassword.Size = new System.Drawing.Size(285, 20);
             this.txtReNewPassword.TabIndex = 1;
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(156, 166);
+            this.btnSave.Location = new System.Drawing.Point(97, 166);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(104, 31);
             this.btnSave.TabIndex = 2;
@@ -101,18 +108,34 @@
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(285, 166);
+            this.btnCancel.Location = new System.Drawing.Point(399, 166);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(104, 31);
             this.btnCancel.TabIndex = 2;
             this.btnCancel.Text = "Hủy";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // btnShowHide
+            // 
+            this.btnShowHide.Location = new System.Drawing.Point(247, 166);
+            this.btnShowHide.Name = "btnShowHide";
+            this.btnShowHide.Size = new System.Drawing.Size(104, 31);
+            this.btnShowHide.TabIndex = 2;
+            this.btnShowHide.Text = "Hiển thị mật khẩu";
+            this.btnShowHide.UseVisualStyleBackColor = true;
+            this.btnShowHide.Click += new System.EventHandler(this.btnShowHide_Click);
             // 
             // frmDoiMatKhau
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(553, 226);
+            this.Controls.Add(this.btnShowHide);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.txtReNewPassword);
@@ -123,6 +146,7 @@
             this.Controls.Add(this.lblOldPassword);
             this.Name = "frmDoiMatKhau";
             this.Text = "Đổi mật khẩu";
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,5 +162,7 @@
         private System.Windows.Forms.TextBox txtReNewPassword;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Button btnShowHide;
     }
 }

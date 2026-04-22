@@ -1,19 +1,14 @@
 ﻿using PhoneCare.Models;
-using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PhoneCare.Data
 {
-    public class PhoneCareDbContext: DbContext
+    public class PhoneCareDbContext : DbContext
     {
-        public PhoneCareDbContext(): base("name=PhoneCareDbContext")
+        public PhoneCareDbContext() : base("name=PhoneCareDbContext")
         {
 
-        }   
+        }
         public DbSet<CoSoCuaHang> CoSoCuaHangs { get; set; }
         public DbSet<NhanVien> NhanViens { get; set; }
         public DbSet<DonHang> DonHangs { get; set; }
@@ -46,6 +41,14 @@ namespace PhoneCare.Data
                 .WithMany(dh => dh.DichVus)
                 .HasForeignKey(dv => dv.IdDonHang)
                 .WillCascadeOnDelete(true);
+
+            modelBuilder.Entity<DonHang>()
+                .HasRequired(d => d.CoSoCuaHang)
+                .WithMany(c => c.DonHangs)
+                .HasForeignKey(d => d.IdCoSo)
+                .WillCascadeOnDelete(false);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

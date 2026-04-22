@@ -64,7 +64,7 @@ namespace PhoneCare.Forms.QuanTriCuaHang
                     coso.Hotline = txtHotline.Text.Trim();
 
                     coso.DateModify = DateTime.Now;
-                    coso.UserModify = 1; // TODO: lấy user login sau
+                    coso.UserModify = Class.CurrentUser.Id;
 
                     db.SaveChanges();
 
@@ -85,7 +85,7 @@ namespace PhoneCare.Forms.QuanTriCuaHang
                         Hotline = txtHotline.Text.Trim(),
                         IsDeleted = false,
                         DateCreated = DateTime.Now,
-                        UserCreated = 1
+                        UserCreated = Class.CurrentUser.Id
                     });
 
                     db.SaveChanges();

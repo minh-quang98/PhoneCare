@@ -42,10 +42,14 @@ namespace PhoneCare.Models
 
         public int UserCreated { get; set; }
         public int? UserModify { get; set; }
+        public int IdCoSo { get; set; }
 
         // Navigation
         [ForeignKey("IdNguoiNhan")]
         public virtual NhanVien NhanVien { get; set; }
+
+        [ForeignKey("IdCoSo")]
+        public virtual CoSoCuaHang CoSoCuaHang { get; set; }
 
         public virtual ICollection<DichVu> DichVus { get; set; }
     }

@@ -7,9 +7,11 @@ namespace PhoneCare
 {
     public partial class frmDangNhap : Form
     {
-        public frmDangNhap()
+        private Form1 _parentForm;
+        public frmDangNhap(Form1 parentForm)
         {
             InitializeComponent();
+            _parentForm = parentForm;
         }
 
         private void btnDangNhap_Click(object sender, EventArgs e)
@@ -27,6 +29,8 @@ namespace PhoneCare
                     Class.CurrentUser.FullName = user.FullName;
 
                     MessageBox.Show("Đăng nhập thành công!");
+
+                    _parentForm.UpdateMenu();
                     this.Close();
                 } else
                 {
