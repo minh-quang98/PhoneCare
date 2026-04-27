@@ -18,7 +18,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void btnAdd_Click(object sender, System.EventArgs e)
         {
-            frmThemMoiDonHang f = new frmThemMoiDonHang();
+            frmThemMoiDonHang f = new frmThemMoiDonHang(this);
             f.ShowDialog();
         }
 
@@ -49,7 +49,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             cbCoSo.SelectedIndex = -1;
         }
 
-        private void LoadData()
+        public void LoadData()
         {
             var query = _context.DonHangs
             .Include("NhanVien")
@@ -180,6 +180,48 @@ namespace PhoneCare.Forms.QuanTriDonHang
         {
             _page = _total / _pageSize;
             LoadData();
+        }
+
+        private void mnuThemDonHang_Click(object sender, EventArgs e)
+        {
+            frmThemMoiDonHang f = new frmThemMoiDonHang(this);
+            f.StartPosition = FormStartPosition.CenterParent;
+            f.ShowDialog();
+        }
+
+        private void mnuSuaDonHang_Click(object sender, EventArgs e)
+        {
+            if (dgvDonHang.CurrentRow == null) return;
+            int id = Convert.ToInt32(dgvDonHang.CurrentRow.Cells["Id"].Value);
+            frmThemMoiDonHang f = new frmThemMoiDonHang(this, id);
+            f.StartPosition = FormStartPosition.CenterParent;
+            f.ShowDialog();
+        }
+
+        private void mnuXoaDonHang_Click(object sender, EventArgs e)
+        {
+            if (dgvDonHang.CurrentRow == null) return;
+
+            int id = Convert.ToInt32(dgvDonHang.CurrentRow.Cells["Id"].Value);
+            var result = MessageBox.Show("Bạn có chắc muốn xóa đơn hàng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+            if (result == DialogResult.No) { return; }
+
+            var donHang = _context.DonHangs.FirstOrDefault(x => x.Id == id);
+            if (donHang != null)
+            {
+                donHang.IsDeleted = true;
+                donHang.DateModify = DateTime.Now;
+                donHang.UserModify = Class.CurrentUser.Id;
+
+                _context.SaveChanges();
+
+                MessageBox.Show("Xóa thành công!");
+                LoadData();
+            } else
+            {
+                MessageBox.Show("Không tìm thấy dữ liệu!");
+            }
         }
     }
 }

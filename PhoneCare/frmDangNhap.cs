@@ -16,12 +16,23 @@ namespace PhoneCare
 
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
+            HandleDangNhap();
+        }
+
+        private void btnDangNhap_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            HandleDangNhap();
+        }
+
+        private void HandleDangNhap()
+        {
             using (var db = new PhoneCareDbContext())
             {
                 var user = db.NhanViens.FirstOrDefault(x => x.UserName == txtTenDangNhap.Text.Trim()
                                                         && x.Password == txtMatKhau.Text.Trim()
                                                         && !x.IsDeleted
                                                         && !x.KhoaTaiKhoan);
+
                 if (user != null)
                 {
                     Class.CurrentUser.Id = user.Id;
@@ -32,7 +43,8 @@ namespace PhoneCare
 
                     _parentForm.UpdateMenu();
                     this.Close();
-                } else
+                }
+                else
                 {
                     MessageBox.Show("Sai tài khoản hoặc mật khẩu!");
                 }

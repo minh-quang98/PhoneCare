@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDanhSachDonHang));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.mnuAuthen = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,10 +42,16 @@
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.cbPageSize = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnToTop = new System.Windows.Forms.ToolStripButton();
+            this.btnPrev = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.lblPaging = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnNext = new System.Windows.Forms.ToolStripButton();
+            this.btnToBottom = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnAdd = new System.Windows.Forms.ToolStripButton();
+            this.btnRefresh = new System.Windows.Forms.ToolStripButton();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.txtKeyword = new System.Windows.Forms.TextBox();
             this.dtTo = new System.Windows.Forms.DateTimePicker();
@@ -61,17 +68,16 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblTotal = new System.Windows.Forms.ToolStripStatusLabel();
             this.dgvDonHang = new System.Windows.Forms.DataGridView();
-            this.btnToTop = new System.Windows.Forms.ToolStripButton();
-            this.btnPrev = new System.Windows.Forms.ToolStripButton();
-            this.btnNext = new System.Windows.Forms.ToolStripButton();
-            this.btnToBottom = new System.Windows.Forms.ToolStripButton();
-            this.btnAdd = new System.Windows.Forms.ToolStripButton();
-            this.btnRefresh = new System.Windows.Forms.ToolStripButton();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuThemDonHang = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSuaDonHang = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuXoaDonHang = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDonHang)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -178,6 +184,26 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
+            // btnToTop
+            // 
+            this.btnToTop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnToTop.Image = ((System.Drawing.Image)(resources.GetObject("btnToTop.Image")));
+            this.btnToTop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnToTop.Name = "btnToTop";
+            this.btnToTop.Size = new System.Drawing.Size(23, 22);
+            this.btnToTop.Text = "toolStripButton1";
+            this.btnToTop.Click += new System.EventHandler(this.btnToTop_Click);
+            // 
+            // btnPrev
+            // 
+            this.btnPrev.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnPrev.Image = ((System.Drawing.Image)(resources.GetObject("btnPrev.Image")));
+            this.btnPrev.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnPrev.Name = "btnPrev";
+            this.btnPrev.Size = new System.Drawing.Size(23, 22);
+            this.btnPrev.Text = "toolStripButton2";
+            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -194,10 +220,50 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
+            // btnNext
+            // 
+            this.btnNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnNext.Image = ((System.Drawing.Image)(resources.GetObject("btnNext.Image")));
+            this.btnNext.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnNext.Name = "btnNext";
+            this.btnNext.Size = new System.Drawing.Size(23, 22);
+            this.btnNext.Text = "toolStripButton3";
+            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            // 
+            // btnToBottom
+            // 
+            this.btnToBottom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnToBottom.Image = ((System.Drawing.Image)(resources.GetObject("btnToBottom.Image")));
+            this.btnToBottom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnToBottom.Name = "btnToBottom";
+            this.btnToBottom.Size = new System.Drawing.Size(23, 22);
+            this.btnToBottom.Text = "toolStripButton4";
+            this.btnToBottom.Click += new System.EventHandler(this.btnToBottom_Click);
+            // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
+            this.btnAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Size = new System.Drawing.Size(23, 22);
+            this.btnAdd.Text = "toolStripButton5";
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
+            this.btnRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(23, 22);
+            this.btnRefresh.Text = "toolStripButton6";
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // groupBox1
             // 
@@ -356,70 +422,41 @@
             // dgvDonHang
             // 
             this.dgvDonHang.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDonHang.ContextMenuStrip = this.contextMenuStrip1;
             this.dgvDonHang.Location = new System.Drawing.Point(9, 138);
             this.dgvDonHang.Name = "dgvDonHang";
             this.dgvDonHang.Size = new System.Drawing.Size(1064, 287);
             this.dgvDonHang.TabIndex = 5;
             // 
-            // btnToTop
+            // contextMenuStrip1
             // 
-            this.btnToTop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnToTop.Image = ((System.Drawing.Image)(resources.GetObject("btnToTop.Image")));
-            this.btnToTop.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnToTop.Name = "btnToTop";
-            this.btnToTop.Size = new System.Drawing.Size(23, 22);
-            this.btnToTop.Text = "toolStripButton1";
-            this.btnToTop.Click += new System.EventHandler(this.btnToTop_Click);
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuThemDonHang,
+            this.mnuSuaDonHang,
+            this.mnuXoaDonHang});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
             // 
-            // btnPrev
+            // mnuThemDonHang
             // 
-            this.btnPrev.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnPrev.Image = ((System.Drawing.Image)(resources.GetObject("btnPrev.Image")));
-            this.btnPrev.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnPrev.Name = "btnPrev";
-            this.btnPrev.Size = new System.Drawing.Size(23, 22);
-            this.btnPrev.Text = "toolStripButton2";
-            this.btnPrev.Click += new System.EventHandler(this.btnPrev_Click);
+            this.mnuThemDonHang.Name = "mnuThemDonHang";
+            this.mnuThemDonHang.Size = new System.Drawing.Size(180, 22);
+            this.mnuThemDonHang.Text = "Thêm đơn hàng";
+            this.mnuThemDonHang.Click += new System.EventHandler(this.mnuThemDonHang_Click);
             // 
-            // btnNext
+            // mnuSuaDonHang
             // 
-            this.btnNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnNext.Image = ((System.Drawing.Image)(resources.GetObject("btnNext.Image")));
-            this.btnNext.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(23, 22);
-            this.btnNext.Text = "toolStripButton3";
-            this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
+            this.mnuSuaDonHang.Name = "mnuSuaDonHang";
+            this.mnuSuaDonHang.Size = new System.Drawing.Size(180, 22);
+            this.mnuSuaDonHang.Text = "Sửa đơn hàng";
+            this.mnuSuaDonHang.Click += new System.EventHandler(this.mnuSuaDonHang_Click);
             // 
-            // btnToBottom
+            // mnuXoaDonHang
             // 
-            this.btnToBottom.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnToBottom.Image = ((System.Drawing.Image)(resources.GetObject("btnToBottom.Image")));
-            this.btnToBottom.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnToBottom.Name = "btnToBottom";
-            this.btnToBottom.Size = new System.Drawing.Size(23, 22);
-            this.btnToBottom.Text = "toolStripButton4";
-            this.btnToBottom.Click += new System.EventHandler(this.btnToBottom_Click);
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("btnAdd.Image")));
-            this.btnAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(23, 22);
-            this.btnAdd.Text = "toolStripButton5";
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("btnRefresh.Image")));
-            this.btnRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(23, 22);
-            this.btnRefresh.Text = "toolStripButton6";
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            this.mnuXoaDonHang.Name = "mnuXoaDonHang";
+            this.mnuXoaDonHang.Size = new System.Drawing.Size(180, 22);
+            this.mnuXoaDonHang.Text = "Xóa đơn hàng";
+            this.mnuXoaDonHang.Click += new System.EventHandler(this.mnuXoaDonHang_Click);
             // 
             // frmDanhSachDonHang
             // 
@@ -444,6 +481,7 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDonHang)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -489,5 +527,9 @@
         private System.Windows.Forms.DataGridView dgvDonHang;
         private System.Windows.Forms.ComboBox cbCoSo;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem mnuThemDonHang;
+        private System.Windows.Forms.ToolStripMenuItem mnuSuaDonHang;
+        private System.Windows.Forms.ToolStripMenuItem mnuXoaDonHang;
     }
 }

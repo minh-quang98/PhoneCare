@@ -28,15 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.lblMaPhieu = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.txtDichVu = new System.Windows.Forms.TextBox();
+            this.txtBaoGia = new System.Windows.Forms.TextBox();
+            this.lblSoTien = new System.Windows.Forms.Label();
             this.btnLuu = new System.Windows.Forms.Button();
             this.btnHuy = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -48,16 +51,15 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Mã phiếu: #";
             // 
-            // label2
+            // lblMaPhieu
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(95, 21);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 13);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "label2";
+            this.lblMaPhieu.AutoSize = true;
+            this.lblMaPhieu.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaPhieu.ForeColor = System.Drawing.Color.Red;
+            this.lblMaPhieu.Location = new System.Drawing.Point(95, 21);
+            this.lblMaPhieu.Name = "lblMaPhieu";
+            this.lblMaPhieu.Size = new System.Drawing.Size(0, 13);
+            this.lblMaPhieu.TabIndex = 1;
             // 
             // label3
             // 
@@ -77,30 +79,32 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Báo giá:";
             // 
-            // textBox1
+            // txtDichVu
             // 
-            this.textBox1.Location = new System.Drawing.Point(98, 54);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(411, 20);
-            this.textBox1.TabIndex = 2;
+            this.txtDichVu.Location = new System.Drawing.Point(98, 54);
+            this.txtDichVu.Name = "txtDichVu";
+            this.txtDichVu.Size = new System.Drawing.Size(411, 20);
+            this.txtDichVu.TabIndex = 2;
             // 
-            // textBox2
+            // txtBaoGia
             // 
-            this.textBox2.Location = new System.Drawing.Point(98, 94);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(241, 20);
-            this.textBox2.TabIndex = 3;
+            this.txtBaoGia.Location = new System.Drawing.Point(98, 94);
+            this.txtBaoGia.Name = "txtBaoGia";
+            this.txtBaoGia.Size = new System.Drawing.Size(241, 20);
+            this.txtBaoGia.TabIndex = 3;
+            this.txtBaoGia.TextChanged += new System.EventHandler(this.txtBaoGia_TextChanged);
+            this.txtBaoGia.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBaoGia_KeyPress);
             // 
-            // label5
+            // lblSoTien
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(365, 97);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(65, 13);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "1000 VNĐ";
+            this.lblSoTien.AutoSize = true;
+            this.lblSoTien.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSoTien.ForeColor = System.Drawing.Color.Red;
+            this.lblSoTien.Location = new System.Drawing.Point(365, 97);
+            this.lblSoTien.Name = "lblSoTien";
+            this.lblSoTien.Size = new System.Drawing.Size(44, 13);
+            this.lblSoTien.TabIndex = 1;
+            this.lblSoTien.Text = "0 VNĐ";
             // 
             // btnLuu
             // 
@@ -110,6 +114,7 @@
             this.btnLuu.TabIndex = 4;
             this.btnLuu.Text = "Lưu lại";
             this.btnLuu.UseVisualStyleBackColor = true;
+            this.btnLuu.Click += new System.EventHandler(this.btnLuu_Click);
             // 
             // btnHuy
             // 
@@ -119,6 +124,11 @@
             this.btnHuy.TabIndex = 4;
             this.btnHuy.Text = "Hủy";
             this.btnHuy.UseVisualStyleBackColor = true;
+            this.btnHuy.Click += new System.EventHandler(this.btnHuy_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // frmDichVu
             // 
@@ -127,15 +137,17 @@
             this.ClientSize = new System.Drawing.Size(539, 190);
             this.Controls.Add(this.btnHuy);
             this.Controls.Add(this.btnLuu);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtBaoGia);
+            this.Controls.Add(this.txtDichVu);
+            this.Controls.Add(this.lblSoTien);
+            this.Controls.Add(this.lblMaPhieu);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Name = "frmDichVu";
             this.Text = "Dịch vụ";
+            this.Load += new System.EventHandler(this.frmDichVu_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -144,13 +156,14 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label lblMaPhieu;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtDichVu;
+        private System.Windows.Forms.TextBox txtBaoGia;
+        private System.Windows.Forms.Label lblSoTien;
         private System.Windows.Forms.Button btnLuu;
         private System.Windows.Forms.Button btnHuy;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
