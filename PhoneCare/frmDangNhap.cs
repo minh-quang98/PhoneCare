@@ -19,11 +19,6 @@ namespace PhoneCare
             HandleDangNhap();
         }
 
-        private void btnDangNhap_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            HandleDangNhap();
-        }
-
         private void HandleDangNhap()
         {
             using (var db = new PhoneCareDbContext())
