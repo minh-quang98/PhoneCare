@@ -61,6 +61,8 @@
             this.dgvDichVu = new System.Windows.Forms.DataGridView();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuThemDichVu = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuSuaDichVu = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuXoaDichVu = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.btnLuu = new System.Windows.Forms.Button();
             this.btnInPhieuNhan = new System.Windows.Forms.Button();
@@ -72,9 +74,7 @@
             this.cbKyThuat = new System.Windows.Forms.ComboBox();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.mnuSuaDichVu = new System.Windows.Forms.ToolStripMenuItem();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.mnuXoaDichVu = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -94,7 +94,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(984, 24);
-            this.menuStrip1.TabIndex = 0;
+            this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // thaoToolStripMenuItem
@@ -131,14 +131,14 @@
             this.txtPassword.Location = new System.Drawing.Point(88, 133);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(260, 20);
-            this.txtPassword.TabIndex = 1;
+            this.txtPassword.TabIndex = 3;
             // 
             // txtMau
             // 
             this.txtMau.Location = new System.Drawing.Point(88, 97);
             this.txtMau.Name = "txtMau";
             this.txtMau.Size = new System.Drawing.Size(260, 20);
-            this.txtMau.TabIndex = 1;
+            this.txtMau.TabIndex = 2;
             // 
             // txtIMEI
             // 
@@ -152,7 +152,7 @@
             this.txtLoaiMay.Location = new System.Drawing.Point(88, 25);
             this.txtLoaiMay.Name = "txtLoaiMay";
             this.txtLoaiMay.Size = new System.Drawing.Size(260, 20);
-            this.txtLoaiMay.TabIndex = 1;
+            this.txtLoaiMay.TabIndex = 0;
             // 
             // label8
             // 
@@ -160,7 +160,7 @@
             this.label8.Location = new System.Drawing.Point(19, 136);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(56, 13);
-            this.label8.TabIndex = 0;
+            this.label8.TabIndex = 7;
             this.label8.Text = "Password:";
             // 
             // label7
@@ -169,7 +169,7 @@
             this.label7.Location = new System.Drawing.Point(20, 100);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(31, 13);
-            this.label7.TabIndex = 0;
+            this.label7.TabIndex = 6;
             this.label7.Text = "Màu:";
             // 
             // label6
@@ -178,7 +178,7 @@
             this.label6.Location = new System.Drawing.Point(19, 64);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(32, 13);
-            this.label6.TabIndex = 0;
+            this.label6.TabIndex = 5;
             this.label6.Text = "IMEI:";
             // 
             // label5
@@ -187,7 +187,7 @@
             this.label5.Location = new System.Drawing.Point(19, 28);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(52, 13);
-            this.label5.TabIndex = 0;
+            this.label5.TabIndex = 4;
             this.label5.Text = "Loại máy:";
             // 
             // groupBox2
@@ -201,7 +201,7 @@
             this.groupBox2.Location = new System.Drawing.Point(12, 37);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(561, 94);
-            this.groupBox2.TabIndex = 2;
+            this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Thông tin khách hàng";
             // 
@@ -210,21 +210,21 @@
             this.txtSDT.Location = new System.Drawing.Point(360, 20);
             this.txtSDT.Name = "txtSDT";
             this.txtSDT.Size = new System.Drawing.Size(195, 20);
-            this.txtSDT.TabIndex = 3;
+            this.txtSDT.TabIndex = 2;
             // 
             // txtTenKH
             // 
             this.txtTenKH.Location = new System.Drawing.Point(73, 21);
             this.txtTenKH.Name = "txtTenKH";
             this.txtTenKH.Size = new System.Drawing.Size(228, 20);
-            this.txtTenKH.TabIndex = 2;
+            this.txtTenKH.TabIndex = 1;
             // 
             // txtDiaChi
             // 
             this.txtDiaChi.Location = new System.Drawing.Point(73, 47);
             this.txtDiaChi.Name = "txtDiaChi";
             this.txtDiaChi.Size = new System.Drawing.Size(482, 20);
-            this.txtDiaChi.TabIndex = 1;
+            this.txtDiaChi.TabIndex = 3;
             // 
             // label2
             // 
@@ -369,14 +369,28 @@
             this.mnuSuaDichVu,
             this.mnuXoaDichVu});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(148, 70);
             // 
             // mnuThemDichVu
             // 
             this.mnuThemDichVu.Name = "mnuThemDichVu";
-            this.mnuThemDichVu.Size = new System.Drawing.Size(180, 22);
+            this.mnuThemDichVu.Size = new System.Drawing.Size(147, 22);
             this.mnuThemDichVu.Text = "Thêm dịch vụ";
             this.mnuThemDichVu.Click += new System.EventHandler(this.mnuThemDichVu_Click);
+            // 
+            // mnuSuaDichVu
+            // 
+            this.mnuSuaDichVu.Name = "mnuSuaDichVu";
+            this.mnuSuaDichVu.Size = new System.Drawing.Size(147, 22);
+            this.mnuSuaDichVu.Text = "Sửa dịch vụ";
+            this.mnuSuaDichVu.Click += new System.EventHandler(this.mnuSuaDichVu_Click);
+            // 
+            // mnuXoaDichVu
+            // 
+            this.mnuXoaDichVu.Name = "mnuXoaDichVu";
+            this.mnuXoaDichVu.Size = new System.Drawing.Size(147, 22);
+            this.mnuXoaDichVu.Text = "Xóa dịch vụ";
+            this.mnuXoaDichVu.Click += new System.EventHandler(this.mnuXoaDichVu_Click);
             // 
             // groupBox5
             // 
@@ -496,23 +510,9 @@
             this.label10.TabIndex = 0;
             this.label10.Text = "Chọn kỹ thuật:";
             // 
-            // mnuSuaDichVu
-            // 
-            this.mnuSuaDichVu.Name = "mnuSuaDichVu";
-            this.mnuSuaDichVu.Size = new System.Drawing.Size(180, 22);
-            this.mnuSuaDichVu.Text = "Sửa dịch vụ";
-            this.mnuSuaDichVu.Click += new System.EventHandler(this.mnuSuaDichVu_Click);
-            // 
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // mnuXoaDichVu
-            // 
-            this.mnuXoaDichVu.Name = "mnuXoaDichVu";
-            this.mnuXoaDichVu.Size = new System.Drawing.Size(180, 22);
-            this.mnuXoaDichVu.Text = "Xóa dịch vụ";
-            this.mnuXoaDichVu.Click += new System.EventHandler(this.mnuXoaDichVu_Click);
             // 
             // frmThemMoiDonHang
             // 

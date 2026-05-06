@@ -33,6 +33,17 @@ namespace PhoneCare.Forms.QuanTriDonHang
             LoadDichVu();
 
             lblTongTien.Text = "0 VND";
+            if (_id.HasValue)
+            {
+                mnuThemDichVu.Visible = true;
+                mnuSuaDichVu.Visible = true;
+                mnuXoaDichVu.Visible = true;
+            } else
+            {
+                mnuThemDichVu.Visible = false;
+                mnuSuaDichVu.Visible = false;
+                mnuXoaDichVu.Visible = false;
+            }
         }
         private void LoadLevel()
         {
@@ -98,7 +109,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     _donHang.Mau = txtMau.Text;
                     _donHang.Password = txtPassword.Text;
 
-                    _donHang.Level = (int)cbLevel.SelectedItem;
+                    _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
                     _donHang.LoaiKyThuat = (string)cbKyThuat.SelectedValue;
 
                     _donHang.TinhTrang = cbTinhTrang.Text;
@@ -129,8 +140,8 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
             else
             {
-                try
-                {
+                //try
+                //{
                     _donHang.TenKH = txtTenKH.Text;
                     _donHang.SoDT = txtSDT.Text;
                     _donHang.DiaChi = txtDiaChi.Text;
@@ -140,7 +151,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     _donHang.Mau = txtMau.Text;
                     _donHang.Password = txtPassword.Text;
 
-                    _donHang.Level = (int)cbLevel.SelectedItem;
+                    _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
                     _donHang.LoaiKyThuat = (string)cbKyThuat.SelectedValue;
 
                     _donHang.TinhTrang = cbTinhTrang.Text;
@@ -164,11 +175,11 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     ClearForm();
                     _parentForm.LoadData();
                     this.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
+                //}
+                //catch (Exception ex)
+                //{
+                //    MessageBox.Show(ex.Message);
+                //}
             }
         }
 
@@ -264,20 +275,6 @@ namespace PhoneCare.Forms.QuanTriDonHang
             if (cbTinhTrang.SelectedIndex < 0)
             {
                 errorProvider1.SetError(cbTinhTrang, "Vui lòng chọn trạng thái");
-                valid = false;
-            }
-
-            // 8. Loại dịch vụ (checkbox)
-            if (!chkBaoHanh.Checked && !chkSuaChua.Checked && !chkDichVu.Checked && !chkCaiDat.Checked)
-            {
-                errorProvider1.SetError(chkBaoHanh, "Chọn ít nhất 1 loại dịch vụ");
-                valid = false;
-            }
-
-            // 9. Danh sách dịch vụ (grid)
-            if (_dsDichVu == null || _dsDichVu.Count == 0)
-            {
-                errorProvider1.SetError(dgvDichVu, "Phải có ít nhất 1 dịch vụ");
                 valid = false;
             }
 
