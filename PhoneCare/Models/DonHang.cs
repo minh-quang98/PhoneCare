@@ -26,7 +26,7 @@ namespace PhoneCare.Models
         public int Level { get; set; }
         public string LoaiKyThuat { get; set; }
 
-        public string TinhTrang { get; set; }
+        public int TinhTrang { get; set; }
         public string TinhTrangMay { get; set; }
 
         public string LoaiDichVu { get; set; }

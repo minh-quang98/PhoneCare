@@ -38,7 +38,8 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 mnuThemDichVu.Visible = true;
                 mnuSuaDichVu.Visible = true;
                 mnuXoaDichVu.Visible = true;
-            } else
+            }
+            else
             {
                 mnuThemDichVu.Visible = false;
                 mnuSuaDichVu.Visible = false;
@@ -54,17 +55,29 @@ namespace PhoneCare.Forms.QuanTriDonHang
             cbKyThuat.Items.AddRange(new string[] { "Kỹ thuật 1", "Kỹ thuật 2", "Kỹ thuật 3", "Kỹ thuật 4", "Kỹ thuật 5" });
         }
 
+        public enum RepairStatus
+        {
+            ChoSua = 1,
+            DangSua = 2,
+            KhongSuaDuoc = 3,
+            KhachKhongSua = 4,
+            DaTraKhach = 5
+        }
+
         private void LoadTrangThai()
         {
-            cbTinhTrang.Items.AddRange(new string[]
+            var list = new[]
             {
-                "Chờ sửa",
-                "Đang sửa",
-                "Chờ sửa",
-                "Không sửa được",
-                "Khách không sửa", 
-                "Đã trả khách",
-            });
+                new { Text = "Chờ sửa", Value = (int)RepairStatus.ChoSua },
+                new { Text = "Đang sửa", Value = (int)RepairStatus.DangSua },
+                new { Text = "Không sửa được", Value = (int)RepairStatus.KhongSuaDuoc },
+                new { Text = "Khách không sửa", Value = (int)RepairStatus.KhachKhongSua },
+                new { Text = "Đã trả khách", Value = (int)RepairStatus.DaTraKhach }
+            };
+
+            cbTinhTrang.DataSource = list;
+            cbTinhTrang.DisplayMember = "Text";
+            cbTinhTrang.ValueMember = "Value";
         }
 
         private void TinhTongTien()
@@ -112,7 +125,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
                     _donHang.LoaiKyThuat = (string)cbKyThuat.SelectedValue;
 
-                    _donHang.TinhTrang = cbTinhTrang.Text;
+                    _donHang.TinhTrang = (int)cbTinhTrang.SelectedValue;
                     _donHang.TinhTrangMay = txtTinhTrangMay.Text;
 
                     _donHang.LoaiDichVu = GetLoaiDichVu();
@@ -142,39 +155,39 @@ namespace PhoneCare.Forms.QuanTriDonHang
             {
                 //try
                 //{
-                    _donHang.TenKH = txtTenKH.Text;
-                    _donHang.SoDT = txtSDT.Text;
-                    _donHang.DiaChi = txtDiaChi.Text;
+                _donHang.TenKH = txtTenKH.Text;
+                _donHang.SoDT = txtSDT.Text;
+                _donHang.DiaChi = txtDiaChi.Text;
 
-                    _donHang.LoaiMay = txtLoaiMay.Text;
-                    _donHang.IMEI = txtIMEI.Text;
-                    _donHang.Mau = txtMau.Text;
-                    _donHang.Password = txtPassword.Text;
+                _donHang.LoaiMay = txtLoaiMay.Text;
+                _donHang.IMEI = txtIMEI.Text;
+                _donHang.Mau = txtMau.Text;
+                _donHang.Password = txtPassword.Text;
 
-                    _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
-                    _donHang.LoaiKyThuat = (string)cbKyThuat.SelectedValue;
+                _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
+                _donHang.LoaiKyThuat = (string)cbKyThuat.SelectedValue;
 
-                    _donHang.TinhTrang = cbTinhTrang.Text;
-                    _donHang.TinhTrangMay = txtTinhTrangMay.Text;
+                _donHang.TinhTrang = cbTinhTrang.Text;
+                _donHang.TinhTrangMay = txtTinhTrangMay.Text;
 
-                    _donHang.LoaiDichVu = GetLoaiDichVu();
+                _donHang.LoaiDichVu = GetLoaiDichVu();
 
-                    _donHang.NgayNhan = DateTime.Now;
-                    _donHang.IdNguoiNhan = Class.CurrentUser.Id;
+                _donHang.NgayNhan = DateTime.Now;
+                _donHang.IdNguoiNhan = Class.CurrentUser.Id;
 
-                    _donHang.DateCreated = DateTime.Now;
-                    _donHang.UserCreated = Class.CurrentUser.Id;
-                    _donHang.IsDeleted = false;
+                _donHang.DateCreated = DateTime.Now;
+                _donHang.UserCreated = Class.CurrentUser.Id;
+                _donHang.IsDeleted = false;
 
-                    _donHang.DichVus = _dsDichVu;
+                _donHang.DichVus = _dsDichVu;
 
-                    _context.DonHangs.Add(_donHang);
-                    _context.SaveChanges();
+                _context.DonHangs.Add(_donHang);
+                _context.SaveChanges();
 
-                    MessageBox.Show("Lưu thành công!");
-                    ClearForm();
-                    _parentForm.LoadData();
-                    this.Close();
+                MessageBox.Show("Lưu thành công!");
+                ClearForm();
+                _parentForm.LoadData();
+                this.Close();
                 //}
                 //catch (Exception ex)
                 //{
