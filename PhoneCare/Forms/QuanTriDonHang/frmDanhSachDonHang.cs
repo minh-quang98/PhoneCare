@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using static PhoneCare.Forms.QuanTriDonHang.frmThemMoiDonHang;
 
 namespace PhoneCare.Forms.QuanTriDonHang
 {
@@ -28,6 +29,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             LoadData();
         }
 
+
         private void LoadStaticData()
         {
             cbPageSize.Items.AddRange(new object[] { 10, 30, 50, 100 });
@@ -37,9 +39,18 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 "ID","Tên KH","SĐT","IMEI","Kỹ thuật"
             });
 
-            cbTrangThai.Items.AddRange(new object[] {
-                "Chờ sửa","Đang sửa","Đã sửa","Không sửa được","Khách không sửa","Đã trả khách"
-            });
+            var list = new[]
+            {
+                new { Text = "Chờ sửa", Value = (int)RepairStatus.ChoSua },
+                new { Text = "Đang sửa", Value = (int)RepairStatus.DangSua },
+                new { Text = "Không sửa được", Value = (int)RepairStatus.KhongSuaDuoc },
+                new { Text = "Khách không sửa", Value = (int)RepairStatus.KhachKhongSua },
+                new { Text = "Đã trả khách", Value = (int)RepairStatus.DaTraKhach }
+            };
+
+            cbTrangThai.DataSource = list;
+            cbTrangThai.DisplayMember = "Text";
+            cbTrangThai.ValueMember = "Value";
 
             cbCoSo.DataSource = _context.CoSoCuaHangs
                 .Where(x => !x.IsDeleted)
@@ -65,7 +76,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             {
                 switch (tieuChi)
                 {
-                    case "ID":
+                    case "ID":  
                         if (int.TryParse(keyword, out int id))
                             query = query.Where(x => x.Id == id);
                         break;
@@ -87,7 +98,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             // Trạng thái
             if (cbTrangThai.SelectedIndex >= 0)
             {
-                string status = cbTrangThai.Text;
+                int status = (int)cbTrangThai.SelectedValue;
                 query = query.Where(x => x.TinhTrang == status);
             }
 
@@ -218,7 +229,8 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
                 MessageBox.Show("Xóa thành công!");
                 LoadData();
-            } else
+            }
+            else
             {
                 MessageBox.Show("Không tìm thấy dữ liệu!");
             }

@@ -28,7 +28,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             dgvDichVu.AutoGenerateColumns = false;
             dgvDichVu.DataSource = _dsDichVu;
             LoadKyThuat();
-            LoadTrangThai();
+            LoadTinhTrang();
             LoadLevel();
             LoadDichVu();
 
@@ -64,7 +64,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             DaTraKhach = 5
         }
 
-        private void LoadTrangThai()
+        private void LoadTinhTrang()
         {
             var list = new[]
             {
@@ -167,7 +167,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
                 _donHang.LoaiKyThuat = (string)cbKyThuat.SelectedValue;
 
-                _donHang.TinhTrang = cbTinhTrang.Text;
+                _donHang.TinhTrang = (int)cbTinhTrang.SelectedValue;
                 _donHang.TinhTrangMay = txtTinhTrangMay.Text;
 
                 _donHang.LoaiDichVu = GetLoaiDichVu();
@@ -180,6 +180,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 _donHang.IsDeleted = false;
 
                 _donHang.DichVus = _dsDichVu;
+                _donHang.IdCoSo = Class.CurrentUser.CoSoCuaHangId;
 
                 _context.DonHangs.Add(_donHang);
                 _context.SaveChanges();
@@ -371,6 +372,11 @@ namespace PhoneCare.Forms.QuanTriDonHang
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void btnInHoaDon_Click(object sender, EventArgs e)
+        {
+            int? idDonHang = _id;
         }
     }
 }

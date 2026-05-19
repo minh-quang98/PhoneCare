@@ -33,6 +33,7 @@ namespace PhoneCare
                     Class.CurrentUser.Id = user.Id;
                     Class.CurrentUser.UserName = user.UserName;
                     Class.CurrentUser.FullName = user.FullName;
+                    Class.CurrentUser.CoSoCuaHangId = user.IdCoSoLamViec;
 
                     MessageBox.Show("Đăng nhập thành công!");
 

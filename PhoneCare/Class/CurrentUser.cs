@@ -11,12 +11,14 @@ namespace PhoneCare.Class
         public static int Id { get; set; }
         public static string UserName { get; set; }
         public static string FullName { get; set; }
+        public static int CoSoCuaHangId { get; set; }
 
         public static void Clear()
         {
             Id = 0;
             UserName = null;
             FullName = null;
+            CoSoCuaHangId = 0;
         }
     }
 }

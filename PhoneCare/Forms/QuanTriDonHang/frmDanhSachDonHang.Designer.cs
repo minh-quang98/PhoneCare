@@ -337,13 +337,6 @@
             // cbTrangThai
             // 
             this.cbTrangThai.FormattingEnabled = true;
-            this.cbTrangThai.Items.AddRange(new object[] {
-            "Chờ sửa",
-            "Đang sửa",
-            "Đã sửa",
-            "Không sửa được",
-            "Khách không sửa",
-            "Đã trả khách"});
             this.cbTrangThai.Location = new System.Drawing.Point(80, 45);
             this.cbTrangThai.Name = "cbTrangThai";
             this.cbTrangThai.Size = new System.Drawing.Size(121, 21);
@@ -435,26 +428,26 @@
             this.mnuSuaDonHang,
             this.mnuXoaDonHang});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 92);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(160, 70);
             // 
             // mnuThemDonHang
             // 
             this.mnuThemDonHang.Name = "mnuThemDonHang";
-            this.mnuThemDonHang.Size = new System.Drawing.Size(180, 22);
+            this.mnuThemDonHang.Size = new System.Drawing.Size(159, 22);
             this.mnuThemDonHang.Text = "Thêm đơn hàng";
             this.mnuThemDonHang.Click += new System.EventHandler(this.mnuThemDonHang_Click);
             // 
             // mnuSuaDonHang
             // 
             this.mnuSuaDonHang.Name = "mnuSuaDonHang";
-            this.mnuSuaDonHang.Size = new System.Drawing.Size(180, 22);
+            this.mnuSuaDonHang.Size = new System.Drawing.Size(159, 22);
             this.mnuSuaDonHang.Text = "Sửa đơn hàng";
             this.mnuSuaDonHang.Click += new System.EventHandler(this.mnuSuaDonHang_Click);
             // 
             // mnuXoaDonHang
             // 
             this.mnuXoaDonHang.Name = "mnuXoaDonHang";
-            this.mnuXoaDonHang.Size = new System.Drawing.Size(180, 22);
+            this.mnuXoaDonHang.Size = new System.Drawing.Size(159, 22);
             this.mnuXoaDonHang.Text = "Xóa đơn hàng";
             this.mnuXoaDonHang.Click += new System.EventHandler(this.mnuXoaDonHang_Click);
             // 

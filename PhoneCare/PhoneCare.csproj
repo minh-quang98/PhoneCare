@@ -266,6 +266,10 @@
     <Compile Include="Migrations\202604221526177_Add_FK_DonHang_CoSo.Designer.cs">
       <DependentUpon>202604221526177_Add_FK_DonHang_CoSo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202605192219221_UpdateDonHang.cs" />
+    <Compile Include="Migrations\202605192219221_UpdateDonHang.Designer.cs">
+      <DependentUpon>202605192219221_UpdateDonHang.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CoSoCuaHang.cs" />
     <Compile Include="Models\DichVu.cs" />
@@ -323,6 +327,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202604221526177_Add_FK_DonHang_CoSo.resx">
       <DependentUpon>202604221526177_Add_FK_DonHang_CoSo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605192219221_UpdateDonHang.resx">
+      <DependentUpon>202605192219221_UpdateDonHang.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
