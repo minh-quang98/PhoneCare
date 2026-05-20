@@ -19,7 +19,7 @@ namespace PhoneCare.Models
         public string DiaChi { get; set; }
 
         public string LoaiMay { get; set; }
-        public string IMEI { get; set; }
+        public int IMEI { get; set; }
         public string Mau { get; set; }
         public string Password { get; set; }
 

@@ -111,8 +111,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
             // Date
             DateTime from = dtFrom.Value.Date;
-            DateTime to = dtTo.Value.Date;
-            query = query.Where(x => x.NgayNhan >= from && x.NgayNhan <= to);
+            DateTime to = dtTo.Value.Date.AddDays(1);
+
+            query = query.Where(x => x.NgayNhan >= from && x.NgayNhan < to);
 
             int total = query.Count();
 
