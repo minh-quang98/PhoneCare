@@ -38,6 +38,7 @@ namespace PhoneCare
                     MessageBox.Show("Đăng nhập thành công!");
 
                     _parentForm.UpdateMenu();
+                    DialogResult = DialogResult.OK;
                     this.Close();
                 }
                 else

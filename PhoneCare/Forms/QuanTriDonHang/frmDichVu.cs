@@ -66,6 +66,14 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void frmDichVu_Load(object sender, EventArgs e)
         {
+            if (_id.HasValue)
+            {
+                LoadDataForEdit();
+                return;
+            }
+
+            Text = "Thêm dịch vụ";
+            btnLuu.Text = "Lưu lại";
             if (_idDonHang.HasValue)
             {
                 lblMaPhieu.Text = _idDonHang.ToString();
@@ -73,6 +81,27 @@ namespace PhoneCare.Forms.QuanTriDonHang
             else
             {
                 lblMaPhieu.Text = "";
+            }
+        }
+
+        private void LoadDataForEdit()
+        {
+            using (var db = new PhoneCareDbContext())
+            {
+                var dichVu = db.DichVus.FirstOrDefault(x => x.Id == _id.Value && x.IsDeleted == false);
+                if (dichVu == null)
+                {
+                    MessageBox.Show("Không tìm thấy dịch vụ cần chỉnh sửa.");
+                    Close();
+                    return;
+                }
+
+                _idDonHang = dichVu.IdDonHang;
+                Text = "Chỉnh sửa dịch vụ";
+                btnLuu.Text = "Cập nhật";
+                lblMaPhieu.Text = dichVu.IdDonHang.ToString();
+                txtDichVu.Text = dichVu.TenDichVu;
+                txtBaoGia.Text = dichVu.DonGia.ToString("0");
             }
         }
 
@@ -84,19 +113,27 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 if (_id.HasValue)
                 {
                     var dichVu = db.DichVus.Find(_id.Value);
-                    if (dichVu != null)
+                    if (dichVu == null || dichVu.IsDeleted)
                     {
-                        dichVu.TenDichVu = txtDichVu.Text.Trim();
-                        dichVu.DonGia = decimal.Parse(txtBaoGia.Text);
-                        dichVu.DateModify = DateTime.Now;
-                        dichVu.UserModify = Class.CurrentUser.Id;
-                        dichVu.IsDeleted = false;
-                        db.SaveChanges();
+                        MessageBox.Show("Không tìm thấy dịch vụ cần cập nhật.");
+                        return;
                     }
-                    MessageBox.Show($"Đã lưu DV: {dichVu.TenDichVu}, IdDonHang = {dichVu.IdDonHang}");
+
+                    dichVu.TenDichVu = txtDichVu.Text.Trim();
+                    dichVu.DonGia = decimal.Parse(txtBaoGia.Text);
+                    dichVu.DateModify = DateTime.Now;
+                    dichVu.UserModify = Class.CurrentUser.Id;
+                    db.SaveChanges();
+                    MessageBox.Show("Cập nhật dịch vụ thành công!");
                 }
                 else
                 {
+                    if (!_idDonHang.HasValue)
+                    {
+                        MessageBox.Show("Không xác định được đơn hàng để thêm dịch vụ.");
+                        return;
+                    }
+
                     var dichVu = new Models.DichVu
                     {
                         TenDichVu = txtDichVu.Text.Trim(),
@@ -108,7 +145,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     };
                     db.DichVus.Add(dichVu);
                     db.SaveChanges();
-                    MessageBox.Show($"Đã lưu DV: {dichVu.TenDichVu}, IdDonHang = {dichVu.IdDonHang}");
+                    MessageBox.Show("Thêm dịch vụ thành công!");
                 }
             }
 
@@ -125,6 +162,21 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 errorProvider1.SetError(txtDichVu, "Tên dịch vụ không được để trống!");
                 validate = false;
             }
+            else
+            {
+                errorProvider1.SetError(txtDichVu, "");
+            }
+
+            if (string.IsNullOrWhiteSpace(txtBaoGia.Text))
+            {
+                errorProvider1.SetError(txtBaoGia, "Báo giá không được để trống!");
+                validate = false;
+            }
+            else
+            {
+                errorProvider1.SetError(txtBaoGia, "");
+            }
+
             return validate;
         }
     }

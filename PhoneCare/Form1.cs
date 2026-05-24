@@ -41,13 +41,32 @@ namespace PhoneCare
         private void Form1_Load(object sender, EventArgs e)
         {
             UpdateMenu();
+            BeginInvoke(new Action(ShowLoginIfNeeded));
         }
 
         private void mnuLogIn_Click(object sender, EventArgs e)
         {
             frmDangNhap f = new frmDangNhap(this);
             f.StartPosition = FormStartPosition.CenterScreen;
-            f.Show();
+            f.ShowDialog(this);
+        }
+
+        private void ShowLoginIfNeeded()
+        {
+            if (Class.CurrentUser.Id != 0) return;
+
+            using (var f = new frmDangNhap(this))
+            {
+                f.StartPosition = FormStartPosition.CenterScreen;
+
+                if (f.ShowDialog(this) != DialogResult.OK || Class.CurrentUser.Id == 0)
+                {
+                    Close();
+                    return;
+                }
+            }
+
+            UpdateMenu();
         }
 
         private void mnuQuanTriNhanVien_Click(object sender, EventArgs e)
@@ -76,6 +95,14 @@ namespace PhoneCare
             Forms.QuanTriDonHang.frmDanhSachDonHang f = new Forms.QuanTriDonHang.frmDanhSachDonHang();
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
+        }
+
+        private void mnuTroGiup_Click(object sender, EventArgs e)
+        {
+            using (var f = new Forms.frmThongTinHoTro())
+            {
+                f.ShowDialog(this);
+            }
         }
     }
 }

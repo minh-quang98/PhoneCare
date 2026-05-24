@@ -25,27 +25,25 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void frmThemMoiDonHang_Load(object sender, EventArgs e)
         {
+            bool isEdit = _id.HasValue;
+
             ConfigureDichVuGrid();
             dgvDichVu.DataSource = _dsDichVu;
             LoadKyThuat();
             LoadTinhTrang();
             LoadLevel();
-            LoadDichVu();
 
-            if (_id.HasValue)
+            groupBox4.Visible = isEdit;
+            btnInHoaDon.Visible = isEdit;
+            btnInPhieuNhan.Visible = isEdit;
+            mnuThemDichVu.Visible = isEdit;
+            mnuSuaDichVu.Visible = isEdit;
+            mnuXoaDichVu.Visible = isEdit;
+            ApplyFormModeLayout(isEdit);
+
+            if (isEdit)
             {
-                mnuThemDichVu.Visible = true;
-                mnuSuaDichVu.Visible = true;
-                mnuXoaDichVu.Visible = true;
-            }
-            else
-            {
-                mnuThemDichVu.Visible = false;
-                mnuSuaDichVu.Visible = false;
-                mnuXoaDichVu.Visible = false;
-            }
-            if (_id.HasValue)
-            {
+                LoadDichVu();
                 this.Text = "Chỉnh sửa đơn hàng";
                 LoadDataForEdit();
             }
@@ -54,6 +52,25 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 this.Text = "Thêm mới đơn hàng";
                 lblTongTien.Text = "0 VND";
             }
+        }
+
+        private void ApplyFormModeLayout(bool isEdit)
+        {
+            if (isEdit)
+            {
+                groupBox4.Visible = true;
+                groupBox5.Top = 574;
+                btnDong.Left = 350;
+                btnLuu.Left = 817;
+                ClientSize = new System.Drawing.Size(984, 735);
+                return;
+            }
+
+            groupBox4.Visible = false;
+            groupBox5.Top = txtTinhTrangMay.Bottom + 18;
+            btnDong.Left = btnInHoaDon.Left;
+            btnLuu.Left = btnInPhieuNhan.Left;
+            ClientSize = new System.Drawing.Size(ClientSize.Width, groupBox5.Bottom + 16);
         }
 
         private void ConfigureDichVuGrid()
@@ -168,7 +185,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     _donHang.Password = txtPassword.Text;
 
                     _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
-                    _donHang.LoaiKyThuat = (string)cbKyThuat.SelectedValue;
+                    _donHang.LoaiKyThuat = cbKyThuat.Text;
 
                     _donHang.TinhTrang = (int)cbTinhTrang.SelectedValue;
                     _donHang.TinhTrangMay = txtTinhTrangMay.Text;
@@ -211,7 +228,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 _donHang.Password = txtPassword.Text;
 
                 _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
-                _donHang.LoaiKyThuat = (string)cbKyThuat.SelectedValue;
+                _donHang.LoaiKyThuat = cbKyThuat.Text;
 
                 _donHang.TinhTrang = (int)cbTinhTrang.SelectedValue;
                 _donHang.TinhTrangMay = txtTinhTrangMay.Text;
@@ -245,7 +262,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void mnuThemDichVu_Click(object sender, EventArgs e)
         {
-            frmDichVu f = new frmDichVu(this, _id);
+            frmDichVu f = new frmDichVu(this, idDonHang: _id);
             f.StartPosition = FormStartPosition.CenterParent;
             f.ShowDialog();
         }
@@ -269,7 +286,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             if (dgvDichVu.CurrentRow == null) return;
 
             int id = Convert.ToInt32(dgvDichVu.CurrentRow.Cells["Id"].Value);
-            frmDichVu f = new frmDichVu(this, id);
+            frmDichVu f = new frmDichVu(this, id: id);
             f.StartPosition = FormStartPosition.CenterParent;
             f.ShowDialog();
         }
@@ -397,7 +414,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
             var result = MessageBox.Show(
                 "Bạn có chắc chắn muốn xóa dịch vụ này không?",
-                "Xác nhận xóa",
+                "Xóa dịch vụ",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning
             );
@@ -476,7 +493,14 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 txtPassword.Text = coso.Password;
 
                 cbLevel.SelectedItem = coso.Level.ToString();
-                cbKyThuat.SelectedValue = coso.LoaiKyThuat;
+                if (cbKyThuat.Items.Contains(coso.LoaiKyThuat))
+                {
+                    cbKyThuat.SelectedItem = coso.LoaiKyThuat;
+                }
+                else
+                {
+                    cbKyThuat.Text = coso.LoaiKyThuat;
+                }
 
                 cbTinhTrang.SelectedValue = coso.TinhTrang;
                 txtTinhTrangMay.Text = coso.TinhTrangMay;

@@ -1,6 +1,8 @@
 ﻿using PhoneCare.Data;
 using System;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using static PhoneCare.Forms.QuanTriDonHang.frmThemMoiDonHang;
 
@@ -12,6 +14,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private int _page = 1;
         private int _pageSize = 10;
         private int _total = 0;
+        private bool _isLoadingStaticData = false;
         public frmDanhSachDonHang()
         {
             InitializeComponent();
@@ -32,12 +35,17 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void LoadStaticData()
         {
+            _isLoadingStaticData = true;
+
+            cbPageSize.Items.Clear();
             cbPageSize.Items.AddRange(new object[] { 10, 30, 50, 100 });
             cbPageSize.SelectedIndex = 0;
 
+            cbTieuChi.Items.Clear();
             cbTieuChi.Items.AddRange(new object[] {
                 "ID","Tên KH","SĐT","IMEI","Kỹ thuật"
             });
+            cbTieuChi.SelectedIndex = 0;
 
             var list = new[]
             {
@@ -51,6 +59,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             cbTrangThai.DataSource = list;
             cbTrangThai.DisplayMember = "Text";
             cbTrangThai.ValueMember = "Value";
+            cbTrangThai.SelectedIndex = -1;
 
             cbCoSo.DataSource = _context.CoSoCuaHangs
                 .Where(x => !x.IsDeleted)
@@ -58,17 +67,53 @@ namespace PhoneCare.Forms.QuanTriDonHang
             cbCoSo.DisplayMember = "Name";
             cbCoSo.ValueMember = "Id";
             cbCoSo.SelectedIndex = -1;
+
+            _isLoadingStaticData = false;
         }
 
         public void LoadData()
         {
-            var query = _context.DonHangs
-            .Include("NhanVien")
-            .Include("CoSoCuaHang")
-            .Where(x => !x.IsDeleted)
-            .AsQueryable();
+            var query = BuildFilteredQuery();
 
-            // Search
+            int total = query.Count();
+            int lastPage = GetLastPage(total);
+            if (_page > lastPage)
+            {
+                _page = lastPage;
+            }
+
+            var data = query
+            .OrderByDescending(x => x.Id)
+            .Skip((_page - 1) * _pageSize)
+            .Take(_pageSize)
+            .ToList()
+            .Select(x => new
+            {
+                x.Id,
+                x.TenKH,
+                x.SoDT,
+                x.LoaiMay,
+                x.IMEI,
+                x.NgayNhan,
+                NguoiNhan = x.NhanVien != null ? x.NhanVien.FullName : "",
+                x.LoaiKyThuat,
+                TinhTrang = GetTinhTrangText(x.TinhTrang),
+                x.Level
+            }).ToList();
+
+            dgvDonHang.DataSource = data;
+            _total = total;
+            UpdatePagingInfo(data.Count, total);
+        }
+
+        private IQueryable<Models.DonHang> BuildFilteredQuery()
+        {
+            var query = _context.DonHangs
+                .Include("NhanVien")
+                .Include("CoSoCuaHang")
+                .Where(x => !x.IsDeleted)
+                .AsQueryable();
+
             string keyword = txtKeyword.Text.Trim();
             string tieuChi = cbTieuChi.Text;
 
@@ -116,31 +161,36 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
             query = query.Where(x => x.NgayNhan >= from && x.NgayNhan < to);
 
-            int total = query.Count();
+            return query;
+        }
 
-            var data = query
-            .OrderByDescending(x => x.Id)
-            .Skip((_page - 1) * _pageSize)
-            .Take(_pageSize)
-            .ToList()
-            .Select(x => new
+        private int GetLastPage(int total)
+        {
+            if (total <= 0) return 1;
+
+            return (int)Math.Ceiling(total / (double)_pageSize);
+        }
+
+        private void UpdatePagingInfo(int rowCount, int total)
+        {
+            if (total == 0)
             {
-                x.Id,
-                x.TenKH,
-                x.SoDT,
-                x.LoaiMay,
-                x.IMEI,
-                x.NgayNhan,
-                NguoiNhan = x.NhanVien != null ? x.NhanVien.FullName : "",
-                x.LoaiKyThuat,
-                x.TinhTrang,
-                x.Level
-            }).ToList();
+                lblPaging.Text = "0 - 0 / 0";
+            }
+            else
+            {
+                int from = ((_page - 1) * _pageSize) + 1;
+                int to = from + rowCount - 1;
+                lblPaging.Text = $"{from} - {to} / {total}";
+            }
 
-            dgvDonHang.DataSource = data;
-            _total = total;
-            lblPaging.Text = $"{((_page - 1) * _pageSize) + 1} - {((_page - 1) * _pageSize) + data.Count} / {total}";
-            lblTotal.Text = $"Tổng: {data.Count}";
+            lblTotal.Text = $"Tổng: {total}";
+
+            int lastPage = GetLastPage(total);
+            btnToTop.Enabled = _page > 1;
+            btnPrev.Enabled = _page > 1;
+            btnNext.Enabled = _page < lastPage;
+            btnToBottom.Enabled = _page < lastPage;
         }
 
         private void btnTimKiem_Click(object sender, EventArgs e)
@@ -152,13 +202,17 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             txtKeyword.Clear();
+            cbTieuChi.SelectedIndex = 0;
             cbTrangThai.SelectedIndex = -1;
             cbCoSo.SelectedIndex = -1;
+            _page = 1;
             LoadData();
         }
 
         private void cbPageSize_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (_isLoadingStaticData || cbPageSize.SelectedItem == null) return;
+
             _pageSize = int.Parse(cbPageSize.SelectedItem.ToString());
             _page = 1;
             LoadData();
@@ -166,6 +220,8 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void btnNext_Click(object sender, EventArgs e)
         {
+            if (_page >= GetLastPage(_total)) return;
+
             _page++;
             LoadData();
         }
@@ -190,7 +246,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void btnToBottom_Click(object sender, EventArgs e)
         {
-            _page = _total / _pageSize;
+            _page = GetLastPage(_total);
             LoadData();
         }
 
@@ -234,6 +290,101 @@ namespace PhoneCare.Forms.QuanTriDonHang
             else
             {
                 MessageBox.Show("Không tìm thấy dữ liệu!");
+            }
+        }
+
+        private void btnXuatExcel_Click(object sender, EventArgs e)
+        {
+            var data = BuildFilteredQuery()
+                .OrderByDescending(x => x.Id)
+                .ToList();
+
+            if (data.Count == 0)
+            {
+                MessageBox.Show("Không có dữ liệu để xuất Excel.");
+                return;
+            }
+
+            using (var dialog = new SaveFileDialog())
+            {
+                dialog.Title = "Xuất danh sách đơn hàng";
+                dialog.Filter = "Excel CSV (*.csv)|*.csv";
+                dialog.FileName = $"DanhSachDonHang_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
+
+                if (dialog.ShowDialog(this) != DialogResult.OK) return;
+
+                using (var writer = new StreamWriter(dialog.FileName, false, new UTF8Encoding(true)))
+                {
+                    WriteCsvRow(writer, new[]
+                    {
+                        "STT",
+                        "ID",
+                        "Tên KH",
+                        "SĐT",
+                        "Loại máy",
+                        "IMEI",
+                        "Ngày nhận",
+                        "Người nhận",
+                        "Kỹ thuật",
+                        "Trạng thái",
+                        "Level",
+                        "Cơ sở"
+                    });
+
+                    for (int i = 0; i < data.Count; i++)
+                    {
+                        var item = data[i];
+                        WriteCsvRow(writer, new[]
+                        {
+                            (i + 1).ToString(),
+                            item.Id.ToString(),
+                            item.TenKH,
+                            item.SoDT,
+                            item.LoaiMay,
+                            item.IMEI.ToString(),
+                            item.NgayNhan.HasValue ? item.NgayNhan.Value.ToString("dd/MM/yyyy HH:mm") : "",
+                            item.NhanVien != null ? item.NhanVien.FullName : "",
+                            item.LoaiKyThuat,
+                            GetTinhTrangText(item.TinhTrang),
+                            item.Level.ToString(),
+                            item.CoSoCuaHang != null ? item.CoSoCuaHang.Name : ""
+                        });
+                    }
+                }
+
+                MessageBox.Show("Xuất Excel thành công!");
+            }
+        }
+
+        private void WriteCsvRow(StreamWriter writer, string[] values)
+        {
+            writer.WriteLine(string.Join(",", values.Select(EscapeCsvValue)));
+        }
+
+        private string EscapeCsvValue(string value)
+        {
+            value = value ?? "";
+            value = value.Replace("\"", "\"\"");
+
+            return $"\"{value}\"";
+        }
+
+        private string GetTinhTrangText(int value)
+        {
+            switch ((RepairStatus)value)
+            {
+                case RepairStatus.ChoSua:
+                    return "Chờ sửa";
+                case RepairStatus.DangSua:
+                    return "Đang sửa";
+                case RepairStatus.KhongSuaDuoc:
+                    return "Không sửa được";
+                case RepairStatus.KhachKhongSua:
+                    return "Khách không sửa";
+                case RepairStatus.DaTraKhach:
+                    return "Đã trả khách";
+                default:
+                    return value.ToString();
             }
         }
     }

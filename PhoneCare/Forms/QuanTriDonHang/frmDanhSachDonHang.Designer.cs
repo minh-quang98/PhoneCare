@@ -65,6 +65,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.btnTimKiem = new System.Windows.Forms.Button();
+            this.btnXuatExcel = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblTotal = new System.Windows.Forms.ToolStripStatusLabel();
             this.dgvDonHang = new System.Windows.Forms.DataGridView();
@@ -314,7 +315,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(53, 15);
             this.label4.TabIndex = 2;
-            this.label4.Text = "Từ ngày:";
+            this.label4.Text = "Đến ngày:";
             // 
             // label3
             // 
@@ -390,11 +391,21 @@
             // 
             this.btnTimKiem.Location = new System.Drawing.Point(972, 74);
             this.btnTimKiem.Name = "btnTimKiem";
-            this.btnTimKiem.Size = new System.Drawing.Size(101, 53);
+            this.btnTimKiem.Size = new System.Drawing.Size(101, 25);
             this.btnTimKiem.TabIndex = 4;
             this.btnTimKiem.Text = "Tìm kiếm";
             this.btnTimKiem.UseVisualStyleBackColor = true;
             this.btnTimKiem.Click += new System.EventHandler(this.btnTimKiem_Click);
+            // 
+            // btnXuatExcel
+            // 
+            this.btnXuatExcel.Location = new System.Drawing.Point(972, 102);
+            this.btnXuatExcel.Name = "btnXuatExcel";
+            this.btnXuatExcel.Size = new System.Drawing.Size(101, 25);
+            this.btnXuatExcel.TabIndex = 6;
+            this.btnXuatExcel.Text = "Xuất Excel";
+            this.btnXuatExcel.UseVisualStyleBackColor = true;
+            this.btnXuatExcel.Click += new System.EventHandler(this.btnXuatExcel_Click);
             // 
             // statusStrip1
             // 
@@ -457,6 +468,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1085, 450);
             this.Controls.Add(this.dgvDonHang);
+            this.Controls.Add(this.btnXuatExcel);
             this.Controls.Add(this.btnTimKiem);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.groupBox1);
@@ -512,6 +524,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtKeyword;
         private System.Windows.Forms.Button btnTimKiem;
+        private System.Windows.Forms.Button btnXuatExcel;
         private System.Windows.Forms.DateTimePicker dtTo;
         private System.Windows.Forms.DateTimePicker dtFrom;
         private System.Windows.Forms.Label label4;

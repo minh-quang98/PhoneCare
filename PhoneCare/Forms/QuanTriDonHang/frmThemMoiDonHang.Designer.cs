@@ -382,7 +382,7 @@
             // 
             this.mnuSuaDichVu.Name = "mnuSuaDichVu";
             this.mnuSuaDichVu.Size = new System.Drawing.Size(147, 22);
-            this.mnuSuaDichVu.Text = "Sửa dịch vụ";
+            this.mnuSuaDichVu.Text = "Chỉnh sửa dịch vụ";
             this.mnuSuaDichVu.Click += new System.EventHandler(this.mnuSuaDichVu_Click);
             // 
             // mnuXoaDichVu

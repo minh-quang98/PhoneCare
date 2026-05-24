@@ -119,6 +119,7 @@
             this.mnuTroGiup.Name = "mnuTroGiup";
             this.mnuTroGiup.Size = new System.Drawing.Size(63, 20);
             this.mnuTroGiup.Text = "Trợ giúp";
+            this.mnuTroGiup.Click += new System.EventHandler(this.mnuTroGiup_Click);
             // 
             // Form1
             // 
