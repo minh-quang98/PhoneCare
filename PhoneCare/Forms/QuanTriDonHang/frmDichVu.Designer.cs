@@ -58,8 +58,9 @@
             this.lblMaPhieu.ForeColor = System.Drawing.Color.Red;
             this.lblMaPhieu.Location = new System.Drawing.Point(95, 21);
             this.lblMaPhieu.Name = "lblMaPhieu";
-            this.lblMaPhieu.Size = new System.Drawing.Size(0, 13);
+            this.lblMaPhieu.Size = new System.Drawing.Size(46, 13);
             this.lblMaPhieu.TabIndex = 1;
+            this.lblMaPhieu.Text = "default";
             // 
             // label3
             // 

@@ -1,5 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+  <DataSources>
+    <DataSource Name="HoaDonDataSet">
+      <ConnectionProperties>
+        <DataProvider>System.Data.DataSet</DataProvider>
+        <ConnectString>/* Local Connection */</ConnectString>
+      </ConnectionProperties>
+      <rd:DataSourceID>6942b010-cf71-4f75-8460-8c086abd7820</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="HoaDonDataSet">
+      <Fields>
+        <Field Name="MaPhieu">
+          <DataField>MaPhieu</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ThoiGian">
+          <DataField>ThoiGian</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NguoiLap">
+          <DataField>NguoiLap</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NguoiThu">
+          <DataField>NguoiThu</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LoaiDichVu">
+          <DataField>LoaiDichVu</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TenKH">
+          <DataField>TenKH</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DiaChi">
+          <DataField>DiaChi</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="SoDT">
+          <DataField>SoDT</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LoaiMay">
+          <DataField>LoaiMay</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Mau">
+          <DataField>Mau</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="IMEI">
+          <DataField>IMEI</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="Password">
+          <DataField>Password</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TongTien">
+          <DataField>TongTien</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="NguoiNhanMay">
+          <DataField>NguoiNhanMay</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="STT">
+          <DataField>STT</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TenDichVu">
+          <DataField>TenDichVu</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DonGia">
+          <DataField>DonGia</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DiaChiCuaHang">
+          <DataField>DiaChiCuaHang</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="DienThoaiCuaHang">
+          <DataField>DienThoaiCuaHang</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>HoaDonDataSet</DataSourceName>
+        <CommandText>/* Local Query */</CommandText>
+      </Query>
+    </DataSet>
+  </DataSets>
   <Body>
     <ReportItems>
       <Textbox Name="txtHoaDonThanhToan">
@@ -41,7 +136,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Mã phiếu: </Value>
+                <Value>="Mã phiếu: " &amp; First(Fields!MaPhieu.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -70,7 +165,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Thời gian: </Value>
+                <Value>="Time: " &amp; First(Fields!ThoiGian.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -99,7 +194,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Người lập:</Value>
+                <Value>="Người lập: " &amp; First(Fields!NguoiLap.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -128,7 +223,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Người thu:</Value>
+                <Value>="Người thu: " &amp; First(Fields!NguoiThu.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -157,7 +252,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Loại dịch vụ:</Value>
+                <Value>="Loại dịch vụ: " &amp; First(Fields!LoaiDichVu.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -186,7 +281,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Khách hàng:</Value>
+                <Value>="KH: " &amp; First(Fields!TenKH.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -215,7 +310,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Địa chỉ:</Value>
+                <Value>="ĐC: " &amp; First(Fields!DiaChi.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -244,7 +339,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Điện thoại:</Value>
+                <Value>="ĐT: " &amp; First(Fields!SoDT.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -273,7 +368,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Máy:</Value>
+                <Value>="Máy: " &amp; First(Fields!LoaiMay.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -302,7 +397,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Màu:</Value>
+                <Value>="Màu: " &amp; First(Fields!Mau.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -331,7 +426,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>IMEI:</Value>
+                <Value>="IMEI: " &amp; First(Fields!IMEI.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -360,7 +455,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Pass:</Value>
+                <Value>="Pass: " &amp; First(Fields!Password.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -512,7 +607,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Fields!STT.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -542,7 +637,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Fields!TenDichVu.Value</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -572,7 +667,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Format(Fields!DonGia.Value, "N0")</Value>
                               <Style />
                             </TextRun>
                           </TextRuns>
@@ -614,6 +709,7 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
+        <DataSetName>HoaDonDataSet</DataSetName>
         <Top>3.50347in</Top>
         <Left>0.19667in</Left>
         <Height>0.5in</Height>
@@ -632,7 +728,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Tổng tiền:</Value>
+                <Value>="Tổng tiền: " &amp; Format(First(Fields!TongTien.Value, "HoaDonDataSet"), "N0") &amp; " VNĐ"</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -725,7 +821,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value />
+                <Value>=First(Fields!NguoiNhanMay.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -754,7 +850,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value />
+                <Value>=First(Fields!TenKH.Value, "HoaDonDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>
@@ -838,7 +934,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>ĐC: 16B Hai Bà Trưng, Hoàn Kiếm, Hà Nội</Value>
+                  <Value>="ĐC: " &amp; First(Fields!DiaChiCuaHang.Value, "HoaDonDataSet")</Value>
                   <Style />
                 </TextRun>
               </TextRuns>
@@ -867,7 +963,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>Điện thoại: </Value>
+                  <Value>="Điện thoại: " &amp; First(Fields!DienThoaiCuaHang.Value, "HoaDonDataSet")</Value>
                   <Style />
                 </TextRun>
               </TextRuns>

@@ -25,14 +25,13 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void frmThemMoiDonHang_Load(object sender, EventArgs e)
         {
-            dgvDichVu.AutoGenerateColumns = false;
+            ConfigureDichVuGrid();
             dgvDichVu.DataSource = _dsDichVu;
             LoadKyThuat();
             LoadTinhTrang();
             LoadLevel();
             LoadDichVu();
 
-            lblTongTien.Text = "0 VND";
             if (_id.HasValue)
             {
                 mnuThemDichVu.Visible = true;
@@ -45,7 +44,53 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 mnuSuaDichVu.Visible = false;
                 mnuXoaDichVu.Visible = false;
             }
+            if (_id.HasValue)
+            {
+                this.Text = "Chỉnh sửa đơn hàng";
+                LoadDataForEdit();
+            }
+            else
+            {
+                this.Text = "Thêm mới đơn hàng";
+                lblTongTien.Text = "0 VND";
+            }
         }
+
+        private void ConfigureDichVuGrid()
+        {
+            dgvDichVu.AutoGenerateColumns = false;
+            dgvDichVu.AllowUserToAddRows = false;
+            dgvDichVu.RowHeadersWidth = 35;
+            dgvDichVu.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            if (dgvDichVu.Columns.Count > 0) return;
+
+            dgvDichVu.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Id",
+                HeaderText = "ID",
+                DataPropertyName = "Id",
+                FillWeight = 12
+            });
+
+            dgvDichVu.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "TenDichVu",
+                HeaderText = "Dịch vụ",
+                DataPropertyName = "TenDichVu",
+                FillWeight = 68
+            });
+
+            dgvDichVu.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "DonGia",
+                HeaderText = "Giá",
+                DataPropertyName = "DonGia",
+                DefaultCellStyle = { Format = "N0" },
+                FillWeight = 20
+            });
+        }
+
         private void LoadLevel()
         {
             cbLevel.Items.AddRange(new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
@@ -118,7 +163,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     _donHang.DiaChi = txtDiaChi.Text;
 
                     _donHang.LoaiMay = txtLoaiMay.Text;
-                    _donHang.IMEI = txtIMEI.Text;
+                    _donHang.IMEI = Convert.ToInt32(txtIMEI.Text);
                     _donHang.Mau = txtMau.Text;
                     _donHang.Password = txtPassword.Text;
 
@@ -138,6 +183,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     _donHang.IsDeleted = false;
 
                     _donHang.DichVus = _dsDichVu;
+                    _donHang.IdCoSo = Class.CurrentUser.CoSoCuaHangId;
 
                     _context.SaveChanges();
 
@@ -160,7 +206,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 _donHang.DiaChi = txtDiaChi.Text;
 
                 _donHang.LoaiMay = txtLoaiMay.Text;
-                _donHang.IMEI = txtIMEI.Text;
+                _donHang.IMEI = Convert.ToInt32(txtIMEI.Text);
                 _donHang.Mau = txtMau.Text;
                 _donHang.Password = txtPassword.Text;
 
@@ -199,15 +245,22 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void mnuThemDichVu_Click(object sender, EventArgs e)
         {
-            frmDichVu f = new frmDichVu(this);
+            frmDichVu f = new frmDichVu(this, _id);
             f.StartPosition = FormStartPosition.CenterParent;
             f.ShowDialog();
         }
 
         public void LoadDichVu()
         {
-            _dsDichVu = new BindingList<DichVu>(_context.DichVus.Where(x => x.IdDonHang == _donHang.Id).ToList());
+            _dsDichVu = new BindingList<DichVu>(
+                _context.DichVus
+               .Where(x => x.IdDonHang == _id && x.IsDeleted == false)
+               .ToList()
+            );
+            ConfigureDichVuGrid();
+            dgvDichVu.DataSource = null;
             dgvDichVu.DataSource = _dsDichVu;
+
             TinhTongTien();
         }
 
@@ -376,7 +429,68 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void btnInHoaDon_Click(object sender, EventArgs e)
         {
-            int? idDonHang = _id;
+            if (!_id.HasValue)
+            {
+                MessageBox.Show("Vui lòng lưu đơn hàng trước khi in hóa đơn.");
+                return;
+            }
+
+            var form = new PhoneCare.Forms.BaoCao.frmHoaDon(_id.Value);
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ShowDialog(this);
+        }
+
+        private void btnInPhieuNhan_Click(object sender, EventArgs e)
+        {
+            if (!_id.HasValue)
+            {
+                MessageBox.Show("Vui lòng lưu đơn hàng trước khi in phiếu nhận.");
+                return;
+            }
+
+            var form = new PhoneCare.Forms.BaoCao.frmPhieuNhanMay(_id.Value);
+            form.StartPosition = FormStartPosition.CenterParent;
+            form.ShowDialog(this);
+        }
+
+        private void LoadDataForEdit()
+        {
+            using (var db = new PhoneCareDbContext())
+            {
+                var coso = db.DonHangs.FirstOrDefault(x => x.Id == _id);
+
+                if (coso == null) return;
+                //txtID.Text = coso.Id.ToString();
+                //txtCode.Text = coso.Code;
+                //txtName.Text = coso.Name;
+                //txtAddress.Text = coso.Address;
+                //txtHomePhone.Text = coso.HomePhone;
+                //txtHotline.Text = coso.Hotline;
+                txtTenKH.Text = coso.TenKH;
+                txtSDT.Text = coso.SoDT;
+                txtDiaChi.Text = coso.DiaChi;
+
+                txtLoaiMay.Text = coso.LoaiMay;
+                txtIMEI.Text = coso.IMEI.ToString();
+                txtMau.Text = coso.Mau;
+                txtPassword.Text = coso.Password;
+
+                cbLevel.SelectedItem = coso.Level.ToString();
+                cbKyThuat.SelectedValue = coso.LoaiKyThuat;
+
+                cbTinhTrang.SelectedValue = coso.TinhTrang;
+                txtTinhTrangMay.Text = coso.TinhTrangMay;
+
+                chkBaoHanh.Checked = coso.LoaiDichVu.Contains("Bảo hành");
+                chkSuaChua.Checked = coso.LoaiDichVu.Contains("Sửa chữa");
+                chkDichVu.Checked = coso.LoaiDichVu.Contains("Dịch vụ");
+                chkCaiDat.Checked = coso.LoaiDichVu.Contains("Cài đặt");
+            }
+        }
+
+        private void btnDong_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

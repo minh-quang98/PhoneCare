@@ -8,33 +8,33 @@ using System.Windows.Forms;
 
 namespace PhoneCare.Forms.BaoCao
 {
-    public partial class frmHoaDon : Form
+    public partial class frmPhieuNhanMay : Form
     {
         private readonly int _idDonHang;
 
-        public frmHoaDon()
+        public frmPhieuNhanMay()
         {
             InitializeComponent();
         }
 
-        public frmHoaDon(int idDonHang) : this()
+        public frmPhieuNhanMay(int idDonHang) : this()
         {
             _idDonHang = idDonHang;
         }
 
-        private void frmHoaDon_Load(object sender, EventArgs e)
+        private void frmPhieuNhanMay_Load(object sender, EventArgs e)
         {
             if (_idDonHang <= 0)
             {
-                MessageBox.Show("Không xác định được đơn hàng cần in hóa đơn.");
+                MessageBox.Show("Không xác định được đơn hàng cần in phiếu nhận.");
                 Close();
                 return;
             }
 
-            LoadHoaDon();
+            LoadPhieuNhanMay();
         }
 
-        private void LoadHoaDon()
+        private void LoadPhieuNhanMay()
         {
             using (var db = new PhoneCareDbContext())
             {
@@ -55,7 +55,7 @@ namespace PhoneCare.Forms.BaoCao
                     .OrderBy(x => x.Id)
                     .ToList();
 
-                var table = TaoBangHoaDon();
+                var table = TaoBangPhieuNhanMay();
                 var tongTien = dichVus.Sum(x => x.DonGia);
                 var nguoiLap = Class.CurrentUser.FullName;
                 var nguoiNhanMay = donHang.NhanVien != null ? donHang.NhanVien.FullName : nguoiLap;
@@ -63,13 +63,13 @@ namespace PhoneCare.Forms.BaoCao
 
                 if (dichVus.Count == 0)
                 {
-                    AddHoaDonRow(table, donHang, coSo, nguoiLap, nguoiNhanMay, tongTien, 0, string.Empty, 0);
+                    AddPhieuNhanMayRow(table, donHang, coSo, nguoiLap, nguoiNhanMay, tongTien, 0, string.Empty, 0);
                 }
                 else
                 {
                     for (int i = 0; i < dichVus.Count; i++)
                     {
-                        AddHoaDonRow(
+                        AddPhieuNhanMayRow(
                             table,
                             donHang,
                             coSo,
@@ -84,20 +84,19 @@ namespace PhoneCare.Forms.BaoCao
                 }
 
                 reportViewer1.LocalReport.DataSources.Clear();
-                reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("HoaDonDataSet", table));
-                reportViewer1.LocalReport.ReportEmbeddedResource = "PhoneCare.BaoCao.HoaDon.rdlc";
+                reportViewer1.LocalReport.DataSources.Add(new ReportDataSource("PhieuNhanMayDataSet", table));
+                reportViewer1.LocalReport.ReportEmbeddedResource = "PhoneCare.BaoCao.PhieuNhanMay.rdlc";
                 reportViewer1.RefreshReport();
             }
         }
 
-        private DataTable TaoBangHoaDon()
+        private DataTable TaoBangPhieuNhanMay()
         {
-            var table = new DataTable("HoaDonDataSet");
+            var table = new DataTable("PhieuNhanMayDataSet");
 
             table.Columns.Add("MaPhieu", typeof(string));
             table.Columns.Add("ThoiGian", typeof(string));
             table.Columns.Add("NguoiLap", typeof(string));
-            table.Columns.Add("NguoiThu", typeof(string));
             table.Columns.Add("LoaiDichVu", typeof(string));
             table.Columns.Add("TenKH", typeof(string));
             table.Columns.Add("DiaChi", typeof(string));
@@ -106,6 +105,7 @@ namespace PhoneCare.Forms.BaoCao
             table.Columns.Add("Mau", typeof(string));
             table.Columns.Add("IMEI", typeof(string));
             table.Columns.Add("Password", typeof(string));
+            table.Columns.Add("GhiChu", typeof(string));
             table.Columns.Add("TongTien", typeof(decimal));
             table.Columns.Add("NguoiNhanMay", typeof(string));
             table.Columns.Add("STT", typeof(int));
@@ -117,7 +117,7 @@ namespace PhoneCare.Forms.BaoCao
             return table;
         }
 
-        private void AddHoaDonRow(
+        private void AddPhieuNhanMayRow(
             DataTable table,
             Models.DonHang donHang,
             Models.CoSoCuaHang coSo,
@@ -132,7 +132,6 @@ namespace PhoneCare.Forms.BaoCao
                 "#" + donHang.Id,
                 DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"),
                 nguoiLap,
-                nguoiLap,
                 donHang.LoaiDichVu,
                 donHang.TenKH,
                 donHang.DiaChi,
@@ -141,6 +140,7 @@ namespace PhoneCare.Forms.BaoCao
                 donHang.Mau,
                 donHang.IMEI.ToString(),
                 donHang.Password,
+                donHang.TinhTrangMay,
                 tongTien,
                 nguoiNhanMay,
                 stt,

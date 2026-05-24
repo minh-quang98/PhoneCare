@@ -87,7 +87,8 @@ namespace PhoneCare.Forms.QuanTriDonHang
                         query = query.Where(x => x.SoDT.Contains(keyword));
                         break;
                     case "IMEI":
-                        query = query.Where(x => x.IMEI.Contains(keyword));
+                        if (int.TryParse(keyword, out int imei))
+                            query = query.Where(x => x.IMEI == imei);
                         break;
                     case "Kỹ thuật":
                         query = query.Where(x => x.LoaiKyThuat.Contains(keyword));
@@ -129,7 +130,6 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 x.SoDT,
                 x.LoaiMay,
                 x.IMEI,
-                DichVu = string.Join(",", x.DichVus.Select(d => d.TenDichVu)),
                 x.NgayNhan,
                 NguoiNhan = x.NhanVien != null ? x.NhanVien.FullName : "",
                 x.LoaiKyThuat,

@@ -1,24 +1,18 @@
 ﻿using PhoneCare.Data;
-using PhoneCare.Forms.QuanTriNhanVien;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PhoneCare.Forms.QuanTriDonHang
 {
-    
+
     public partial class frmDichVu : Form
     {
         private frmThemMoiDonHang _parentForm;
         private int? _id = null;
         private int? _idDonHang = null;
-        public frmDichVu(frmThemMoiDonHang parentForm, int? id = null, int? idDonHang = null)
+        public frmDichVu(frmThemMoiDonHang parentForm, int? idDonHang = null, int? id = null)
         {
             InitializeComponent();
             _parentForm = parentForm;
@@ -72,10 +66,11 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void frmDichVu_Load(object sender, EventArgs e)
         {
-            if (_id.HasValue)
+            if (_idDonHang.HasValue)
             {
-                lblMaPhieu.Text = _id.ToString();
-            } else
+                lblMaPhieu.Text = _idDonHang.ToString();
+            }
+            else
             {
                 lblMaPhieu.Text = "";
             }
@@ -84,31 +79,38 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private void btnLuu_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
-             using (var db = new PhoneCareDbContext())
-             {
-                 if (_id.HasValue)
-                 {
-                     var dichVu = db.DichVus.Find(_id.Value);
-                     if (dichVu != null)
-                     {
-                         dichVu.TenDichVu = txtDichVu.Text.Trim();
-                         dichVu.DonGia = decimal.Parse(txtBaoGia.Text);
-                         db.SaveChanges();
-                     }
-                 }
-                 else
-                 {
-                     var dichVu = new Models.DichVu
-                     {
-                         TenDichVu = txtDichVu.Text.Trim(),
-                         DonGia = decimal.Parse(txtBaoGia.Text),
-                         IdDonHang = _idDonHang.Value
-                     };
-                     db.DichVus.Add(dichVu);
-                     db.SaveChanges();
-                 }
+            using (var db = new PhoneCareDbContext())
+            {
+                if (_id.HasValue)
+                {
+                    var dichVu = db.DichVus.Find(_id.Value);
+                    if (dichVu != null)
+                    {
+                        dichVu.TenDichVu = txtDichVu.Text.Trim();
+                        dichVu.DonGia = decimal.Parse(txtBaoGia.Text);
+                        dichVu.DateModify = DateTime.Now;
+                        dichVu.UserModify = Class.CurrentUser.Id;
+                        dichVu.IsDeleted = false;
+                        db.SaveChanges();
+                    }
+                    MessageBox.Show($"Đã lưu DV: {dichVu.TenDichVu}, IdDonHang = {dichVu.IdDonHang}");
+                }
+                else
+                {
+                    var dichVu = new Models.DichVu
+                    {
+                        TenDichVu = txtDichVu.Text.Trim(),
+                        DonGia = decimal.Parse(txtBaoGia.Text),
+                        IdDonHang = _idDonHang.Value,
+                        DateCreated = DateTime.Now,
+                        UserCreated = Class.CurrentUser.Id,
+                        IsDeleted = false,
+                    };
+                    db.DichVus.Add(dichVu);
+                    db.SaveChanges();
+                    MessageBox.Show($"Đã lưu DV: {dichVu.TenDichVu}, IdDonHang = {dichVu.IdDonHang}");
+                }
             }
-            MessageBox.Show("Lưu thành công!");
 
             _parentForm.LoadDichVu();
             ClearForm();

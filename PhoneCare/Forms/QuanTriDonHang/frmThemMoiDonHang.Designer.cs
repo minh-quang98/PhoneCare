@@ -430,6 +430,7 @@
             this.btnInPhieuNhan.TabIndex = 4;
             this.btnInPhieuNhan.Text = "In phiếu nhận";
             this.btnInPhieuNhan.UseVisualStyleBackColor = true;
+            this.btnInPhieuNhan.Click += new System.EventHandler(this.btnInPhieuNhan_Click);
             // 
             // btnInHoaDon
             // 
@@ -449,6 +450,7 @@
             this.btnDong.TabIndex = 4;
             this.btnDong.Text = "Đóng";
             this.btnDong.UseVisualStyleBackColor = true;
+            this.btnDong.Click += new System.EventHandler(this.btnDong_Click);
             // 
             // lblTongTien
             // 
