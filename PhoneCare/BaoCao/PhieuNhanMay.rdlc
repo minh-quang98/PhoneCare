@@ -397,7 +397,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="IMEI: " &amp; First(Fields!IMEI.Value, "PhieuNhanMayDataSet") &amp; ", Pass: " &amp; First(Fields!Password.Value, "PhieuNhanMayDataSet")</Value>
+                <Value>="IMEI: " &amp; First(Fields!IMEI.Value, "PhieuNhanMayDataSet")</Value>
                 <Style />
               </TextRun>
             </TextRuns>

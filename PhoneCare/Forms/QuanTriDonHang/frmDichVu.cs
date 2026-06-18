@@ -108,6 +108,8 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private void btnLuu_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
+            if (!_parentForm.CanModifyServices()) return;
+
             using (var db = new PhoneCareDbContext())
             {
                 if (_id.HasValue)

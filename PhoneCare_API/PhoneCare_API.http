@@ -1,0 +1,6 @@
+@PhoneCare_API_HostAddress = http://localhost:5064
+
+GET {{PhoneCare_API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

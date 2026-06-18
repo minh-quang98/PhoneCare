@@ -455,7 +455,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Pass: " &amp; First(Fields!Password.Value, "HoaDonDataSet")</Value>
+                <Value></Value>
                 <Style />
               </TextRun>
             </TextRuns>

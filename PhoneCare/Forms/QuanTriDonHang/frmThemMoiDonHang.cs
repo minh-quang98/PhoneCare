@@ -1,4 +1,5 @@
-﻿using PhoneCare.Data;
+using PhoneCare.Class;
+using PhoneCare.Data;
 using PhoneCare.Models;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,18 @@ namespace PhoneCare.Forms.QuanTriDonHang
 {
     public partial class frmThemMoiDonHang : Form
     {
-        private PhoneCareDbContext _context = new PhoneCareDbContext();
+        private readonly PhoneCareDbContext _context = new PhoneCareDbContext();
         private BindingList<DichVu> _dsDichVu = new BindingList<DichVu>();
         private DonHang _donHang = new DonHang();
-        private frmDanhSachDonHang _parentForm;
-        private int? _id;
+        private readonly frmDanhSachDonHang _parentForm;
+        private readonly int? _id;
 
         public frmThemMoiDonHang(frmDanhSachDonHang parentForm, int? id = null)
         {
             InitializeComponent();
             _parentForm = parentForm;
             _id = id;
+            FormClosed += (sender, args) => _context.Dispose();
         }
 
         private void frmThemMoiDonHang_Load(object sender, EventArgs e)
@@ -43,13 +45,14 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
             if (isEdit)
             {
-                LoadDichVu();
-                this.Text = "Chỉnh sửa đơn hàng";
+                Text = "Chỉnh sửa đơn hàng";
                 LoadDataForEdit();
+                LoadDichVu();
+                ApplyServicePermission();
             }
             else
             {
-                this.Text = "Thêm mới đơn hàng";
+                Text = "Thêm mới đơn hàng";
                 lblTongTien.Text = "0 VND";
             }
         }
@@ -110,20 +113,20 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void LoadLevel()
         {
+            cbLevel.Items.Clear();
             cbLevel.Items.AddRange(new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
         }
+
         private void LoadKyThuat()
         {
-            cbKyThuat.Items.AddRange(new string[] { "Kỹ thuật 1", "Kỹ thuật 2", "Kỹ thuật 3", "Kỹ thuật 4", "Kỹ thuật 5" });
-        }
+            cbKyThuat.Items.Clear();
+            var technicians = _context.NhanViens
+                .Where(x => !x.IsDeleted && !x.KhoaTaiKhoan && x.LoaiNhanVien == PermissionService.KyThuat)
+                .OrderBy(x => x.FullName)
+                .Select(x => x.FullName)
+                .ToList();
 
-        public enum RepairStatus
-        {
-            ChoSua = 1,
-            DangSua = 2,
-            KhongSuaDuoc = 3,
-            KhachKhongSua = 4,
-            DaTraKhach = 5
+            cbKyThuat.Items.AddRange(technicians.Cast<object>().ToArray());
         }
 
         private void LoadTinhTrang()
@@ -132,6 +135,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             {
                 new { Text = "Chờ sửa", Value = (int)RepairStatus.ChoSua },
                 new { Text = "Đang sửa", Value = (int)RepairStatus.DangSua },
+                new { Text = "Đã sửa", Value = (int)RepairStatus.DaSua },
                 new { Text = "Không sửa được", Value = (int)RepairStatus.KhongSuaDuoc },
                 new { Text = "Khách không sửa", Value = (int)RepairStatus.KhachKhongSua },
                 new { Text = "Đã trả khách", Value = (int)RepairStatus.DaTraKhach }
@@ -145,13 +149,12 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private void TinhTongTien()
         {
             decimal tong = _dsDichVu.Sum(x => x.DonGia);
-
             lblTongTien.Text = tong.ToString("N0") + " VND";
         }
 
         private string GetLoaiDichVu()
         {
-            List<string> list = new List<string>();
+            var list = new List<string>();
 
             if (chkBaoHanh.Checked) list.Add("Bảo hành");
             if (chkSuaChua.Checked) list.Add("Sửa chữa");
@@ -173,106 +176,78 @@ namespace PhoneCare.Forms.QuanTriDonHang
                     MessageBox.Show("Đơn hàng không tồn tại");
                     return;
                 }
-                try
+
+                if (!RepairStatusHelper.CanEditOrder(_donHang.TinhTrang))
                 {
-                    _donHang.TenKH = txtTenKH.Text;
-                    _donHang.SoDT = txtSDT.Text;
-                    _donHang.DiaChi = txtDiaChi.Text;
-
-                    _donHang.LoaiMay = txtLoaiMay.Text;
-                    _donHang.IMEI = Convert.ToInt32(txtIMEI.Text);
-                    _donHang.Mau = txtMau.Text;
-                    _donHang.Password = txtPassword.Text;
-
-                    _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
-                    _donHang.LoaiKyThuat = cbKyThuat.Text;
-
-                    _donHang.TinhTrang = (int)cbTinhTrang.SelectedValue;
-                    _donHang.TinhTrangMay = txtTinhTrangMay.Text;
-
-                    _donHang.LoaiDichVu = GetLoaiDichVu();
-
-                    _donHang.NgayNhan = DateTime.Now;
-                    _donHang.IdNguoiNhan = Class.CurrentUser.Id;
-
-                    _donHang.DateModify = DateTime.Now;
-                    _donHang.UserModify = Class.CurrentUser.Id;
-                    _donHang.IsDeleted = false;
-
-                    _donHang.DichVus = _dsDichVu;
-                    _donHang.IdCoSo = Class.CurrentUser.CoSoCuaHangId;
-
-                    _context.SaveChanges();
-
-                    MessageBox.Show("Lưu thành công!");
-                    ClearForm();
-                    _parentForm.LoadData();
-                    this.Close();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
+                    MessageBox.Show("Không thể sửa đơn hàng ở trạng thái hiện tại.");
+                    return;
                 }
             }
-            else
+
+            try
             {
-                //try
-                //{
-                _donHang.TenKH = txtTenKH.Text;
-                _donHang.SoDT = txtSDT.Text;
-                _donHang.DiaChi = txtDiaChi.Text;
+                MapFormToDonHang(_donHang);
 
-                _donHang.LoaiMay = txtLoaiMay.Text;
-                _donHang.IMEI = Convert.ToInt32(txtIMEI.Text);
-                _donHang.Mau = txtMau.Text;
-                _donHang.Password = txtPassword.Text;
+                if (_id.HasValue)
+                {
+                    _donHang.DateModify = DateTime.Now;
+                    _donHang.UserModify = Class.CurrentUser.Id;
+                }
+                else
+                {
+                    _donHang.NgayNhan = DateTime.Now;
+                    _donHang.IdNguoiNhan = Class.CurrentUser.Id;
+                    _donHang.DateCreated = DateTime.Now;
+                    _donHang.UserCreated = Class.CurrentUser.Id;
+                    _donHang.IsDeleted = false;
+                    _donHang.IdCoSo = Class.CurrentUser.CoSoCuaHangId;
+                    _context.DonHangs.Add(_donHang);
+                }
 
-                _donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
-                _donHang.LoaiKyThuat = cbKyThuat.Text;
-
-                _donHang.TinhTrang = (int)cbTinhTrang.SelectedValue;
-                _donHang.TinhTrangMay = txtTinhTrangMay.Text;
-
-                _donHang.LoaiDichVu = GetLoaiDichVu();
-
-                _donHang.NgayNhan = DateTime.Now;
-                _donHang.IdNguoiNhan = Class.CurrentUser.Id;
-
-                _donHang.DateCreated = DateTime.Now;
-                _donHang.UserCreated = Class.CurrentUser.Id;
-                _donHang.IsDeleted = false;
-
-                _donHang.DichVus = _dsDichVu;
-                _donHang.IdCoSo = Class.CurrentUser.CoSoCuaHangId;
-
-                _context.DonHangs.Add(_donHang);
                 _context.SaveChanges();
 
                 MessageBox.Show("Lưu thành công!");
                 ClearForm();
                 _parentForm.LoadData();
-                this.Close();
-                //}
-                //catch (Exception ex)
-                //{
-                //    MessageBox.Show(ex.Message);
-                //}
+                Close();
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void MapFormToDonHang(DonHang donHang)
+        {
+            donHang.TenKH = txtTenKH.Text.Trim();
+            donHang.SoDT = txtSDT.Text.Trim();
+            donHang.DiaChi = txtDiaChi.Text.Trim();
+            donHang.LoaiMay = txtLoaiMay.Text.Trim();
+            donHang.IMEI = txtIMEI.Text.Trim();
+            donHang.Mau = txtMau.Text.Trim();
+            donHang.Password = txtPassword.Text;
+            donHang.Level = Convert.ToInt32(cbLevel.SelectedItem);
+            donHang.LoaiKyThuat = cbKyThuat.Text;
+            donHang.TinhTrang = (int)cbTinhTrang.SelectedValue;
+            donHang.TinhTrangMay = txtTinhTrangMay.Text.Trim();
+            donHang.LoaiDichVu = GetLoaiDichVu();
         }
 
         private void mnuThemDichVu_Click(object sender, EventArgs e)
         {
-            frmDichVu f = new frmDichVu(this, idDonHang: _id);
+            if (!CanModifyServices()) return;
+
+            var f = new frmDichVu(this, idDonHang: _id);
             f.StartPosition = FormStartPosition.CenterParent;
-            f.ShowDialog();
+            f.ShowDialog(this);
         }
 
         public void LoadDichVu()
         {
             _dsDichVu = new BindingList<DichVu>(
                 _context.DichVus
-               .Where(x => x.IdDonHang == _id && x.IsDeleted == false)
-               .ToList()
+                    .Where(x => x.IdDonHang == _id && x.IsDeleted == false)
+                    .ToList()
             );
             ConfigureDichVuGrid();
             dgvDichVu.DataSource = null;
@@ -284,11 +259,12 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private void mnuSuaDichVu_Click(object sender, EventArgs e)
         {
             if (dgvDichVu.CurrentRow == null) return;
+            if (!CanModifyServices()) return;
 
             int id = Convert.ToInt32(dgvDichVu.CurrentRow.Cells["Id"].Value);
-            frmDichVu f = new frmDichVu(this, id: id);
+            var f = new frmDichVu(this, id: id);
             f.StartPosition = FormStartPosition.CenterParent;
-            f.ShowDialog();
+            f.ShowDialog(this);
         }
 
         private void ClearError()
@@ -300,6 +276,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             errorProvider1.SetError(txtTinhTrangMay, "");
             errorProvider1.SetError(cbKyThuat, "");
             errorProvider1.SetError(cbTinhTrang, "");
+            errorProvider1.SetError(cbLevel, "");
         }
 
         private bool ValidateInput()
@@ -307,14 +284,12 @@ namespace PhoneCare.Forms.QuanTriDonHang
             bool valid = true;
             ClearError();
 
-            // 1. Tên khách hàng
             if (string.IsNullOrWhiteSpace(txtTenKH.Text))
             {
                 errorProvider1.SetError(txtTenKH, "Tên khách hàng không được để trống");
                 valid = false;
             }
 
-            // 2. SĐT
             if (string.IsNullOrWhiteSpace(txtSDT.Text))
             {
                 errorProvider1.SetError(txtSDT, "Số điện thoại không được để trống");
@@ -326,39 +301,45 @@ namespace PhoneCare.Forms.QuanTriDonHang
                 valid = false;
             }
 
-
-            // 3. Loại máy
             if (string.IsNullOrWhiteSpace(txtLoaiMay.Text))
             {
                 errorProvider1.SetError(txtLoaiMay, "Loại máy không được để trống");
                 valid = false;
             }
 
-            // 4. IMEI
-            if (string.IsNullOrWhiteSpace(txtIMEI.Text))
+            string imei = txtIMEI.Text.Trim();
+            if (string.IsNullOrWhiteSpace(imei))
             {
                 errorProvider1.SetError(txtIMEI, "IMEI không được để trống");
                 valid = false;
             }
+            else if (!imei.All(char.IsDigit) || imei.Length < 14 || imei.Length > 17)
+            {
+                errorProvider1.SetError(txtIMEI, "IMEI phải là dãy số từ 14 đến 17 chữ số");
+                valid = false;
+            }
 
-            // 5. Tình trạng máy
             if (string.IsNullOrWhiteSpace(txtTinhTrangMay.Text))
             {
                 errorProvider1.SetError(txtTinhTrangMay, "Tình trạng máy không được để trống");
                 valid = false;
             }
 
-            // 6. Chọn kỹ thuật
-            if (cbKyThuat.SelectedIndex < 0)
+            if (cbKyThuat.SelectedIndex < 0 && string.IsNullOrWhiteSpace(cbKyThuat.Text))
             {
                 errorProvider1.SetError(cbKyThuat, "Vui lòng chọn kỹ thuật viên");
                 valid = false;
             }
 
-            // 7. Trạng thái
             if (cbTinhTrang.SelectedIndex < 0)
             {
                 errorProvider1.SetError(cbTinhTrang, "Vui lòng chọn trạng thái");
+                valid = false;
+            }
+
+            if (cbLevel.SelectedIndex < 0)
+            {
+                errorProvider1.SetError(cbLevel, "Vui lòng chọn level");
                 valid = false;
             }
 
@@ -367,48 +348,31 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void ClearForm()
         {
-            // ===== Thông tin khách hàng =====
             txtTenKH.Clear();
             txtSDT.Clear();
             txtDiaChi.Clear();
-
-            // ===== Thông tin máy =====
             txtLoaiMay.Clear();
             txtIMEI.Clear();
             txtMau.Clear();
             txtPassword.Clear();
-
-            // ===== Loại dịch vụ =====
             chkBaoHanh.Checked = false;
             chkSuaChua.Checked = false;
             chkDichVu.Checked = false;
             chkCaiDat.Checked = false;
-
             cbLevel.SelectedIndex = -1;
-
-            // ===== Tình trạng =====
             txtTinhTrangMay.Clear();
-
-            // ===== Danh sách dịch vụ =====
-            _dsDichVu.Clear(); // BindingList → grid auto clear
-
-            // ===== Dropdown thao tác =====
+            _dsDichVu.Clear();
             cbKyThuat.SelectedIndex = -1;
             cbTinhTrang.SelectedIndex = -1;
-
-            // ===== Tổng tiền =====
             lblTongTien.Text = "0 VNĐ";
-
-            // ===== Clear validation =====
             errorProvider1.Clear();
-
-            // ===== Focus lại =====
             txtTenKH.Focus();
         }
 
         private void mnuXoaDichVu_Click(object sender, EventArgs e)
         {
             if (dgvDichVu.CurrentRow == null) return;
+            if (!CanModifyServices()) return;
 
             int id = Convert.ToInt32(dgvDichVu.CurrentRow.Cells["Id"].Value);
 
@@ -472,49 +436,67 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void LoadDataForEdit()
         {
-            using (var db = new PhoneCareDbContext())
+            _donHang = _context.DonHangs.FirstOrDefault(x => x.Id == _id && !x.IsDeleted);
+
+            if (_donHang == null) return;
+
+            txtTenKH.Text = _donHang.TenKH;
+            txtSDT.Text = _donHang.SoDT;
+            txtDiaChi.Text = _donHang.DiaChi;
+            txtLoaiMay.Text = _donHang.LoaiMay;
+            txtIMEI.Text = _donHang.IMEI;
+            txtMau.Text = _donHang.Mau;
+            txtPassword.Text = _donHang.Password;
+            cbLevel.SelectedItem = _donHang.Level.ToString();
+
+            if (cbKyThuat.Items.Contains(_donHang.LoaiKyThuat))
             {
-                var coso = db.DonHangs.FirstOrDefault(x => x.Id == _id);
-
-                if (coso == null) return;
-                //txtID.Text = coso.Id.ToString();
-                //txtCode.Text = coso.Code;
-                //txtName.Text = coso.Name;
-                //txtAddress.Text = coso.Address;
-                //txtHomePhone.Text = coso.HomePhone;
-                //txtHotline.Text = coso.Hotline;
-                txtTenKH.Text = coso.TenKH;
-                txtSDT.Text = coso.SoDT;
-                txtDiaChi.Text = coso.DiaChi;
-
-                txtLoaiMay.Text = coso.LoaiMay;
-                txtIMEI.Text = coso.IMEI.ToString();
-                txtMau.Text = coso.Mau;
-                txtPassword.Text = coso.Password;
-
-                cbLevel.SelectedItem = coso.Level.ToString();
-                if (cbKyThuat.Items.Contains(coso.LoaiKyThuat))
-                {
-                    cbKyThuat.SelectedItem = coso.LoaiKyThuat;
-                }
-                else
-                {
-                    cbKyThuat.Text = coso.LoaiKyThuat;
-                }
-
-                cbTinhTrang.SelectedValue = coso.TinhTrang;
-                txtTinhTrangMay.Text = coso.TinhTrangMay;
-
-                chkBaoHanh.Checked = coso.LoaiDichVu.Contains("Bảo hành");
-                chkSuaChua.Checked = coso.LoaiDichVu.Contains("Sửa chữa");
-                chkDichVu.Checked = coso.LoaiDichVu.Contains("Dịch vụ");
-                chkCaiDat.Checked = coso.LoaiDichVu.Contains("Cài đặt");
+                cbKyThuat.SelectedItem = _donHang.LoaiKyThuat;
             }
+            else
+            {
+                cbKyThuat.Text = _donHang.LoaiKyThuat;
+            }
+
+            cbTinhTrang.SelectedValue = _donHang.TinhTrang;
+            txtTinhTrangMay.Text = _donHang.TinhTrangMay;
+
+            string loaiDichVu = _donHang.LoaiDichVu ?? string.Empty;
+            chkBaoHanh.Checked = loaiDichVu.Contains("Bảo hành");
+            chkSuaChua.Checked = loaiDichVu.Contains("Sửa chữa");
+            chkDichVu.Checked = loaiDichVu.Contains("Dịch vụ");
+            chkCaiDat.Checked = loaiDichVu.Contains("Cài đặt");
+        }
+
+        public bool CanModifyServices()
+        {
+            if (!PermissionService.CanManageServices())
+            {
+                MessageBox.Show("Bạn không có quyền cập nhật dịch vụ.");
+                return false;
+            }
+
+            int status = _donHang != null ? _donHang.TinhTrang : 0;
+            if (!RepairStatusHelper.CanEditOrder(status))
+            {
+                MessageBox.Show("Không thể cập nhật dịch vụ ở trạng thái hiện tại.");
+                return false;
+            }
+
+            return true;
+        }
+
+        private void ApplyServicePermission()
+        {
+            bool enabled = PermissionService.CanManageServices() && RepairStatusHelper.CanEditOrder(_donHang.TinhTrang);
+            mnuThemDichVu.Enabled = enabled;
+            mnuSuaDichVu.Enabled = enabled;
+            mnuXoaDichVu.Enabled = enabled;
         }
 
         private void btnDong_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
     }
 }

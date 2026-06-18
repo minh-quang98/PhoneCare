@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using PhoneCare.Class;
+using System;
 using System.Windows.Forms;
 
 namespace PhoneCare
@@ -24,14 +18,19 @@ namespace PhoneCare
                 mnuLogIn.Visible = false;
                 mnuChangePassword.Visible = true;
                 mnuDangXuat.Visible = true;
-                mnuQuanTri.Visible = true;
-                mnuDonHang.Visible = true;
+                mnuQuanTriNhanVien.Visible = PermissionService.CanManageEmployees();
+                mnuQuanLyCuaHang.Visible = PermissionService.CanManageStores();
+                mnuQuanTri.Visible = mnuQuanTriNhanVien.Visible || mnuQuanLyCuaHang.Visible;
+                mnuDonHang.Visible = PermissionService.CanViewOrders();
                 mnuTroGiup.Visible = true;
-            } else
+            }
+            else
             {
                 mnuLogIn.Visible = true;
                 mnuChangePassword.Visible = false;
                 mnuDangXuat.Visible = false;
+                mnuQuanTriNhanVien.Visible = false;
+                mnuQuanLyCuaHang.Visible = false;
                 mnuQuanTri.Visible = false;
                 mnuDonHang.Visible = false;
                 mnuTroGiup.Visible = false;
@@ -46,7 +45,7 @@ namespace PhoneCare
 
         private void mnuLogIn_Click(object sender, EventArgs e)
         {
-            frmDangNhap f = new frmDangNhap(this);
+            var f = new frmDangNhap(this);
             f.StartPosition = FormStartPosition.CenterScreen;
             f.ShowDialog(this);
         }
@@ -71,28 +70,46 @@ namespace PhoneCare
 
         private void mnuQuanTriNhanVien_Click(object sender, EventArgs e)
         {
-            Forms.QuanTriNhanVien.frmQuanTriNhanVien f = new Forms.QuanTriNhanVien.frmQuanTriNhanVien();
+            if (!PermissionService.CanManageEmployees())
+            {
+                MessageBox.Show("Bạn không có quyền quản lý nhân viên.");
+                return;
+            }
+
+            var f = new Forms.QuanTriNhanVien.frmQuanTriNhanVien();
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
         }
 
         private void mnuChangePassword_Click(object sender, EventArgs e)
         {
-            Forms.frmDoiMatKhau f = new Forms.frmDoiMatKhau();
+            var f = new Forms.frmDoiMatKhau();
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
         }
 
         private void mnuQuanLyCuaHang_Click(object sender, EventArgs e)
         {
-            Forms.QuanTriCuaHang.frmDanhSachCuaHang f = new Forms.QuanTriCuaHang.frmDanhSachCuaHang();
+            if (!PermissionService.CanManageStores())
+            {
+                MessageBox.Show("Bạn không có quyền quản lý cửa hàng.");
+                return;
+            }
+
+            var f = new Forms.QuanTriCuaHang.frmDanhSachCuaHang();
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
         }
 
         private void mnuDonHang_Click(object sender, EventArgs e)
         {
-            Forms.QuanTriDonHang.frmDanhSachDonHang f = new Forms.QuanTriDonHang.frmDanhSachDonHang();
+            if (!PermissionService.CanViewOrders())
+            {
+                MessageBox.Show("Bạn không có quyền xem đơn hàng.");
+                return;
+            }
+
+            var f = new Forms.QuanTriDonHang.frmDanhSachDonHang();
             f.StartPosition = FormStartPosition.CenterScreen;
             f.Show();
         }

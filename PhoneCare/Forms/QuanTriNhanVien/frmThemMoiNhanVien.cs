@@ -1,16 +1,16 @@
-﻿using PhoneCare.Data;
+using PhoneCare.Class;
+using PhoneCare.Data;
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Linq;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace PhoneCare.Forms.QuanTriNhanVien
 {
     public partial class frmThemMoiNhanVien : Form
     {
-        private frmQuanTriNhanVien _parentForm;
-        private int? _id = null;
+        private readonly frmQuanTriNhanVien _parentForm;
+        private readonly int? _id = null;
+
         public frmThemMoiNhanVien(frmQuanTriNhanVien parent, int? id = null)
         {
             InitializeComponent();
@@ -20,33 +20,31 @@ namespace PhoneCare.Forms.QuanTriNhanVien
 
         private string GetTypeEmployee()
         {
-            if (rbtAdmin.Checked) return "Admin";
-            if (rbtAdminCS.Checked) return "AdminCS";
-            if (rbtSale.Checked) return "Sale";
-            if (rbtKyThuat.Checked) return "Kỹ thuật";
-            return "Marketing";
+            if (rbtAdmin.Checked) return PermissionService.Admin;
+            if (rbtAdminCS.Checked) return PermissionService.AdminCoSo;
+            if (rbtSale.Checked) return PermissionService.Sale;
+            if (rbtKyThuat.Checked) return PermissionService.KyThuat;
+            return PermissionService.Marketing;
         }
 
         private void SetTypeEmployee(string type)
         {
             switch (type)
             {
-                case "Admin":
+                case PermissionService.Admin:
                     rbtAdmin.Checked = true;
                     break;
-                case "AdminCS":
+                case PermissionService.AdminCoSo:
                     rbtAdminCS.Checked = true;
                     break;
-                case "Sale":
+                case PermissionService.Sale:
                     rbtSale.Checked = true;
                     break;
-                case "Kỹ thuật":
+                case PermissionService.KyThuat:
                     rbtKyThuat.Checked = true;
                     break;
-                case "Marketing":
+                case PermissionService.Marketing:
                     rbtMarketting.Checked = true;
-                    break;
-                default:
                     break;
             }
         }
@@ -59,7 +57,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             {
                 if (_id.HasValue)
                 {
-                    var nhanvien = db.NhanViens.FirstOrDefault(x => x.Id == _id);
+                    var nhanvien = db.NhanViens.FirstOrDefault(x => x.Id == _id && !x.IsDeleted);
                     if (nhanvien == null)
                     {
                         MessageBox.Show("Không tìm thấy nhân viên!");
@@ -67,38 +65,44 @@ namespace PhoneCare.Forms.QuanTriNhanVien
                     }
 
                     nhanvien.UserName = txtTaiKhoan.Text.Trim();
-                    nhanvien.Password = txtMatKhau.Text.Trim();
+                    if (!string.IsNullOrWhiteSpace(txtMatKhau.Text))
+                    {
+                        nhanvien.Password = PasswordHasher.Hash(txtMatKhau.Text.Trim());
+                    }
+
                     nhanvien.FullName = txtHoTen.Text.Trim();
                     nhanvien.NickName = txtNickName.Text.Trim();
                     nhanvien.Email = txtEmail.Text.Trim();
                     nhanvien.Phone = txtSDT.Text.Trim();
                     nhanvien.IdCoSoLamViec = Convert.ToInt32(cboCoSoLamViec.SelectedValue);
                     nhanvien.KhoaTaiKhoan = chkKhoaTaiKhoan.Checked;
-                    nhanvien.LoaiNhanVien = this.GetTypeEmployee();
+                    nhanvien.LoaiNhanVien = GetTypeEmployee();
                     nhanvien.DateModify = DateTime.Now;
                     nhanvien.UserModify = Class.CurrentUser.Id;
                     nhanvien.IsDeleted = false;
 
                     db.SaveChanges();
-
                     MessageBox.Show("Cập nhật thành công!");
-                } else
+                }
+                else
                 {
-                    if (db.NhanViens.Any(x => x.UserName == txtTaiKhoan.Text.Trim()))
+                    if (db.NhanViens.Any(x => x.UserName == txtTaiKhoan.Text.Trim() && !x.IsDeleted))
                     {
                         errorProvider1.SetError(txtTaiKhoan, $"Tài khoản {txtTaiKhoan.Text} đã tồn tại!");
                         return;
                     }
-                    db.NhanViens.Add(new Models.NhanVien {
+
+                    db.NhanViens.Add(new Models.NhanVien
+                    {
                         UserName = txtTaiKhoan.Text.Trim(),
-                        Password = txtMatKhau.Text.Trim(),
+                        Password = PasswordHasher.Hash(txtMatKhau.Text.Trim()),
                         FullName = txtHoTen.Text.Trim(),
                         NickName = txtNickName.Text.Trim(),
                         Email = txtEmail.Text.Trim(),
                         Phone = txtSDT.Text.Trim(),
                         IdCoSoLamViec = Convert.ToInt32(cboCoSoLamViec.SelectedValue),
                         KhoaTaiKhoan = chkKhoaTaiKhoan.Checked,
-                        LoaiNhanVien = this.GetTypeEmployee(),
+                        LoaiNhanVien = GetTypeEmployee(),
                         DateCreated = DateTime.Now,
                         UserCreated = Class.CurrentUser.Id,
                         IsDeleted = false
@@ -108,11 +112,10 @@ namespace PhoneCare.Forms.QuanTriNhanVien
                     MessageBox.Show("Thêm nhân viên thành công!");
                 }
             }
+
             ClearForm();
             _parentForm.LoadNhanVien();
-
-            this.Close();
-            
+            Close();
         }
 
         private void frmThemMoiNhanVien_Load(object sender, EventArgs e)
@@ -120,12 +123,12 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             LoadCoSo();
             if (_id.HasValue)
             {
-                this.Text = "Chỉnh sửa nhân viên";
+                Text = "Chỉnh sửa nhân viên";
                 LoadDataForEdit();
             }
             else
             {
-                this.Text = "Thêm mới nhân viên";
+                Text = "Thêm mới nhân viên";
             }
         }
 
@@ -133,18 +136,18 @@ namespace PhoneCare.Forms.QuanTriNhanVien
         {
             using (var db = new PhoneCareDbContext())
             {
-                var nhanvien = db.NhanViens.FirstOrDefault(x => x.Id == _id);
+                var nhanvien = db.NhanViens.FirstOrDefault(x => x.Id == _id && !x.IsDeleted);
 
                 if (nhanvien == null) return;
                 txtTaiKhoan.Text = nhanvien.UserName;
-                txtMatKhau.Text = nhanvien.Password;
+                txtMatKhau.Clear();
                 txtHoTen.Text = nhanvien.FullName;
                 txtNickName.Text = nhanvien.NickName;
                 txtEmail.Text = nhanvien.Email;
                 txtSDT.Text = nhanvien.Phone;
                 chkKhoaTaiKhoan.Checked = nhanvien.KhoaTaiKhoan;
                 cboCoSoLamViec.SelectedValue = nhanvien.IdCoSoLamViec;
-                this.SetTypeEmployee(nhanvien.LoaiNhanVien);
+                SetTypeEmployee(nhanvien.LoaiNhanVien);
             }
         }
 
@@ -152,21 +155,23 @@ namespace PhoneCare.Forms.QuanTriNhanVien
         {
             using (var db = new PhoneCareDbContext())
             {
-                cboCoSoLamViec.DataSource = db.CoSoCuaHangs.ToList();
-                cboCoSoLamViec.DisplayMember = "Name"; // tên hiển thị
-                cboCoSoLamViec.ValueMember = "Id";     // giá trị
+                cboCoSoLamViec.DataSource = db.CoSoCuaHangs.Where(x => !x.IsDeleted).ToList();
+                cboCoSoLamViec.DisplayMember = "Name";
+                cboCoSoLamViec.ValueMember = "Id";
             }
         }
 
         private bool ValidateInput()
         {
             bool validate = true;
+            errorProvider1.Clear();
+
             if (string.IsNullOrWhiteSpace(txtTaiKhoan.Text))
             {
                 errorProvider1.SetError(txtTaiKhoan, "Tài khoản không được để trống!");
                 validate = false;
             }
-            if (string.IsNullOrWhiteSpace(txtMatKhau.Text))
+            if (!_id.HasValue && string.IsNullOrWhiteSpace(txtMatKhau.Text))
             {
                 errorProvider1.SetError(txtMatKhau, "Mật khẩu không được để trống!");
                 validate = false;
@@ -176,13 +181,14 @@ namespace PhoneCare.Forms.QuanTriNhanVien
                 errorProvider1.SetError(txtHoTen, "Họ và tên không được để trống!");
                 validate = false;
             }
+
             return validate;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
             ClearForm();
-            this.Close();
+            Close();
         }
 
         private void ClearForm()
@@ -193,7 +199,6 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             txtNickName.Clear();
             txtEmail.Clear();
             txtSDT.Clear();
-
         }
     }
 }

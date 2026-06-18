@@ -1,29 +1,29 @@
-﻿using PhoneCare.Data;
+using PhoneCare.Class;
+using PhoneCare.Data;
+using PhoneCare.Models;
 using System;
-using System.IO;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using static PhoneCare.Forms.QuanTriDonHang.frmThemMoiDonHang;
 
 namespace PhoneCare.Forms.QuanTriDonHang
 {
     public partial class frmDanhSachDonHang : Form
     {
-        private PhoneCareDbContext _context = new PhoneCareDbContext();
         private int _page = 1;
         private int _pageSize = 10;
         private int _total = 0;
         private bool _isLoadingStaticData = false;
+
         public frmDanhSachDonHang()
         {
             InitializeComponent();
         }
 
-        private void btnAdd_Click(object sender, System.EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            frmThemMoiDonHang f = new frmThemMoiDonHang(this);
-            f.ShowDialog();
+            OpenCreateForm();
         }
 
         private void frmDanhSachDonHang_Load(object sender, EventArgs e)
@@ -31,7 +31,6 @@ namespace PhoneCare.Forms.QuanTriDonHang
             LoadStaticData();
             LoadData();
         }
-
 
         private void LoadStaticData()
         {
@@ -43,74 +42,77 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
             cbTieuChi.Items.Clear();
             cbTieuChi.Items.AddRange(new object[] {
-                "ID","Tên KH","SĐT","IMEI","Kỹ thuật"
+                "ID","Tên KH","SĐT","IMEI","Kỹ thuật","Loại máy"
             });
             cbTieuChi.SelectedIndex = 0;
 
-            var list = new[]
-            {
-                new { Text = "Chờ sửa", Value = (int)RepairStatus.ChoSua },
-                new { Text = "Đang sửa", Value = (int)RepairStatus.DangSua },
-                new { Text = "Không sửa được", Value = (int)RepairStatus.KhongSuaDuoc },
-                new { Text = "Khách không sửa", Value = (int)RepairStatus.KhachKhongSua },
-                new { Text = "Đã trả khách", Value = (int)RepairStatus.DaTraKhach }
-            };
-
-            cbTrangThai.DataSource = list;
+            cbTrangThai.DataSource = GetStatusList();
             cbTrangThai.DisplayMember = "Text";
             cbTrangThai.ValueMember = "Value";
             cbTrangThai.SelectedIndex = -1;
 
-            cbCoSo.DataSource = _context.CoSoCuaHangs
-                .Where(x => !x.IsDeleted)
-                .ToList();
+            using (var context = new PhoneCareDbContext())
+            {
+                cbCoSo.DataSource = context.CoSoCuaHangs
+                    .Where(x => !x.IsDeleted)
+                    .ToList();
+            }
+
             cbCoSo.DisplayMember = "Name";
             cbCoSo.ValueMember = "Id";
             cbCoSo.SelectedIndex = -1;
+
+            dtFrom.ShowCheckBox = true;
+            dtTo.ShowCheckBox = true;
+            dtFrom.Checked = false;
+            dtTo.Checked = false;
 
             _isLoadingStaticData = false;
         }
 
         public void LoadData()
         {
-            var query = BuildFilteredQuery();
-
-            int total = query.Count();
-            int lastPage = GetLastPage(total);
-            if (_page > lastPage)
+            using (var context = new PhoneCareDbContext())
             {
-                _page = lastPage;
+                var query = BuildFilteredQuery(context);
+
+                int total = query.Count();
+                int lastPage = GetLastPage(total);
+                if (_page > lastPage)
+                {
+                    _page = lastPage;
+                }
+
+                var data = query
+                    .OrderByDescending(x => x.Id)
+                    .Skip((_page - 1) * _pageSize)
+                    .Take(_pageSize)
+                    .ToList()
+                    .Select(x => new
+                    {
+                        x.Id,
+                        x.TenKH,
+                        x.SoDT,
+                        x.LoaiMay,
+                        x.IMEI,
+                        x.NgayNhan,
+                        NguoiNhan = x.NhanVien != null ? x.NhanVien.FullName : "",
+                        x.LoaiKyThuat,
+                        TinhTrang = RepairStatusHelper.GetText(x.TinhTrang),
+                        x.Level
+                    }).ToList();
+
+                dgvDonHang.DataSource = data;
+                _total = total;
+                UpdatePagingInfo(data.Count, total);
             }
-
-            var data = query
-            .OrderByDescending(x => x.Id)
-            .Skip((_page - 1) * _pageSize)
-            .Take(_pageSize)
-            .ToList()
-            .Select(x => new
-            {
-                x.Id,
-                x.TenKH,
-                x.SoDT,
-                x.LoaiMay,
-                x.IMEI,
-                x.NgayNhan,
-                NguoiNhan = x.NhanVien != null ? x.NhanVien.FullName : "",
-                x.LoaiKyThuat,
-                TinhTrang = GetTinhTrangText(x.TinhTrang),
-                x.Level
-            }).ToList();
-
-            dgvDonHang.DataSource = data;
-            _total = total;
-            UpdatePagingInfo(data.Count, total);
         }
 
-        private IQueryable<Models.DonHang> BuildFilteredQuery()
+        private IQueryable<DonHang> BuildFilteredQuery(PhoneCareDbContext context)
         {
-            var query = _context.DonHangs
-                .Include("NhanVien")
-                .Include("CoSoCuaHang")
+            var query = context.DonHangs
+                .Include(x => x.NhanVien)
+                .Include(x => x.CoSoCuaHang)
                 .Where(x => !x.IsDeleted)
                 .AsQueryable();
 
@@ -121,7 +123,7 @@ namespace PhoneCare.Forms.QuanTriDonHang
             {
                 switch (tieuChi)
                 {
-                    case "ID":  
+                    case "ID":
                         if (int.TryParse(keyword, out int id))
                             query = query.Where(x => x.Id == id);
                         break;
@@ -132,34 +134,40 @@ namespace PhoneCare.Forms.QuanTriDonHang
                         query = query.Where(x => x.SoDT.Contains(keyword));
                         break;
                     case "IMEI":
-                        if (int.TryParse(keyword, out int imei))
-                            query = query.Where(x => x.IMEI == imei);
+                        query = query.Where(x => x.IMEI.Contains(keyword));
                         break;
                     case "Kỹ thuật":
                         query = query.Where(x => x.LoaiKyThuat.Contains(keyword));
                         break;
+                    case "Loại máy":
+                        query = query.Where(x => x.LoaiMay.Contains(keyword));
+                        break;
                 }
             }
 
-            // Trạng thái
             if (cbTrangThai.SelectedIndex >= 0)
             {
                 int status = (int)cbTrangThai.SelectedValue;
                 query = query.Where(x => x.TinhTrang == status);
             }
 
-            // Cơ sở
             if (cbCoSo.SelectedIndex >= 0)
             {
                 int cosoId = (int)cbCoSo.SelectedValue;
                 query = query.Where(x => x.IdCoSo == cosoId);
             }
 
-            // Date
-            DateTime from = dtFrom.Value.Date;
-            DateTime to = dtTo.Value.Date.AddDays(1);
+            if (dtFrom.Checked)
+            {
+                DateTime from = dtFrom.Value.Date;
+                query = query.Where(x => x.NgayNhan >= from);
+            }
 
-            query = query.Where(x => x.NgayNhan >= from && x.NgayNhan < to);
+            if (dtTo.Checked)
+            {
+                DateTime to = dtTo.Value.Date.AddDays(1);
+                query = query.Where(x => x.NgayNhan < to);
+            }
 
             return query;
         }
@@ -167,7 +175,6 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private int GetLastPage(int total)
         {
             if (total <= 0) return 1;
-
             return (int)Math.Ceiling(total / (double)_pageSize);
         }
 
@@ -205,6 +212,8 @@ namespace PhoneCare.Forms.QuanTriDonHang
             cbTieuChi.SelectedIndex = 0;
             cbTrangThai.SelectedIndex = -1;
             cbCoSo.SelectedIndex = -1;
+            dtFrom.Checked = false;
+            dtTo.Checked = false;
             _page = 1;
             LoadData();
         }
@@ -221,7 +230,6 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private void btnNext_Click(object sender, EventArgs e)
         {
             if (_page >= GetLastPage(_total)) return;
-
             _page++;
             LoadData();
         }
@@ -252,18 +260,51 @@ namespace PhoneCare.Forms.QuanTriDonHang
 
         private void mnuThemDonHang_Click(object sender, EventArgs e)
         {
-            frmThemMoiDonHang f = new frmThemMoiDonHang(this);
+            OpenCreateForm();
+        }
+
+        private void OpenCreateForm()
+        {
+            if (!PermissionService.CanEditOrders())
+            {
+                MessageBox.Show("Bạn không có quyền thêm đơn hàng.");
+                return;
+            }
+
+            var f = new frmThemMoiDonHang(this);
             f.StartPosition = FormStartPosition.CenterParent;
-            f.ShowDialog();
+            f.ShowDialog(this);
         }
 
         private void mnuSuaDonHang_Click(object sender, EventArgs e)
         {
             if (dgvDonHang.CurrentRow == null) return;
+            if (!PermissionService.CanEditOrders())
+            {
+                MessageBox.Show("Bạn không có quyền sửa đơn hàng.");
+                return;
+            }
+
             int id = Convert.ToInt32(dgvDonHang.CurrentRow.Cells["Id"].Value);
-            frmThemMoiDonHang f = new frmThemMoiDonHang(this, id);
+            using (var context = new PhoneCareDbContext())
+            {
+                var donHang = context.DonHangs.FirstOrDefault(x => x.Id == id && !x.IsDeleted);
+                if (donHang == null)
+                {
+                    MessageBox.Show("Không tìm thấy đơn hàng.");
+                    return;
+                }
+
+                if (!RepairStatusHelper.CanEditOrder(donHang.TinhTrang))
+                {
+                    MessageBox.Show("Không thể sửa đơn hàng ở trạng thái hiện tại.");
+                    return;
+                }
+            }
+
+            var f = new frmThemMoiDonHang(this, id);
             f.StartPosition = FormStartPosition.CenterParent;
-            f.ShowDialog();
+            f.ShowDialog(this);
         }
 
         private void mnuXoaDonHang_Click(object sender, EventArgs e)
@@ -273,119 +314,90 @@ namespace PhoneCare.Forms.QuanTriDonHang
             int id = Convert.ToInt32(dgvDonHang.CurrentRow.Cells["Id"].Value);
             var result = MessageBox.Show("Bạn có chắc muốn xóa đơn hàng này?", "Xác nhận", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
-            if (result == DialogResult.No) { return; }
+            if (result == DialogResult.No) return;
 
-            var donHang = _context.DonHangs.FirstOrDefault(x => x.Id == id);
-            if (donHang != null)
+            using (var context = new PhoneCareDbContext())
             {
-                donHang.IsDeleted = true;
-                donHang.DateModify = DateTime.Now;
-                donHang.UserModify = Class.CurrentUser.Id;
+                var donHang = context.DonHangs.FirstOrDefault(x => x.Id == id && !x.IsDeleted);
+                if (donHang != null)
+                {
+                    donHang.IsDeleted = true;
+                    donHang.DateModify = DateTime.Now;
+                    donHang.UserModify = Class.CurrentUser.Id;
 
-                _context.SaveChanges();
+                    context.SaveChanges();
 
-                MessageBox.Show("Xóa thành công!");
-                LoadData();
-            }
-            else
-            {
-                MessageBox.Show("Không tìm thấy dữ liệu!");
+                    MessageBox.Show("Xóa thành công!");
+                    LoadData();
+                }
+                else
+                {
+                    MessageBox.Show("Không tìm thấy dữ liệu!");
+                }
             }
         }
 
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
-            var data = BuildFilteredQuery()
-                .OrderByDescending(x => x.Id)
-                .ToList();
-
-            if (data.Count == 0)
+            using (var context = new PhoneCareDbContext())
             {
-                MessageBox.Show("Không có dữ liệu để xuất Excel.");
-                return;
-            }
+                var data = BuildFilteredQuery(context)
+                    .OrderByDescending(x => x.Id)
+                    .ToList();
 
-            using (var dialog = new SaveFileDialog())
-            {
-                dialog.Title = "Xuất danh sách đơn hàng";
-                dialog.Filter = "Excel CSV (*.csv)|*.csv";
-                dialog.FileName = $"DanhSachDonHang_{DateTime.Now:yyyyMMdd_HHmmss}.csv";
-
-                if (dialog.ShowDialog(this) != DialogResult.OK) return;
-
-                using (var writer = new StreamWriter(dialog.FileName, false, new UTF8Encoding(true)))
+                if (data.Count == 0)
                 {
-                    WriteCsvRow(writer, new[]
-                    {
-                        "STT",
-                        "ID",
-                        "Tên KH",
-                        "SĐT",
-                        "Loại máy",
-                        "IMEI",
-                        "Ngày nhận",
-                        "Người nhận",
-                        "Kỹ thuật",
-                        "Trạng thái",
-                        "Level",
-                        "Cơ sở"
-                    });
-
-                    for (int i = 0; i < data.Count; i++)
-                    {
-                        var item = data[i];
-                        WriteCsvRow(writer, new[]
-                        {
-                            (i + 1).ToString(),
-                            item.Id.ToString(),
-                            item.TenKH,
-                            item.SoDT,
-                            item.LoaiMay,
-                            item.IMEI.ToString(),
-                            item.NgayNhan.HasValue ? item.NgayNhan.Value.ToString("dd/MM/yyyy HH:mm") : "",
-                            item.NhanVien != null ? item.NhanVien.FullName : "",
-                            item.LoaiKyThuat,
-                            GetTinhTrangText(item.TinhTrang),
-                            item.Level.ToString(),
-                            item.CoSoCuaHang != null ? item.CoSoCuaHang.Name : ""
-                        });
-                    }
+                    MessageBox.Show("Không có dữ liệu để xuất Excel.");
+                    return;
                 }
 
-                MessageBox.Show("Xuất Excel thành công!");
+                using (var dialog = new SaveFileDialog())
+                {
+                    dialog.Title = "Xuất danh sách đơn hàng";
+                    dialog.Filter = "Excel Workbook (*.xlsx)|*.xlsx";
+                    dialog.FileName = $"DanhSachDonHang_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
+
+                    if (dialog.ShowDialog(this) != DialogResult.OK) return;
+
+                    var headers = new List<string>
+                    {
+                        "STT", "ID", "Tên KH", "SĐT", "Loại máy", "IMEI", "Ngày nhận",
+                        "Người nhận", "Kỹ thuật", "Trạng thái", "Level", "Cơ sở"
+                    };
+
+                    var rows = data.Select((item, index) => (IList<string>)new List<string>
+                    {
+                        (index + 1).ToString(),
+                        item.Id.ToString(),
+                        item.TenKH,
+                        item.SoDT,
+                        item.LoaiMay,
+                        item.IMEI,
+                        item.NgayNhan.HasValue ? item.NgayNhan.Value.ToString("dd/MM/yyyy HH:mm") : "",
+                        item.NhanVien != null ? item.NhanVien.FullName : "",
+                        item.LoaiKyThuat,
+                        RepairStatusHelper.GetText(item.TinhTrang),
+                        item.Level.ToString(),
+                        item.CoSoCuaHang != null ? item.CoSoCuaHang.Name : ""
+                    }).ToList();
+
+                    ExcelExporter.Export(dialog.FileName, "Danh sách đơn hàng", headers, rows);
+                    MessageBox.Show("Xuất Excel thành công!");
+                }
             }
         }
 
-        private void WriteCsvRow(StreamWriter writer, string[] values)
+        private object[] GetStatusList()
         {
-            writer.WriteLine(string.Join(",", values.Select(EscapeCsvValue)));
-        }
-
-        private string EscapeCsvValue(string value)
-        {
-            value = value ?? "";
-            value = value.Replace("\"", "\"\"");
-
-            return $"\"{value}\"";
-        }
-
-        private string GetTinhTrangText(int value)
-        {
-            switch ((RepairStatus)value)
+            return new[]
             {
-                case RepairStatus.ChoSua:
-                    return "Chờ sửa";
-                case RepairStatus.DangSua:
-                    return "Đang sửa";
-                case RepairStatus.KhongSuaDuoc:
-                    return "Không sửa được";
-                case RepairStatus.KhachKhongSua:
-                    return "Khách không sửa";
-                case RepairStatus.DaTraKhach:
-                    return "Đã trả khách";
-                default:
-                    return value.ToString();
-            }
+                new { Text = "Chờ sửa", Value = (int)RepairStatus.ChoSua },
+                new { Text = "Đang sửa", Value = (int)RepairStatus.DangSua },
+                new { Text = "Đã sửa", Value = (int)RepairStatus.DaSua },
+                new { Text = "Không sửa được", Value = (int)RepairStatus.KhongSuaDuoc },
+                new { Text = "Khách không sửa", Value = (int)RepairStatus.KhachKhongSua },
+                new { Text = "Đã trả khách", Value = (int)RepairStatus.DaTraKhach }
+            };
         }
     }
 }

@@ -12,6 +12,7 @@ namespace PhoneCare.Class
         public static string UserName { get; set; }
         public static string FullName { get; set; }
         public static int CoSoCuaHangId { get; set; }
+        public static string LoaiNhanVien { get; set; }
 
         public static void Clear()
         {
@@ -19,6 +20,7 @@ namespace PhoneCare.Class
             UserName = null;
             FullName = null;
             CoSoCuaHangId = 0;
+            LoaiNhanVien = null;
         }
     }
 }

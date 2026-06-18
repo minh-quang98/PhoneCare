@@ -48,9 +48,6 @@
     <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Data.SqlClient, Version=1.13.20136.2, Culture=neutral, PublicKeyToken=23ec7fc2d6eaa4a5, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Data.SqlClient.1.1.3\lib\net46\Microsoft.Data.SqlClient.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore.Abstractions, Version=3.1.32.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.EntityFrameworkCore.Abstractions.3.1.32\lib\netstandard2.0\Microsoft.EntityFrameworkCore.Abstractions.dll</HintPath>
     </Reference>
@@ -168,6 +165,7 @@
       <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -179,6 +177,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\CurrentUser.cs" />
+    <Compile Include="Class\ExcelExporter.cs" />
+    <Compile Include="Class\PasswordHasher.cs" />
+    <Compile Include="Class\PermissionService.cs" />
+    <Compile Include="Class\RepairStatusHelper.cs" />
     <Compile Include="Data\PhoneCareDbContext.cs" />
     <Compile Include="Forms\BaoCao\frmHoaDon.cs">
       <SubType>Form</SubType>
@@ -286,11 +288,16 @@
     <Compile Include="Migrations\202605212220407_SuaModelDonHang.Designer.cs">
       <DependentUpon>202605212220407_SuaModelDonHang.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202605270001000_SecurityAndOrderFixes.cs" />
+    <Compile Include="Migrations\202605270001000_SecurityAndOrderFixes.Designer.cs">
+      <DependentUpon>202605270001000_SecurityAndOrderFixes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CoSoCuaHang.cs" />
     <Compile Include="Models\DichVu.cs" />
     <Compile Include="Models\DonHang.cs" />
     <Compile Include="Models\NhanVien.cs" />
+    <Compile Include="Models\RepairStatus.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqlServerTypes\Loader.cs" />

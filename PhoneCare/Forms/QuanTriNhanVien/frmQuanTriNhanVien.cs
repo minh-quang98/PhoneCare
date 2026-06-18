@@ -1,13 +1,6 @@
-﻿using PhoneCare.Data;
-using PhoneCare.Forms.QuanTriCuaHang;
+using PhoneCare.Data;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PhoneCare.Forms.QuanTriNhanVien
@@ -24,6 +17,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             using (var db = new PhoneCareDbContext())
             {
                 var list = db.NhanViens
+                             .Where(x => !x.IsDeleted)
                              .Select(x => new
                              {
                                  x.Id,
@@ -48,9 +42,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
 
         private void ctmThemMoi_Click(object sender, EventArgs e)
         {
-            frmThemMoiNhanVien f = new frmThemMoiNhanVien(this);
+            var f = new frmThemMoiNhanVien(this);
             f.StartPosition = FormStartPosition.CenterScreen;
-            f.Show();
+            f.ShowDialog(this);
         }
 
         private void ctmChinhSua_Click(object sender, EventArgs e)
@@ -58,9 +52,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             if (dgvNhanVien.CurrentRow == null) return;
 
             int id = Convert.ToInt32(dgvNhanVien.CurrentRow.Cells["Id"].Value);
-            frmThemMoiNhanVien f = new frmThemMoiNhanVien(this, id);
+            var f = new frmThemMoiNhanVien(this, id);
             f.StartPosition = FormStartPosition.CenterParent;
-            f.ShowDialog();
+            f.ShowDialog(this);
         }
 
         private void ctmXoa_Click(object sender, EventArgs e)
@@ -70,7 +64,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             int id = Convert.ToInt32(dgvNhanVien.CurrentRow.Cells["Id"].Value);
 
             var result = MessageBox.Show(
-                "Bạn có chắc chắn muốn xóa cửa hàng này không?",
+                "Bạn có chắc chắn muốn xóa nhân viên này không?",
                 "Xác nhận Xóa",
                 MessageBoxButtons.YesNo,
                 MessageBoxIcon.Warning
@@ -80,7 +74,7 @@ namespace PhoneCare.Forms.QuanTriNhanVien
 
             using (var db = new PhoneCareDbContext())
             {
-                var nhanvien = db.NhanViens.FirstOrDefault(x => x.Id == id);
+                var nhanvien = db.NhanViens.FirstOrDefault(x => x.Id == id && !x.IsDeleted);
 
                 if (nhanvien == null)
                 {
@@ -96,7 +90,6 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             }
 
             MessageBox.Show("Xóa nhân viên thành công!");
-
             LoadNhanVien();
         }
     }

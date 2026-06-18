@@ -1,22 +1,17 @@
-﻿using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
+using PhoneCare.Class;
 using PhoneCare.Data;
 using PhoneCare.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PhoneCare.Forms
 {
     public partial class frmDoiMatKhau : Form
     {
-        private int _userId;
+        private readonly int _userId;
         private bool _showPassword = false;
+
         public frmDoiMatKhau()
         {
             InitializeComponent();
@@ -26,6 +21,8 @@ namespace PhoneCare.Forms
         private bool ValidateInput()
         {
             bool validate = true;
+            errorProvider1.Clear();
+
             if (string.IsNullOrWhiteSpace(txtOldPassword.Text))
             {
                 errorProvider1.SetError(txtOldPassword, "Vui lòng nhập mật khẩu cũ!");
@@ -62,28 +59,36 @@ namespace PhoneCare.Forms
                     return;
                 }
 
-                // ❗ So sánh mật khẩu cũ
-                if (user.Password != txtOldPassword.Text)
+                if (!IsPasswordValid(user.Password, txtOldPassword.Text))
                 {
                     errorProvider1.SetError(txtOldPassword, "Mật khẩu cũ không đúng!");
                     return;
                 }
 
-                // Update mật khẩu mới
-                user.Password = txtNewPassword.Text;
+                user.Password = PasswordHasher.Hash(txtNewPassword.Text);
                 user.DateModify = DateTime.Now;
                 user.UserModify = _userId;
 
                 context.SaveChanges();
 
                 MessageBox.Show("Đổi mật khẩu thành công");
-                this.Close();
+                Close();
             }
+        }
+
+        private bool IsPasswordValid(string storedPassword, string password)
+        {
+            if (PasswordHasher.IsHashed(storedPassword))
+            {
+                return PasswordHasher.Verify(password, storedPassword);
+            }
+
+            return storedPassword == password;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void btnShowHide_Click(object sender, EventArgs e)
@@ -94,7 +99,8 @@ namespace PhoneCare.Forms
                 txtOldPassword.PasswordChar = '*';
                 txtReNewPassword.PasswordChar = '*';
                 _showPassword = false;
-            } else
+            }
+            else
             {
                 txtNewPassword.PasswordChar = '\0';
                 txtOldPassword.PasswordChar = '\0';
