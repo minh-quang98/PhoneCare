@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using PhoneCare_API.Data;
 using PhoneCare_API.Mapping;
+using PhoneCare_API.Middleware;
 using PhoneCare_API.Services;
 using Scalar.AspNetCore;
 
@@ -50,6 +51,9 @@ builder.Services.AddOpenApi(options =>
 });
 
 var app = builder.Build();
+
+// Bắt mọi exception chưa được xử lý từ các API phía dưới pipeline.
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

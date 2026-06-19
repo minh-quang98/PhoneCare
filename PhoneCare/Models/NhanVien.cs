@@ -13,15 +13,15 @@ namespace PhoneCare.Models
     {
         [Key]
         public int Id { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string FullName { get; set; }
-        public string NickName { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string? NickName { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
         public int IdCoSoLamViec { get; set; }
         public bool KhoaTaiKhoan { get; set; }
-        public string LoaiNhanVien { get; set; }
+        public string LoaiNhanVien { get; set; } = string.Empty;
         public int FailedLoginCount { get; set; }
         public DateTime? LockoutEndAt { get; set; }
         public DateTime? LastFailedLoginAt { get; set; }

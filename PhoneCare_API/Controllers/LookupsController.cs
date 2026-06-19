@@ -49,7 +49,7 @@ namespace PhoneCare_API.Controllers
                     Phone = x.Phone,
                     LoaiNhanVien = x.LoaiNhanVien,
                     IdCoSoLamViec = x.IdCoSoLamViec,
-                    WorkPlaceName = x.CoSoCuaHang != null ? x.CoSoCuaHang.Name : string.Empty,
+                    WorkPlaceName = x.CoSoCuaHang != null ? x.CoSoCuaHang.Name ?? string.Empty : string.Empty,
                     KhoaTaiKhoan = x.KhoaTaiKhoan
                 })
                 .ToListAsync();

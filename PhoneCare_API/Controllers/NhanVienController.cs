@@ -28,7 +28,6 @@ namespace PhoneCare_API.Controllers
             if (!PermissionService.CanManageEmployees(current.LoaiNhanVien)) return StatusCode(StatusCodes.Status403Forbidden, ApiResponse<IEnumerable<NhanVienListItemDto>>.Forbidden("Bạn không có quyền quản lý nhân viên."));
 
             var data = await _db.NhanViens
-                .Include(x => x.CoSoCuaHang)
                 .Where(x => !x.IsDeleted)
                 .OrderBy(x => x.FullName)
                 .Select(x => new NhanVienListItemDto
@@ -40,7 +39,7 @@ namespace PhoneCare_API.Controllers
                     Phone = x.Phone,
                     LoaiNhanVien = x.LoaiNhanVien,
                     IdCoSoLamViec = x.IdCoSoLamViec,
-                    WorkPlaceName = x.CoSoCuaHang != null ? x.CoSoCuaHang.Name : string.Empty,
+                    WorkPlaceName = x.CoSoCuaHang != null ? x.CoSoCuaHang.Name ?? string.Empty : string.Empty,
                     KhoaTaiKhoan = x.KhoaTaiKhoan
                 })
                 .ToListAsync();
@@ -70,7 +69,12 @@ namespace PhoneCare_API.Controllers
             if (current == null) return Unauthorized(ApiResponse<NhanVienDetailDto>.Unauthorized("Vui lòng đăng nhập."));
             if (!PermissionService.CanManageEmployees(current.LoaiNhanVien)) return StatusCode(StatusCodes.Status403Forbidden, ApiResponse<NhanVienDetailDto>.Forbidden("Bạn không có quyền quản lý nhân viên."));
 
-            var validation = ValidateEmployee(request.UserName, request.Password, request.FullName, request.LoaiNhanVien, true);
+            if (string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest(ApiResponse<NhanVienDetailDto>.BadRequest("Mật khẩu không được để trống."));
+            }
+
+            var validation = ValidateEmployee(request.UserName, request.FullName, request.LoaiNhanVien);
             if (validation != null) return BadRequest(ApiResponse<NhanVienDetailDto>.BadRequest(validation));
             if (await _db.NhanViens.AnyAsync(x => x.UserName == request.UserName.Trim() && !x.IsDeleted))
             {
@@ -78,7 +82,8 @@ namespace PhoneCare_API.Controllers
             }
             if (!await _db.CoSoCuaHangs.AnyAsync(x => x.Id == request.IdCoSoLamViec && !x.IsDeleted))
             {
-                return BadRequest(ApiResponse<NhanVienDetailDto>.BadRequest("Cơ sở làm việc không hợp lệ."));
+                return BadRequest(ApiResponse<NhanVienDetailDto>.BadRequest(
+                    "Không tồn tại cơ sở cửa hàng đã chọn hoặc cơ sở này đã bị xóa."));
             }
 
             var item = new NhanVien
@@ -113,7 +118,7 @@ namespace PhoneCare_API.Controllers
             var item = await _db.NhanViens.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
             if (item == null) return NotFound(ApiResponse<NhanVienDetailDto>.NotFound("Không tìm thấy nhân viên."));
 
-            var validation = ValidateEmployee(request.UserName, request.Password, request.FullName, request.LoaiNhanVien, false);
+            var validation = ValidateEmployee(request.UserName, request.FullName, request.LoaiNhanVien);
             if (validation != null) return BadRequest(ApiResponse<NhanVienDetailDto>.BadRequest(validation));
             if (await _db.NhanViens.AnyAsync(x => x.Id != id && x.UserName == request.UserName.Trim() && !x.IsDeleted))
             {
@@ -121,14 +126,11 @@ namespace PhoneCare_API.Controllers
             }
             if (!await _db.CoSoCuaHangs.AnyAsync(x => x.Id == request.IdCoSoLamViec && !x.IsDeleted))
             {
-                return BadRequest(ApiResponse<NhanVienDetailDto>.BadRequest("Cơ sở làm việc không hợp lệ."));
+                return BadRequest(ApiResponse<NhanVienDetailDto>.BadRequest(
+                    "Không tồn tại cơ sở cửa hàng đã chọn hoặc cơ sở này đã bị xóa."));
             }
 
             item.UserName = request.UserName.Trim();
-            if (!string.IsNullOrWhiteSpace(request.Password))
-            {
-                item.Password = PasswordHasher.Hash(request.Password.Trim());
-            }
             item.FullName = request.FullName.Trim();
             item.NickName = request.NickName?.Trim();
             item.Email = request.Email?.Trim();
@@ -199,10 +201,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<object>.Ok("Xóa nhân viên thành công."));
         }
 
-        private static string? ValidateEmployee(string userName, string? password, string fullName, string role, bool passwordRequired)
+        private static string? ValidateEmployee(string userName, string fullName, string role)
         {
             if (string.IsNullOrWhiteSpace(userName)) return "Tài khoản không được để trống.";
-            if (passwordRequired && string.IsNullOrWhiteSpace(password)) return "Mật khẩu không được để trống.";
             if (string.IsNullOrWhiteSpace(fullName)) return "Họ và tên không được để trống.";
             if (!PermissionService.Roles.Any(x => string.Equals(x, role, StringComparison.OrdinalIgnoreCase))) return "Loại nhân viên không hợp lệ.";
             return null;

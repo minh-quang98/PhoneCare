@@ -50,7 +50,6 @@ namespace PhoneCare_API.Models.DTO
     public class UpdateNhanVienDto
     {
         public string UserName { get; set; } = string.Empty;
-        public string? Password { get; set; }
         public string FullName { get; set; } = string.Empty;
         public string? NickName { get; set; }
         public string? Email { get; set; }

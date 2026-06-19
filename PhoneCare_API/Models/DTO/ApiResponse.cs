@@ -55,5 +55,10 @@ namespace PhoneCare_API.Models.DTO
         {
             return Create(false, StatusCodes.Status409Conflict, message, default, error);
         }
+
+        public static ApiResponse<TData> InternalServerError(string message, object? error = null)
+        {
+            return Create(false, StatusCodes.Status500InternalServerError, message, default, error);
+        }
     }
 }
