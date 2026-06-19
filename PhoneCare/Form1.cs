@@ -6,11 +6,17 @@ namespace PhoneCare
 {
     public partial class Form1 : Form
     {
+        /// <summary>
+        /// Khởi tạo cửa sổ chính của ứng dụng.
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Cập nhật trạng thái menu theo người dùng và quyền hiện tại.
+        /// </summary>
         public void UpdateMenu()
         {
             if (Class.CurrentUser.Id != 0)
@@ -37,12 +43,18 @@ namespace PhoneCare
             }
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu Form1_Load được hiển thị.
+        /// </summary>
         private void Form1_Load(object sender, EventArgs e)
         {
             UpdateMenu();
             BeginInvoke(new Action(ShowLoginIfNeeded));
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuLogIn_Click.
+        /// </summary>
         private void mnuLogIn_Click(object sender, EventArgs e)
         {
             var f = new frmDangNhap(this);
@@ -50,6 +62,9 @@ namespace PhoneCare
             f.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Hiển thị màn hình đăng nhập khi chưa có phiên người dùng.
+        /// </summary>
         private void ShowLoginIfNeeded()
         {
             if (Class.CurrentUser.Id != 0) return;
@@ -68,6 +83,9 @@ namespace PhoneCare
             UpdateMenu();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuQuanTriNhanVien_Click.
+        /// </summary>
         private void mnuQuanTriNhanVien_Click(object sender, EventArgs e)
         {
             if (!PermissionService.CanManageEmployees())
@@ -81,6 +99,9 @@ namespace PhoneCare
             f.Show();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuChangePassword_Click.
+        /// </summary>
         private void mnuChangePassword_Click(object sender, EventArgs e)
         {
             var f = new Forms.frmDoiMatKhau();
@@ -88,6 +109,9 @@ namespace PhoneCare
             f.Show();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuQuanLyCuaHang_Click.
+        /// </summary>
         private void mnuQuanLyCuaHang_Click(object sender, EventArgs e)
         {
             if (!PermissionService.CanManageStores())
@@ -101,6 +125,9 @@ namespace PhoneCare
             f.Show();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuDonHang_Click.
+        /// </summary>
         private void mnuDonHang_Click(object sender, EventArgs e)
         {
             if (!PermissionService.CanViewOrders())
@@ -114,6 +141,9 @@ namespace PhoneCare
             f.Show();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuTroGiup_Click.
+        /// </summary>
         private void mnuTroGiup_Click(object sender, EventArgs e)
         {
             using (var f = new Forms.frmThongTinHoTro())

@@ -59,11 +59,6 @@ namespace PhoneCare_API.Models.DTO
         public string LoaiNhanVien { get; set; } = string.Empty;
     }
 
-    public class SetLockNhanVienDto
-    {
-        public bool KhoaTaiKhoan { get; set; }
-    }
-
     public class ResetPasswordDto
     {
         public string Password { get; set; } = string.Empty;

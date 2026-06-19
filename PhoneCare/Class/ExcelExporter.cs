@@ -9,6 +9,9 @@ namespace PhoneCare.Class
 {
     public static class ExcelExporter
     {
+        /// <summary>
+        /// Xuất danh sách dữ liệu thành tệp Excel theo tiêu đề và tên sheet được cung cấp.
+        /// </summary>
         public static void Export(string fileName, string sheetName, IList<string> headers, IList<IList<string>> rows)
         {
             if (File.Exists(fileName))
@@ -34,6 +37,9 @@ namespace PhoneCare.Class
             }
         }
 
+        /// <summary>
+        /// Tạo và ghi một part XML vào package của tệp Excel.
+        /// </summary>
         private static void WritePart(Package package, Uri uri, string content, string contentType)
         {
             var part = package.CreatePart(uri, contentType, CompressionOption.Maximum);
@@ -44,6 +50,9 @@ namespace PhoneCare.Class
             }
         }
 
+        /// <summary>
+        /// Tạo nội dung XML mô tả workbook và worksheet Excel.
+        /// </summary>
         private static string CreateWorkbookXml(string sheetName)
         {
             return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
@@ -53,6 +62,9 @@ namespace PhoneCare.Class
                    "</workbook>";
         }
 
+        /// <summary>
+        /// Tạo nội dung XML chứa tiêu đề và các dòng dữ liệu của worksheet.
+        /// </summary>
         private static string CreateWorksheetXml(IList<string> headers, IList<IList<string>> rows)
         {
             var xml = new StringBuilder();
@@ -71,6 +83,9 @@ namespace PhoneCare.Class
             return xml.ToString();
         }
 
+        /// <summary>
+        /// Tạo nội dung XML định nghĩa kiểu hiển thị cho tệp Excel.
+        /// </summary>
         private static string CreateStylesXml()
         {
             return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" +
@@ -83,6 +98,9 @@ namespace PhoneCare.Class
                    "</styleSheet>";
         }
 
+        /// <summary>
+        /// Ghi một dòng dữ liệu vào nội dung XML của worksheet.
+        /// </summary>
         private static void AppendRow(StringBuilder xml, int rowIndex, IList<string> values, bool header)
         {
             xml.Append("<row r=\"").Append(rowIndex).Append("\">");
@@ -97,6 +115,9 @@ namespace PhoneCare.Class
             xml.Append("</row>");
         }
 
+        /// <summary>
+        /// Chuyển số thứ tự cột thành tên cột Excel.
+        /// </summary>
         private static string GetColumnName(int columnNumber)
         {
             var columnName = string.Empty;
@@ -110,6 +131,9 @@ namespace PhoneCare.Class
             return columnName;
         }
 
+        /// <summary>
+        /// Mã hóa các ký tự đặc biệt để giá trị có thể ghi an toàn vào XML.
+        /// </summary>
         private static string Escape(string value)
         {
             return SecurityElement.Escape(value ?? string.Empty);

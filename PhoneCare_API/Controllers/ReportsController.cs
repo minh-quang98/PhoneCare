@@ -14,24 +14,36 @@ namespace PhoneCare_API.Controllers
         private readonly ApplicationDbContext _db;
         private readonly CurrentUserService _currentUserService;
 
+        /// <summary>
+        /// Khởi tạo controller báo cáo cùng các dịch vụ phụ thuộc.
+        /// </summary>
         public ReportsController(ApplicationDbContext db, CurrentUserService currentUserService)
         {
             _db = db;
             _currentUserService = currentUserService;
         }
 
+        /// <summary>
+        /// Lấy dữ liệu báo cáo phiếu nhận máy của đơn hàng.
+        /// </summary>
         [HttpGet("don-hang/{id:int}/phieu-nhan-may")]
         public async Task<ActionResult<ApiResponse<DonHangReportDto>>> PhieuNhanMay(int id)
         {
             return await BuildReport(id, "Lấy dữ liệu phiếu nhận máy thành công.", includeNguoiThu: false);
         }
 
+        /// <summary>
+        /// Lấy dữ liệu báo cáo hóa đơn của đơn hàng.
+        /// </summary>
         [HttpGet("don-hang/{id:int}/hoa-don")]
         public async Task<ActionResult<ApiResponse<DonHangReportDto>>> HoaDon(int id)
         {
             return await BuildReport(id, "Lấy dữ liệu hóa đơn thành công.", includeNguoiThu: true);
         }
 
+        /// <summary>
+        /// Tổng hợp dữ liệu đơn hàng để tạo nội dung báo cáo.
+        /// </summary>
         private async Task<ActionResult<ApiResponse<DonHangReportDto>>> BuildReport(int id, string message, bool includeNguoiThu)
         {
             var current = _currentUserService.GetCurrentUser(HttpContext);
@@ -81,6 +93,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<DonHangReportDto>.Ok(message, report));
         }
 
+        /// <summary>
+        /// Lấy số điện thoại phù hợp để hiển thị trên báo cáo cửa hàng.
+        /// </summary>
         private static string GetStorePhone(CoSoCuaHang? store)
         {
             if (store == null) return string.Empty;

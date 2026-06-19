@@ -5,6 +5,9 @@ namespace PhoneCare.Data
 {
     public class PhoneCareDbContext : DbContext
     {
+        /// <summary>
+        /// Khởi tạo ngữ cảnh kết nối cơ sở dữ liệu của ứng dụng desktop.
+        /// </summary>
         public PhoneCareDbContext() : base("name=PhoneCareDbContext")
         {
 
@@ -14,6 +17,9 @@ namespace PhoneCare.Data
         public DbSet<DonHang> DonHangs { get; set; }
         public DbSet<DichVu> DichVus { get; set; }
 
+        /// <summary>
+        /// Cấu hình ánh xạ entity, quan hệ và ràng buộc của cơ sở dữ liệu.
+        /// </summary>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CoSoCuaHang>().ToTable("COSOCUAHANG");

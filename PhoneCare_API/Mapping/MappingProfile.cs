@@ -9,6 +9,9 @@ namespace PhoneCare_API.Mapping
 {
     public class MappingProfile : Profile
     {
+        /// <summary>
+        /// Khởi tạo cấu hình ánh xạ giữa entity và DTO.
+        /// </summary>
         public MappingProfile()
         {
             CreateMap<CoSoCuaHang, CoSoCuaHangDTO>().ReverseMap();

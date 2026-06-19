@@ -12,6 +12,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private frmThemMoiDonHang _parentForm;
         private int? _id = null;
         private int? _idDonHang = null;
+        /// <summary>
+        /// Khởi tạo đối tượng frmDichVu.
+        /// </summary>
         public frmDichVu(frmThemMoiDonHang parentForm, int? idDonHang = null, int? id = null)
         {
             InitializeComponent();
@@ -20,12 +23,18 @@ namespace PhoneCare.Forms.QuanTriDonHang
             _idDonHang = idDonHang;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnHuy_Click.
+        /// </summary>
         private void btnHuy_Click(object sender, EventArgs e)
         {
             ClearForm();
             this.Close();
         }
 
+        /// <summary>
+        /// Kiểm soát ký tự nhập vào trong sự kiện txtBaoGia_KeyPress.
+        /// </summary>
         private void txtBaoGia_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -34,6 +43,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Xử lý và định dạng dữ liệu khi nội dung điều khiển thay đổi.
+        /// </summary>
         private void txtBaoGia_TextChanged(object sender, EventArgs e)
         {
             string raw = txtBaoGia.Text;
@@ -56,6 +68,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Đưa các trường nhập liệu trên biểu mẫu về trạng thái ban đầu.
+        /// </summary>
         private void ClearForm()
         {
             txtBaoGia.Clear();
@@ -64,6 +79,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             lblMaPhieu.Text = "";
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmDichVu_Load được hiển thị.
+        /// </summary>
         private void frmDichVu_Load(object sender, EventArgs e)
         {
             if (_id.HasValue)
@@ -84,6 +102,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Tải dữ liệu hiện có lên biểu mẫu để chỉnh sửa.
+        /// </summary>
         private void LoadDataForEdit()
         {
             using (var db = new PhoneCareDbContext())
@@ -105,6 +126,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnLuu_Click.
+        /// </summary>
         private void btnLuu_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
@@ -156,6 +180,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             this.Close();
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu nhập trên biểu mẫu và hiển thị lỗi tương ứng.
+        /// </summary>
         private bool ValidateInput()
         {
             bool validate = true;

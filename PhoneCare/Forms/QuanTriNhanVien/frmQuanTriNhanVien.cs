@@ -7,11 +7,17 @@ namespace PhoneCare.Forms.QuanTriNhanVien
 {
     public partial class frmQuanTriNhanVien : Form
     {
+        /// <summary>
+        /// Khởi tạo đối tượng frmQuanTriNhanVien.
+        /// </summary>
         public frmQuanTriNhanVien()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Tải danh sách nhân viên từ cơ sở dữ liệu lên giao diện.
+        /// </summary>
         public void LoadNhanVien()
         {
             using (var db = new PhoneCareDbContext())
@@ -33,6 +39,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             }
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmQuanTriNhanVien_Load được hiển thị.
+        /// </summary>
         private void frmQuanTriNhanVien_Load(object sender, EventArgs e)
         {
             dgvNhanVien.AutoGenerateColumns = true;
@@ -40,6 +49,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             dgvNhanVien.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh ctmThemMoi_Click.
+        /// </summary>
         private void ctmThemMoi_Click(object sender, EventArgs e)
         {
             var f = new frmThemMoiNhanVien(this);
@@ -47,6 +59,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             f.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh ctmChinhSua_Click.
+        /// </summary>
         private void ctmChinhSua_Click(object sender, EventArgs e)
         {
             if (dgvNhanVien.CurrentRow == null) return;
@@ -57,6 +72,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             f.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh ctmXoa_Click.
+        /// </summary>
         private void ctmXoa_Click(object sender, EventArgs e)
         {
             if (dgvNhanVien.CurrentRow == null) return;

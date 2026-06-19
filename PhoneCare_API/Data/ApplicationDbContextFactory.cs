@@ -5,6 +5,9 @@ namespace PhoneCare_API.Data
 {
     public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
     {
+        /// <summary>
+        /// Tạo DbContext phục vụ các công cụ thiết kế và migration.
+        /// </summary>
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var basePath = Directory.GetCurrentDirectory();

@@ -11,6 +11,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
         private readonly frmQuanTriNhanVien _parentForm;
         private readonly int? _id = null;
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmThemMoiNhanVien.
+        /// </summary>
         public frmThemMoiNhanVien(frmQuanTriNhanVien parent, int? id = null)
         {
             InitializeComponent();
@@ -18,6 +21,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             _id = id;
         }
 
+        /// <summary>
+        /// Lấy loại nhân viên đang được chọn trên biểu mẫu.
+        /// </summary>
         private string GetTypeEmployee()
         {
             if (rbtAdmin.Checked) return PermissionService.Admin;
@@ -27,6 +33,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             return PermissionService.Marketing;
         }
 
+        /// <summary>
+        /// Chọn loại nhân viên tương ứng trên biểu mẫu.
+        /// </summary>
         private void SetTypeEmployee(string type)
         {
             switch (type)
@@ -49,6 +58,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnSave_Click.
+        /// </summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
@@ -118,6 +130,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             Close();
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmThemMoiNhanVien_Load được hiển thị.
+        /// </summary>
         private void frmThemMoiNhanVien_Load(object sender, EventArgs e)
         {
             LoadCoSo();
@@ -132,6 +147,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             }
         }
 
+        /// <summary>
+        /// Tải dữ liệu hiện có lên biểu mẫu để chỉnh sửa.
+        /// </summary>
         private void LoadDataForEdit()
         {
             using (var db = new PhoneCareDbContext())
@@ -151,6 +169,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             }
         }
 
+        /// <summary>
+        /// Tải danh sách cơ sở cửa hàng vào điều khiển chọn dữ liệu.
+        /// </summary>
         private void LoadCoSo()
         {
             using (var db = new PhoneCareDbContext())
@@ -161,6 +182,9 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             }
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu nhập trên biểu mẫu và hiển thị lỗi tương ứng.
+        /// </summary>
         private bool ValidateInput()
         {
             bool validate = true;
@@ -185,12 +209,18 @@ namespace PhoneCare.Forms.QuanTriNhanVien
             return validate;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnCancel_Click.
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             ClearForm();
             Close();
         }
 
+        /// <summary>
+        /// Đưa các trường nhập liệu trên biểu mẫu về trạng thái ban đầu.
+        /// </summary>
         private void ClearForm()
         {
             txtTaiKhoan.Clear();

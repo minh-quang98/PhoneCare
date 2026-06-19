@@ -9,11 +9,17 @@ namespace PhoneCare_API.Services
     {
         private readonly IConfiguration _configuration;
 
+        /// <summary>
+        /// Khởi tạo dịch vụ tạo và xác thực token từ cấu hình ứng dụng.
+        /// </summary>
         public AuthTokenService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Tạo token đăng nhập có chữ ký và thời hạn cho người dùng.
+        /// </summary>
         public (string Token, DateTime ExpiresAt) CreateToken(CurrentUserDto user)
         {
             var expiresAt = DateTime.UtcNow.AddHours(GetExpirationHours());
@@ -32,6 +38,9 @@ namespace PhoneCare_API.Services
             return ($"{payloadPart}.{signaturePart}", expiresAt.ToLocalTime());
         }
 
+        /// <summary>
+        /// Kiểm tra chữ ký, thời hạn token và đọc thông tin người dùng.
+        /// </summary>
         public bool TryValidate(string? token, out CurrentUserDto user)
         {
             user = new CurrentUserDto();
@@ -65,11 +74,17 @@ namespace PhoneCare_API.Services
             }
         }
 
+        /// <summary>
+        /// Đọc số giờ hết hạn token từ cấu hình với giá trị dự phòng an toàn.
+        /// </summary>
         private int GetExpirationHours()
         {
             return int.TryParse(_configuration["Auth:ExpirationHours"], out var hours) && hours > 0 ? hours : 8;
         }
 
+        /// <summary>
+        /// Tạo chữ ký HMAC cho phần dữ liệu token.
+        /// </summary>
         private string Sign(string payloadPart)
         {
             var secret = _configuration["Auth:Secret"];
@@ -82,6 +97,9 @@ namespace PhoneCare_API.Services
             return Base64UrlEncode(hmac.ComputeHash(Encoding.UTF8.GetBytes(payloadPart)));
         }
 
+        /// <summary>
+        /// So sánh hai giá trị trong thời gian cố định để hạn chế tấn công timing.
+        /// </summary>
         private static bool FixedTimeEquals(string left, string right)
         {
             var leftBytes = Encoding.UTF8.GetBytes(left);
@@ -90,11 +108,17 @@ namespace PhoneCare_API.Services
                 && CryptographicOperations.FixedTimeEquals(leftBytes, rightBytes);
         }
 
+        /// <summary>
+        /// Mã hóa mảng byte thành chuỗi Base64 URL-safe.
+        /// </summary>
         private static string Base64UrlEncode(byte[] bytes)
         {
             return Convert.ToBase64String(bytes).TrimEnd('=').Replace('+', '-').Replace('/', '_');
         }
 
+        /// <summary>
+        /// Giải mã chuỗi Base64 URL-safe thành mảng byte.
+        /// </summary>
         private static byte[] Base64UrlDecode(string value)
         {
             var padded = value.Replace('-', '+').Replace('_', '/');

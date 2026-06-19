@@ -8,11 +8,17 @@ namespace PhoneCare.Forms.QuanTriCuaHang
 {
     public partial class frmDanhSachCuaHang : Form
     {
+        /// <summary>
+        /// Khởi tạo đối tượng frmDanhSachCuaHang.
+        /// </summary>
         public frmDanhSachCuaHang()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuThemMoi_Click.
+        /// </summary>
         private void mnuThemMoi_Click(object sender, EventArgs e)
         {
             frmThemMoiCuaHang f = new frmThemMoiCuaHang(this);
@@ -20,11 +26,17 @@ namespace PhoneCare.Forms.QuanTriCuaHang
             f.ShowDialog();
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmDanhSachCuaHang_Load được hiển thị.
+        /// </summary>
         private void frmDanhSachCuaHang_Load(object sender, EventArgs e)
         {
             LoadCoSo();
             dgvCoSo.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
+        /// <summary>
+        /// Tải danh sách cơ sở cửa hàng vào điều khiển chọn dữ liệu.
+        /// </summary>
         public void LoadCoSo()
         {
             using (var db = new PhoneCareDbContext())
@@ -46,6 +58,9 @@ namespace PhoneCare.Forms.QuanTriCuaHang
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuCapNhat_Click.
+        /// </summary>
         private void mnuCapNhat_Click(object sender, EventArgs e)
         {
             if (dgvCoSo.CurrentRow == null) return;
@@ -56,6 +71,9 @@ namespace PhoneCare.Forms.QuanTriCuaHang
             f.ShowDialog();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuXoa_Click.
+        /// </summary>
         private void mnuXoa_Click(object sender, EventArgs e)
         {
             if (dgvCoSo.CurrentRow == null) return;

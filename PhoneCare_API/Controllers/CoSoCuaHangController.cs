@@ -15,12 +15,18 @@ namespace PhoneCare_API.Controllers
         private readonly ApplicationDbContext _db;
         private readonly CurrentUserService _currentUserService;
 
+        /// <summary>
+        /// Khởi tạo controller quản lý cơ sở cửa hàng cùng các dịch vụ phụ thuộc.
+        /// </summary>
         public CoSoCuaHangController(ApplicationDbContext db, CurrentUserService currentUserService)
         {
             _db = db;
             _currentUserService = currentUserService;
         }
 
+        /// <summary>
+        /// Lấy danh sách bản ghi hợp lệ và trả về cho client.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<CoSoCuaHangDTO>>>> GetAll()
         {
@@ -46,6 +52,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<IEnumerable<CoSoCuaHangDTO>>.Ok("Lay danh sach co so cua hang thanh cong.", data));
         }
 
+        /// <summary>
+        /// Tìm và trả về chi tiết bản ghi theo mã định danh.
+        /// </summary>
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ApiResponse<CoSoCuaHangDTO>>> GetById(int id)
         {
@@ -54,6 +63,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<CoSoCuaHangDTO>.Ok("Lay co so cua hang thanh cong.", Map(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu và tạo mới bản ghi tương ứng.
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ApiResponse<CoSoCuaHangDTO>>> Create(CreateCoSoCuaHangDto request)
         {
@@ -98,6 +110,9 @@ namespace PhoneCare_API.Controllers
             return StatusCode(StatusCodes.Status201Created, ApiResponse<CoSoCuaHangDTO>.Created("Them co so cua hang thanh cong.", Map(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu và cập nhật bản ghi được yêu cầu.
+        /// </summary>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ApiResponse<CoSoCuaHangDTO>>> Update(int id, UpdateCoSoCuaHangDto request)
         {
@@ -140,6 +155,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<CoSoCuaHangDTO>.Ok("Cap nhat co so cua hang thanh cong.", Map(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra quyền và thực hiện xóa mềm bản ghi được yêu cầu.
+        /// </summary>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<ApiResponse<object>>> Delete(int id)
         {
@@ -160,6 +178,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<object>.Ok("Xoa co so cua hang thanh cong."));
         }
 
+        /// <summary>
+        /// Kiểm tra các trường bắt buộc của cơ sở cửa hàng.
+        /// </summary>
         private static string? ValidateStore(string code, string name, string address)
         {
             if (string.IsNullOrWhiteSpace(code)) return "Code khong duoc de trong.";
@@ -168,6 +189,9 @@ namespace PhoneCare_API.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Ánh xạ entity sang đối tượng dữ liệu trả về cho client.
+        /// </summary>
         private static CoSoCuaHangDTO Map(CoSoCuaHang item)
         {
             return new CoSoCuaHangDTO

@@ -12,16 +12,25 @@ namespace PhoneCare.Forms.BaoCao
     {
         private readonly int _idDonHang;
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmPhieuNhanMay.
+        /// </summary>
         public frmPhieuNhanMay()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmPhieuNhanMay.
+        /// </summary>
         public frmPhieuNhanMay(int idDonHang) : this()
         {
             _idDonHang = idDonHang;
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmPhieuNhanMay_Load được hiển thị.
+        /// </summary>
         private void frmPhieuNhanMay_Load(object sender, EventArgs e)
         {
             if (_idDonHang <= 0)
@@ -34,6 +43,9 @@ namespace PhoneCare.Forms.BaoCao
             LoadPhieuNhanMay();
         }
 
+        /// <summary>
+        /// Tải dữ liệu đơn hàng và hiển thị báo cáo phiếu nhận máy.
+        /// </summary>
         private void LoadPhieuNhanMay()
         {
             using (var db = new PhoneCareDbContext())
@@ -90,6 +102,9 @@ namespace PhoneCare.Forms.BaoCao
             }
         }
 
+        /// <summary>
+        /// Tạo cấu trúc bảng dữ liệu dùng để hiển thị phiếu nhận máy.
+        /// </summary>
         private DataTable TaoBangPhieuNhanMay()
         {
             var table = new DataTable("PhieuNhanMayDataSet");
@@ -117,6 +132,9 @@ namespace PhoneCare.Forms.BaoCao
             return table;
         }
 
+        /// <summary>
+        /// Thêm một dòng dữ liệu vào bảng phiếu nhận máy.
+        /// </summary>
         private void AddPhieuNhanMayRow(
             DataTable table,
             Models.DonHang donHang,

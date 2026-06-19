@@ -12,16 +12,25 @@ namespace PhoneCare.Forms.BaoCao
     {
         private readonly int _idDonHang;
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmHoaDon.
+        /// </summary>
         public frmHoaDon()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmHoaDon.
+        /// </summary>
         public frmHoaDon(int idDonHang) : this()
         {
             _idDonHang = idDonHang;
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmHoaDon_Load được hiển thị.
+        /// </summary>
         private void frmHoaDon_Load(object sender, EventArgs e)
         {
             if (_idDonHang <= 0)
@@ -34,6 +43,9 @@ namespace PhoneCare.Forms.BaoCao
             LoadHoaDon();
         }
 
+        /// <summary>
+        /// Tải dữ liệu đơn hàng và hiển thị báo cáo hóa đơn.
+        /// </summary>
         private void LoadHoaDon()
         {
             using (var db = new PhoneCareDbContext())
@@ -90,6 +102,9 @@ namespace PhoneCare.Forms.BaoCao
             }
         }
 
+        /// <summary>
+        /// Tạo cấu trúc bảng dữ liệu dùng để hiển thị hóa đơn.
+        /// </summary>
         private DataTable TaoBangHoaDon()
         {
             var table = new DataTable("HoaDonDataSet");
@@ -117,6 +132,9 @@ namespace PhoneCare.Forms.BaoCao
             return table;
         }
 
+        /// <summary>
+        /// Thêm một dòng dữ liệu vào bảng hóa đơn.
+        /// </summary>
         private void AddHoaDonRow(
             DataTable table,
             Models.DonHang donHang,

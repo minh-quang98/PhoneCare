@@ -18,6 +18,9 @@ namespace PhoneCare.Forms.QuanTriCuaHang
         private frmDanhSachCuaHang _parentForm;
         private int? _id = null;
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmThemMoiCuaHang.
+        /// </summary>
         public frmThemMoiCuaHang(frmDanhSachCuaHang parent, int? id = null)
         {
             InitializeComponent();
@@ -25,6 +28,9 @@ namespace PhoneCare.Forms.QuanTriCuaHang
             _id = id;
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu nhập trên biểu mẫu và hiển thị lỗi tương ứng.
+        /// </summary>
         private bool ValidateInput()
         {
             bool validate = true;
@@ -45,6 +51,9 @@ namespace PhoneCare.Forms.QuanTriCuaHang
             }
             return validate;
         }
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnSave_Click.
+        /// </summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
@@ -101,6 +110,9 @@ namespace PhoneCare.Forms.QuanTriCuaHang
             this.Close();
         }
 
+        /// <summary>
+        /// Đưa các trường nhập liệu trên biểu mẫu về trạng thái ban đầu.
+        /// </summary>
         private void ClearForm()
         {
             txtCode.Clear();
@@ -112,12 +124,18 @@ namespace PhoneCare.Forms.QuanTriCuaHang
             txtCode.Focus();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnCancel_Click.
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             ClearForm();
             this.Close();
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmThemMoiCuaHang_Load được hiển thị.
+        /// </summary>
         private void frmThemMoiCuaHang_Load(object sender, EventArgs e)
         {
             if (_id.HasValue)
@@ -131,6 +149,9 @@ namespace PhoneCare.Forms.QuanTriCuaHang
             }
         }
 
+        /// <summary>
+        /// Tải dữ liệu hiện có lên biểu mẫu để chỉnh sửa.
+        /// </summary>
         private void LoadDataForEdit()
         {
             using (var db = new PhoneCareDbContext())

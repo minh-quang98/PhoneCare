@@ -12,12 +12,18 @@ namespace PhoneCare.Forms
         private readonly int _userId;
         private bool _showPassword = false;
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmDoiMatKhau.
+        /// </summary>
         public frmDoiMatKhau()
         {
             InitializeComponent();
             _userId = Class.CurrentUser.Id;
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu nhập trên biểu mẫu và hiển thị lỗi tương ứng.
+        /// </summary>
         private bool ValidateInput()
         {
             bool validate = true;
@@ -44,6 +50,9 @@ namespace PhoneCare.Forms
             return validate;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnSave_Click.
+        /// </summary>
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
@@ -76,6 +85,9 @@ namespace PhoneCare.Forms
             }
         }
 
+        /// <summary>
+        /// Xác thực mật khẩu nhập vào và hỗ trợ dữ liệu mật khẩu cũ chưa được băm.
+        /// </summary>
         private bool IsPasswordValid(string storedPassword, string password)
         {
             if (PasswordHasher.IsHashed(storedPassword))
@@ -86,11 +98,17 @@ namespace PhoneCare.Forms
             return storedPassword == password;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnCancel_Click.
+        /// </summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Close();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnShowHide_Click.
+        /// </summary>
         private void btnShowHide_Click(object sender, EventArgs e)
         {
             if (_showPassword)

@@ -10,12 +10,18 @@ namespace PhoneCare_API.Services
         private readonly AuthTokenService _tokenService;
         private readonly ApplicationDbContext _db;
 
+        /// <summary>
+        /// Khởi tạo dịch vụ truy xuất người dùng hiện tại.
+        /// </summary>
         public CurrentUserService(AuthTokenService tokenService, ApplicationDbContext db)
         {
             _tokenService = tokenService;
             _db = db;
         }
 
+        /// <summary>
+        /// Xác thực token và tải nhân viên hiện tại từ cơ sở dữ liệu.
+        /// </summary>
         public async Task<NhanVien?> GetCurrentNhanVienAsync(HttpContext httpContext)
         {
             var user = GetCurrentUser(httpContext);
@@ -26,6 +32,9 @@ namespace PhoneCare_API.Services
                 .FirstOrDefaultAsync(x => x.Id == user.Id && !x.IsDeleted && !x.KhoaTaiKhoan);
         }
 
+        /// <summary>
+        /// Đọc và xác thực token để lấy thông tin người dùng hiện tại.
+        /// </summary>
         public CurrentUserDto? GetCurrentUser(HttpContext httpContext)
         {
             var header = httpContext.Request.Headers.Authorization.ToString();

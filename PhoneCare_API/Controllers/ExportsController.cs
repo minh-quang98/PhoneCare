@@ -14,12 +14,18 @@ namespace PhoneCare_API.Controllers
         private readonly ApplicationDbContext _db;
         private readonly CurrentUserService _currentUserService;
 
+        /// <summary>
+        /// Khởi tạo controller xuất dữ liệu cùng các dịch vụ phụ thuộc.
+        /// </summary>
         public ExportsController(ApplicationDbContext db, CurrentUserService currentUserService)
         {
             _db = db;
             _currentUserService = currentUserService;
         }
 
+        /// <summary>
+        /// Lọc và xuất danh sách đơn hàng thành tệp CSV.
+        /// </summary>
         [HttpGet("don-hang")]
         public async Task<IActionResult> ExportDonHang([FromQuery] DonHangQueryDto query)
         {
@@ -71,6 +77,9 @@ namespace PhoneCare_API.Controllers
             return File(bytes, "text/csv; charset=utf-8", $"DanhSachDonHang_{DateTime.Now:yyyyMMdd_HHmmss}.csv");
         }
 
+        /// <summary>
+        /// Tạo truy vấn đơn hàng theo các điều kiện lọc được cung cấp.
+        /// </summary>
         private IQueryable<PhoneCare.Models.DonHang> BuildFilteredQuery(DonHangQueryDto query)
         {
             var dbQuery = _db.DonHangs
@@ -119,6 +128,9 @@ namespace PhoneCare_API.Controllers
             return dbQuery;
         }
 
+        /// <summary>
+        /// Chuyển giá trị thành chuỗi CSV an toàn bằng cách xử lý ký tự đặc biệt.
+        /// </summary>
         private static string Csv(object? value)
         {
             var text = Convert.ToString(value) ?? string.Empty;

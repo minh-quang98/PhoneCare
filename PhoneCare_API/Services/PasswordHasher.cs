@@ -9,6 +9,9 @@ namespace PhoneCare_API.Services
         private const int Iterations = 100000;
         private const string Prefix = "PBKDF2";
 
+        /// <summary>
+        /// Băm mật khẩu bằng salt ngẫu nhiên để lưu trữ an toàn.
+        /// </summary>
         public static string Hash(string password)
         {
             ArgumentNullException.ThrowIfNull(password);
@@ -21,6 +24,9 @@ namespace PhoneCare_API.Services
             return string.Join("$", Prefix, Iterations, Convert.ToBase64String(salt), Convert.ToBase64String(hash));
         }
 
+        /// <summary>
+        /// Xác thực mật khẩu nhập vào với giá trị băm đã lưu.
+        /// </summary>
         public static bool Verify(string password, string storedPassword)
         {
             if (password == null || string.IsNullOrWhiteSpace(storedPassword)) return false;
@@ -42,12 +48,18 @@ namespace PhoneCare_API.Services
             }
         }
 
+        /// <summary>
+        /// Kiểm tra chuỗi mật khẩu đã có đúng định dạng băm của ứng dụng hay chưa.
+        /// </summary>
         public static bool IsHashed(string storedPassword)
         {
             return !string.IsNullOrWhiteSpace(storedPassword)
                 && storedPassword.StartsWith(Prefix + "$", StringComparison.Ordinal);
         }
 
+        /// <summary>
+        /// Sinh khóa băm mật khẩu từ mật khẩu, salt và số vòng lặp.
+        /// </summary>
         private static byte[] Derive(string password, byte[] salt, int iterations)
         {
             using var pbkdf2 = new Rfc2898DeriveBytes(password, salt, iterations, HashAlgorithmName.SHA256);

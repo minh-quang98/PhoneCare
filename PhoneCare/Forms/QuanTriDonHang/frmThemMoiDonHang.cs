@@ -17,6 +17,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private readonly frmDanhSachDonHang _parentForm;
         private readonly int? _id;
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmThemMoiDonHang.
+        /// </summary>
         public frmThemMoiDonHang(frmDanhSachDonHang parentForm, int? id = null)
         {
             InitializeComponent();
@@ -25,6 +28,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             FormClosed += (sender, args) => _context.Dispose();
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmThemMoiDonHang_Load được hiển thị.
+        /// </summary>
         private void frmThemMoiDonHang_Load(object sender, EventArgs e)
         {
             bool isEdit = _id.HasValue;
@@ -57,6 +63,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Điều chỉnh bố cục và trạng thái điều khiển theo chế độ thêm mới hoặc chỉnh sửa.
+        /// </summary>
         private void ApplyFormModeLayout(bool isEdit)
         {
             if (isEdit)
@@ -76,6 +85,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             ClientSize = new System.Drawing.Size(ClientSize.Width, groupBox5.Bottom + 16);
         }
 
+        /// <summary>
+        /// Thiết lập cột và cách hiển thị cho bảng danh sách dịch vụ.
+        /// </summary>
         private void ConfigureDichVuGrid()
         {
             dgvDichVu.AutoGenerateColumns = false;
@@ -111,12 +123,18 @@ namespace PhoneCare.Forms.QuanTriDonHang
             });
         }
 
+        /// <summary>
+        /// Tải danh sách mức độ hoặc loại kỹ thuật lên biểu mẫu.
+        /// </summary>
         private void LoadLevel()
         {
             cbLevel.Items.Clear();
             cbLevel.Items.AddRange(new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
         }
 
+        /// <summary>
+        /// Tải danh sách kỹ thuật viên có thể phân công.
+        /// </summary>
         private void LoadKyThuat()
         {
             cbKyThuat.Items.Clear();
@@ -129,6 +147,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             cbKyThuat.Items.AddRange(technicians.Cast<object>().ToArray());
         }
 
+        /// <summary>
+        /// Tải danh sách trạng thái sửa chữa lên biểu mẫu.
+        /// </summary>
         private void LoadTinhTrang()
         {
             var list = new[]
@@ -146,12 +167,18 @@ namespace PhoneCare.Forms.QuanTriDonHang
             cbTinhTrang.ValueMember = "Value";
         }
 
+        /// <summary>
+        /// Tính và hiển thị tổng tiền của các dịch vụ trong đơn hàng.
+        /// </summary>
         private void TinhTongTien()
         {
             decimal tong = _dsDichVu.Sum(x => x.DonGia);
             lblTongTien.Text = tong.ToString("N0") + " VND";
         }
 
+        /// <summary>
+        /// Xác định loại dịch vụ đang được chọn trên biểu mẫu.
+        /// </summary>
         private string GetLoaiDichVu()
         {
             var list = new List<string>();
@@ -164,6 +191,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             return string.Join(", ", list);
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnLuu_Click.
+        /// </summary>
         private void btnLuu_Click(object sender, EventArgs e)
         {
             if (!ValidateInput()) return;
@@ -217,6 +247,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Sao chép dữ liệu từ biểu mẫu vào entity đơn hàng.
+        /// </summary>
         private void MapFormToDonHang(DonHang donHang)
         {
             donHang.TenKH = txtTenKH.Text.Trim();
@@ -233,6 +266,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             donHang.LoaiDichVu = GetLoaiDichVu();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuThemDichVu_Click.
+        /// </summary>
         private void mnuThemDichVu_Click(object sender, EventArgs e)
         {
             if (!CanModifyServices()) return;
@@ -242,6 +278,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             f.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Tải và hiển thị danh sách dịch vụ của đơn hàng.
+        /// </summary>
         public void LoadDichVu()
         {
             _dsDichVu = new BindingList<DichVu>(
@@ -256,6 +295,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             TinhTongTien();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuSuaDichVu_Click.
+        /// </summary>
         private void mnuSuaDichVu_Click(object sender, EventArgs e)
         {
             if (dgvDichVu.CurrentRow == null) return;
@@ -267,6 +309,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             f.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Xóa các thông báo lỗi kiểm tra dữ liệu trên biểu mẫu.
+        /// </summary>
         private void ClearError()
         {
             errorProvider1.SetError(txtTenKH, "");
@@ -279,6 +324,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             errorProvider1.SetError(cbLevel, "");
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu nhập trên biểu mẫu và hiển thị lỗi tương ứng.
+        /// </summary>
         private bool ValidateInput()
         {
             bool valid = true;
@@ -346,6 +394,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             return valid;
         }
 
+        /// <summary>
+        /// Đưa các trường nhập liệu trên biểu mẫu về trạng thái ban đầu.
+        /// </summary>
         private void ClearForm()
         {
             txtTenKH.Clear();
@@ -369,6 +420,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             txtTenKH.Focus();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuXoaDichVu_Click.
+        /// </summary>
         private void mnuXoaDichVu_Click(object sender, EventArgs e)
         {
             if (dgvDichVu.CurrentRow == null) return;
@@ -408,6 +462,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnInHoaDon_Click.
+        /// </summary>
         private void btnInHoaDon_Click(object sender, EventArgs e)
         {
             if (!_id.HasValue)
@@ -421,6 +478,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             form.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnInPhieuNhan_Click.
+        /// </summary>
         private void btnInPhieuNhan_Click(object sender, EventArgs e)
         {
             if (!_id.HasValue)
@@ -434,6 +494,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             form.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Tải dữ liệu hiện có lên biểu mẫu để chỉnh sửa.
+        /// </summary>
         private void LoadDataForEdit()
         {
             _donHang = _context.DonHangs.FirstOrDefault(x => x.Id == _id && !x.IsDeleted);
@@ -468,6 +531,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             chkCaiDat.Checked = loaiDichVu.Contains("Cài đặt");
         }
 
+        /// <summary>
+        /// Kiểm tra đơn hàng và người dùng hiện tại có cho phép thay đổi dịch vụ hay không.
+        /// </summary>
         public bool CanModifyServices()
         {
             if (!PermissionService.CanManageServices())
@@ -486,6 +552,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             return true;
         }
 
+        /// <summary>
+        /// Áp dụng quyền thao tác dịch vụ lên các điều khiển của giao diện.
+        /// </summary>
         private void ApplyServicePermission()
         {
             bool enabled = PermissionService.CanManageServices() && RepairStatusHelper.CanEditOrder(_donHang.TinhTrang);
@@ -494,6 +563,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             mnuXoaDichVu.Enabled = enabled;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnDong_Click.
+        /// </summary>
         private void btnDong_Click(object sender, EventArgs e)
         {
             Close();

@@ -4,6 +4,9 @@ namespace PhoneCare_API.Services
 {
     public static class RepairStatusService
     {
+        /// <summary>
+        /// Chuyển giá trị trạng thái sửa chữa thành nội dung hiển thị.
+        /// </summary>
         public static string GetText(int value)
         {
             return (RepairStatus)value switch
@@ -18,6 +21,9 @@ namespace PhoneCare_API.Services
             };
         }
 
+        /// <summary>
+        /// Kiểm tra trạng thái hiện tại có cho phép chỉnh sửa đơn hàng hay không.
+        /// </summary>
         public static bool CanEditOrder(int value)
         {
             return value == (int)RepairStatus.ChoSua
@@ -25,6 +31,9 @@ namespace PhoneCare_API.Services
                 || value == (int)RepairStatus.DaSua;
         }
 
+        /// <summary>
+        /// Kiểm tra giá trị trạng thái có nằm trong tập trạng thái hợp lệ hay không.
+        /// </summary>
         public static bool IsValid(int value)
         {
             return Enum.IsDefined(typeof(RepairStatus), value);

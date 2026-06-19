@@ -16,22 +16,34 @@ namespace PhoneCare.Forms.QuanTriDonHang
         private int _total = 0;
         private bool _isLoadingStaticData = false;
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmDanhSachDonHang.
+        /// </summary>
         public frmDanhSachDonHang()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnAdd_Click.
+        /// </summary>
         private void btnAdd_Click(object sender, EventArgs e)
         {
             OpenCreateForm();
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmDanhSachDonHang_Load được hiển thị.
+        /// </summary>
         private void frmDanhSachDonHang_Load(object sender, EventArgs e)
         {
             LoadStaticData();
             LoadData();
         }
 
+        /// <summary>
+        /// Tải các danh mục tĩnh dùng cho bộ lọc đơn hàng.
+        /// </summary>
         private void LoadStaticData()
         {
             _isLoadingStaticData = true;
@@ -70,6 +82,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             _isLoadingStaticData = false;
         }
 
+        /// <summary>
+        /// Tải danh sách dữ liệu theo bộ lọc và trang hiện tại lên giao diện.
+        /// </summary>
         public void LoadData()
         {
             using (var context = new PhoneCareDbContext())
@@ -108,6 +123,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Tạo truy vấn đơn hàng theo các điều kiện lọc được cung cấp.
+        /// </summary>
         private IQueryable<DonHang> BuildFilteredQuery(PhoneCareDbContext context)
         {
             var query = context.DonHangs
@@ -172,12 +190,18 @@ namespace PhoneCare.Forms.QuanTriDonHang
             return query;
         }
 
+        /// <summary>
+        /// Tính số trang cuối cùng từ tổng số bản ghi và kích thước trang.
+        /// </summary>
         private int GetLastPage(int total)
         {
             if (total <= 0) return 1;
             return (int)Math.Ceiling(total / (double)_pageSize);
         }
 
+        /// <summary>
+        /// Cập nhật thông tin và trạng thái điều khiển phân trang.
+        /// </summary>
         private void UpdatePagingInfo(int rowCount, int total)
         {
             if (total == 0)
@@ -200,12 +224,18 @@ namespace PhoneCare.Forms.QuanTriDonHang
             btnToBottom.Enabled = _page < lastPage;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnTimKiem_Click.
+        /// </summary>
         private void btnTimKiem_Click(object sender, EventArgs e)
         {
             _page = 1;
             LoadData();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnRefresh_Click.
+        /// </summary>
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             txtKeyword.Clear();
@@ -218,6 +248,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             LoadData();
         }
 
+        /// <summary>
+        /// Cập nhật dữ liệu khi lựa chọn trên điều khiển thay đổi.
+        /// </summary>
         private void cbPageSize_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (_isLoadingStaticData || cbPageSize.SelectedItem == null) return;
@@ -227,6 +260,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             LoadData();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnNext_Click.
+        /// </summary>
         private void btnNext_Click(object sender, EventArgs e)
         {
             if (_page >= GetLastPage(_total)) return;
@@ -234,6 +270,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             LoadData();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnPrev_Click.
+        /// </summary>
         private void btnPrev_Click(object sender, EventArgs e)
         {
             if (_page > 1)
@@ -243,6 +282,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnToTop_Click.
+        /// </summary>
         private void btnToTop_Click(object sender, EventArgs e)
         {
             if (_page > 1)
@@ -252,17 +294,26 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnToBottom_Click.
+        /// </summary>
         private void btnToBottom_Click(object sender, EventArgs e)
         {
             _page = GetLastPage(_total);
             LoadData();
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuThemDonHang_Click.
+        /// </summary>
         private void mnuThemDonHang_Click(object sender, EventArgs e)
         {
             OpenCreateForm();
         }
 
+        /// <summary>
+        /// Mở biểu mẫu tạo đơn hàng mới và làm mới danh sách sau khi đóng.
+        /// </summary>
         private void OpenCreateForm()
         {
             if (!PermissionService.CanEditOrders())
@@ -276,6 +327,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             f.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuSuaDonHang_Click.
+        /// </summary>
         private void mnuSuaDonHang_Click(object sender, EventArgs e)
         {
             if (dgvDonHang.CurrentRow == null) return;
@@ -307,6 +361,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             f.ShowDialog(this);
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh mnuXoaDonHang_Click.
+        /// </summary>
         private void mnuXoaDonHang_Click(object sender, EventArgs e)
         {
             if (dgvDonHang.CurrentRow == null) return;
@@ -337,6 +394,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnXuatExcel_Click.
+        /// </summary>
         private void btnXuatExcel_Click(object sender, EventArgs e)
         {
             using (var context = new PhoneCareDbContext())
@@ -387,6 +447,9 @@ namespace PhoneCare.Forms.QuanTriDonHang
             }
         }
 
+        /// <summary>
+        /// Tạo danh sách trạng thái dùng cho bộ lọc đơn hàng.
+        /// </summary>
         private object[] GetStatusList()
         {
             return new[]

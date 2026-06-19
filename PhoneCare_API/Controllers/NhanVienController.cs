@@ -14,12 +14,18 @@ namespace PhoneCare_API.Controllers
         private readonly ApplicationDbContext _db;
         private readonly CurrentUserService _currentUserService;
 
+        /// <summary>
+        /// Khởi tạo controller quản lý nhân viên cùng các dịch vụ phụ thuộc.
+        /// </summary>
         public NhanVienController(ApplicationDbContext db, CurrentUserService currentUserService)
         {
             _db = db;
             _currentUserService = currentUserService;
         }
 
+        /// <summary>
+        /// Lấy danh sách bản ghi hợp lệ và trả về cho client.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<ApiResponse<IEnumerable<NhanVienListItemDto>>>> GetAll()
         {
@@ -47,6 +53,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<IEnumerable<NhanVienListItemDto>>.Ok("Lấy danh sách nhân viên thành công.", data));
         }
 
+        /// <summary>
+        /// Tìm và trả về chi tiết bản ghi theo mã định danh.
+        /// </summary>
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ApiResponse<NhanVienDetailDto>>> GetById(int id)
         {
@@ -62,6 +71,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<NhanVienDetailDto>.Ok("Lấy nhân viên thành công.", MapDetail(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu và tạo mới bản ghi tương ứng.
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ApiResponse<NhanVienDetailDto>>> Create(CreateNhanVienDto request)
         {
@@ -108,6 +120,9 @@ namespace PhoneCare_API.Controllers
             return StatusCode(StatusCodes.Status201Created, ApiResponse<NhanVienDetailDto>.Created("Thêm nhân viên thành công.", MapDetail(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu và cập nhật bản ghi được yêu cầu.
+        /// </summary>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ApiResponse<NhanVienDetailDto>>> Update(int id, UpdateNhanVienDto request)
         {
@@ -146,8 +161,11 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<NhanVienDetailDto>.Ok("Cập nhật nhân viên thành công.", MapDetail(item)));
         }
 
+        /// <summary>
+        /// Khóa tài khoản nhân viên theo mã định danh.
+        /// </summary>
         [HttpPatch("{id:int}/lock")]
-        public async Task<ActionResult<ApiResponse<object>>> SetLock(int id, SetLockNhanVienDto request)
+        public async Task<ActionResult<ApiResponse<object>>> SetLock(int id)
         {
             var current = _currentUserService.GetCurrentUser(HttpContext);
             if (current == null) return Unauthorized(ApiResponse<object>.Unauthorized("Vui lòng đăng nhập."));
@@ -156,13 +174,46 @@ namespace PhoneCare_API.Controllers
             var item = await _db.NhanViens.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
             if (item == null) return NotFound(ApiResponse<object>.NotFound("Không tìm thấy nhân viên."));
 
-            item.KhoaTaiKhoan = request.KhoaTaiKhoan;
+            item.KhoaTaiKhoan = true;
             item.DateModify = DateTime.Now;
             item.UserModify = current.Id;
             await _db.SaveChangesAsync();
-            return Ok(ApiResponse<object>.Ok(request.KhoaTaiKhoan ? "Khóa tài khoản thành công." : "Mở khóa tài khoản thành công."));
+            return Ok(ApiResponse<object>.Ok("Khóa tài khoản thành công."));
         }
 
+        /// <summary>
+        /// Mở khóa hoàn toàn tài khoản và xóa lịch sử đăng nhập sai hiện tại.
+        /// </summary>
+        [HttpPatch("{id:int}/unlock")]
+        public async Task<ActionResult<ApiResponse<object>>> Unlock(int id)
+        {
+            var current = _currentUserService.GetCurrentUser(HttpContext);
+            if (current == null) return Unauthorized(ApiResponse<object>.Unauthorized("Vui lòng đăng nhập."));
+            if (!PermissionService.CanManageEmployees(current.LoaiNhanVien))
+            {
+                return StatusCode(
+                    StatusCodes.Status403Forbidden,
+                    ApiResponse<object>.Forbidden("Bạn không có quyền quản lý nhân viên."));
+            }
+
+            var item = await _db.NhanViens.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            if (item == null) return NotFound(ApiResponse<object>.NotFound("Không tìm thấy nhân viên."));
+
+            item.KhoaTaiKhoan = false;
+            item.FailedLoginCount = 0;
+            item.LockoutEndAt = null;
+            item.LastFailedLoginAt = null;
+            item.DateModify = DateTime.Now;
+            item.UserModify = current.Id;
+
+            await _db.SaveChangesAsync();
+
+            return Ok(ApiResponse<object>.Ok("Mở khóa tài khoản thành công."));
+        }
+
+        /// <summary>
+        /// Đặt lại mật khẩu và xóa trạng thái đăng nhập sai của nhân viên.
+        /// </summary>
         [HttpPatch("{id:int}/password")]
         public async Task<ActionResult<ApiResponse<object>>> ResetPassword(int id, ResetPasswordDto request)
         {
@@ -184,6 +235,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<object>.Ok("Đổi mật khẩu nhân viên thành công."));
         }
 
+        /// <summary>
+        /// Kiểm tra quyền và thực hiện xóa mềm bản ghi được yêu cầu.
+        /// </summary>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<ApiResponse<object>>> Delete(int id)
         {
@@ -201,6 +255,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<object>.Ok("Xóa nhân viên thành công."));
         }
 
+        /// <summary>
+        /// Kiểm tra các trường bắt buộc và vai trò của nhân viên.
+        /// </summary>
         private static string? ValidateEmployee(string userName, string fullName, string role)
         {
             if (string.IsNullOrWhiteSpace(userName)) return "Tài khoản không được để trống.";
@@ -209,6 +266,9 @@ namespace PhoneCare_API.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Ánh xạ entity sang DTO chi tiết.
+        /// </summary>
         private static NhanVienDetailDto MapDetail(NhanVien item)
         {
             return new NhanVienDetailDto

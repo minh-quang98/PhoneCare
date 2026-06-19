@@ -14,6 +14,9 @@ namespace PhoneCare.Class
         public static int CoSoCuaHangId { get; set; }
         public static string LoaiNhanVien { get; set; }
 
+        /// <summary>
+        /// Xóa thông tin người dùng đang đăng nhập khỏi phiên hiện tại.
+        /// </summary>
         public static void Clear()
         {
             Id = 0;

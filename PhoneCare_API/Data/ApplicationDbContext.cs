@@ -5,6 +5,9 @@ namespace PhoneCare_API.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        /// <summary>
+        /// Khởi tạo ngữ cảnh kết nối cơ sở dữ liệu của API.
+        /// </summary>
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
@@ -15,6 +18,9 @@ namespace PhoneCare_API.Data
         public DbSet<DonHang> DonHangs { get; set; }
         public DbSet<DichVu> DichVus { get; set; }
 
+        /// <summary>
+        /// Cấu hình ánh xạ entity, quan hệ và ràng buộc của cơ sở dữ liệu.
+        /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CoSoCuaHang>().ToTable("COSOCUAHANG");

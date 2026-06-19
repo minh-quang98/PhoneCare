@@ -16,6 +16,9 @@ namespace PhoneCare_API.Controllers
         private readonly AuthTokenService _tokenService;
         private readonly CurrentUserService _currentUserService;
 
+        /// <summary>
+        /// Khởi tạo controller xác thực cùng các dịch vụ phụ thuộc.
+        /// </summary>
         public AuthController(ApplicationDbContext db, AuthTokenService tokenService, CurrentUserService currentUserService)
         {
             _db = db;
@@ -23,6 +26,9 @@ namespace PhoneCare_API.Controllers
             _currentUserService = currentUserService;
         }
 
+        /// <summary>
+        /// Xác thực tài khoản, quản lý số lần đăng nhập sai và cấp token đăng nhập.
+        /// </summary>
         [HttpPost("login")]
         public async Task<ActionResult<ApiResponse<LoginResponseDto>>> Login(LoginRequestDto request)
         {
@@ -83,6 +89,9 @@ namespace PhoneCare_API.Controllers
             return Unauthorized(ApiResponse<LoginResponseDto>.Unauthorized("Sai tài khoản hoặc mật khẩu."));
         }
 
+        /// <summary>
+        /// Lấy thông tin người dùng hiện đang đăng nhập từ token.
+        /// </summary>
         [HttpGet("current-user")]
         public async Task<ActionResult<ApiResponse<CurrentUserDto>>> CurrentUser()
         {
@@ -102,6 +111,9 @@ namespace PhoneCare_API.Controllers
             }));
         }
 
+        /// <summary>
+        /// Kiểm tra mật khẩu hiện tại và cập nhật mật khẩu mới cho người dùng.
+        /// </summary>
         [HttpPost("change-password")]
         public async Task<ActionResult<ApiResponse<object>>> ChangePassword(ChangePasswordRequestDto request)
         {
@@ -133,6 +145,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<object>.Ok("Đổi mật khẩu thành công."));
         }
 
+        /// <summary>
+        /// Xác thực mật khẩu nhập vào và hỗ trợ dữ liệu mật khẩu cũ chưa được băm.
+        /// </summary>
         private static bool IsPasswordValid(string storedPassword, string password)
         {
             return PasswordHasher.IsHashed(storedPassword)

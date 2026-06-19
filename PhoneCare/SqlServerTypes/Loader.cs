@@ -9,6 +9,9 @@ namespace SqlServerTypes
     /// </summary>
     public class Utilities
     {
+        /// <summary>
+        /// Gọi Windows API để nạp thư viện native vào tiến trình.
+        /// </summary>
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr LoadLibrary(string libname);
 
@@ -29,6 +32,9 @@ namespace SqlServerTypes
             LoadNativeAssembly(nativeBinaryPath, "SqlServerSpatial140.dll");
         }
 
+        /// <summary>
+        /// Nạp một thư viện native từ đường dẫn được chỉ định.
+        /// </summary>
         private static void LoadNativeAssembly(string nativeBinaryPath, string assemblyName)
         {
             var path = Path.Combine(nativeBinaryPath, assemblyName);

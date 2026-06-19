@@ -13,17 +13,26 @@ namespace PhoneCare_API.Controllers
     {
         private readonly ApplicationDbContext _db;
 
+        /// <summary>
+        /// Khởi tạo controller cung cấp dữ liệu danh mục dùng chung.
+        /// </summary>
         public LookupsController(ApplicationDbContext db)
         {
             _db = db;
         }
 
+        /// <summary>
+        /// Trả về danh sách vai trò nhân viên được hỗ trợ.
+        /// </summary>
         [HttpGet("roles")]
         public ActionResult<ApiResponse<IEnumerable<string>>> Roles()
         {
             return Ok(ApiResponse<IEnumerable<string>>.Ok("Lấy danh sách vai trò thành công.", PermissionService.Roles));
         }
 
+        /// <summary>
+        /// Trả về danh sách trạng thái sửa chữa dùng cho lookup.
+        /// </summary>
         [HttpGet("repair-statuses")]
         public ActionResult<ApiResponse<IEnumerable<LookupItemDto>>> RepairStatuses()
         {
@@ -33,6 +42,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<IEnumerable<LookupItemDto>>.Ok("Lấy danh sách trạng thái sửa chữa thành công.", data));
         }
 
+        /// <summary>
+        /// Lấy danh sách kỹ thuật viên đang hoạt động.
+        /// </summary>
         [HttpGet("technicians")]
         public async Task<ActionResult<ApiResponse<IEnumerable<NhanVienListItemDto>>>> Technicians()
         {

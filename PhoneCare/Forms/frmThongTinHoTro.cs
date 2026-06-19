@@ -5,11 +5,17 @@ namespace PhoneCare.Forms
 {
     public partial class frmThongTinHoTro : Form
     {
+        /// <summary>
+        /// Khởi tạo đối tượng frmThongTinHoTro.
+        /// </summary>
         public frmThongTinHoTro()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Khởi tạo và tải dữ liệu khi biểu mẫu frmThongTinHoTro_Load được hiển thị.
+        /// </summary>
         private void frmThongTinHoTro_Load(object sender, EventArgs e)
         {
             lblTitle.Text = "Phone Care - Hỗ trợ";

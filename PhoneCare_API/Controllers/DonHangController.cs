@@ -14,12 +14,18 @@ namespace PhoneCare_API.Controllers
         private readonly ApplicationDbContext _db;
         private readonly CurrentUserService _currentUserService;
 
+        /// <summary>
+        /// Khởi tạo controller quản lý đơn hàng cùng các dịch vụ phụ thuộc.
+        /// </summary>
         public DonHangController(ApplicationDbContext db, CurrentUserService currentUserService)
         {
             _db = db;
             _currentUserService = currentUserService;
         }
 
+        /// <summary>
+        /// Lấy danh sách bản ghi hợp lệ và trả về cho client.
+        /// </summary>
         [HttpGet]
         public async Task<ActionResult<ApiResponse<PagedResult<DonHangListItemDto>>>> GetAll([FromQuery] DonHangQueryDto query)
         {
@@ -63,6 +69,9 @@ namespace PhoneCare_API.Controllers
             }));
         }
 
+        /// <summary>
+        /// Tìm và trả về chi tiết bản ghi theo mã định danh.
+        /// </summary>
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ApiResponse<DonHangDetailDto>>> GetById(int id)
         {
@@ -80,6 +89,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<DonHangDetailDto>.Ok("Lấy đơn hàng thành công.", MapDetail(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu và tạo mới bản ghi tương ứng.
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ApiResponse<DonHangDetailDto>>> Create(CreateDonHangDto request)
         {
@@ -119,6 +131,9 @@ namespace PhoneCare_API.Controllers
             return StatusCode(StatusCodes.Status201Created, ApiResponse<DonHangDetailDto>.Created("Thêm đơn hàng thành công.", MapDetail(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu và cập nhật bản ghi được yêu cầu.
+        /// </summary>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ApiResponse<DonHangDetailDto>>> Update(int id, UpdateDonHangDto request)
         {
@@ -153,6 +168,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<DonHangDetailDto>.Ok("Cập nhật đơn hàng thành công.", MapDetail(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra và cập nhật trạng thái sửa chữa của đơn hàng.
+        /// </summary>
         [HttpPatch("{id:int}/status")]
         public async Task<ActionResult<ApiResponse<DonHangDetailDto>>> UpdateStatus(int id, UpdateDonHangStatusDto request)
         {
@@ -173,6 +191,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<DonHangDetailDto>.Ok("Cập nhật trạng thái đơn hàng thành công.", MapDetail(item)));
         }
 
+        /// <summary>
+        /// Kiểm tra quyền và thực hiện xóa mềm bản ghi được yêu cầu.
+        /// </summary>
         [HttpDelete("{id:int}")]
         public async Task<ActionResult<ApiResponse<object>>> Delete(int id)
         {
@@ -190,6 +211,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<object>.Ok("Xóa đơn hàng thành công."));
         }
 
+        /// <summary>
+        /// Lấy danh sách dịch vụ thuộc đơn hàng được yêu cầu.
+        /// </summary>
         [HttpGet("{id:int}/dich-vu")]
         public async Task<ActionResult<ApiResponse<IEnumerable<DichVuDto>>>> GetServices(int id)
         {
@@ -206,6 +230,9 @@ namespace PhoneCare_API.Controllers
             return Ok(ApiResponse<IEnumerable<DichVuDto>>.Ok("Lấy danh sách dịch vụ thành công.", data));
         }
 
+        /// <summary>
+        /// Kiểm tra dữ liệu và thêm dịch vụ mới vào đơn hàng.
+        /// </summary>
         [HttpPost("{id:int}/dich-vu")]
         public async Task<ActionResult<ApiResponse<DichVuDto>>> CreateService(int id, CreateDichVuDto request)
         {
@@ -234,6 +261,9 @@ namespace PhoneCare_API.Controllers
             return StatusCode(StatusCodes.Status201Created, ApiResponse<DichVuDto>.Created("Thêm dịch vụ thành công.", MapService(service)));
         }
 
+        /// <summary>
+        /// Tạo truy vấn đơn hàng theo các điều kiện lọc được cung cấp.
+        /// </summary>
         private IQueryable<DonHang> BuildFilteredQuery(DonHangQueryDto query)
         {
             var dbQuery = _db.DonHangs
@@ -282,6 +312,9 @@ namespace PhoneCare_API.Controllers
             return dbQuery;
         }
 
+        /// <summary>
+        /// Kiểm tra tính hợp lệ của dữ liệu đơn hàng.
+        /// </summary>
         private static string? ValidateOrder(CreateDonHangDto request)
         {
             if (string.IsNullOrWhiteSpace(request.TenKH)) return "Tên khách hàng không được để trống.";
@@ -297,6 +330,9 @@ namespace PhoneCare_API.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Kiểm tra tên và đơn giá của dịch vụ.
+        /// </summary>
         internal static string? ValidateService(string tenDichVu, decimal donGia)
         {
             if (string.IsNullOrWhiteSpace(tenDichVu)) return "Tên dịch vụ không được để trống.";
@@ -304,6 +340,9 @@ namespace PhoneCare_API.Controllers
             return null;
         }
 
+        /// <summary>
+        /// Tải các quan hệ cần thiết của đơn hàng để ánh xạ dữ liệu trả về.
+        /// </summary>
         private async Task LoadOrderReferences(DonHang item)
         {
             await _db.Entry(item).Reference(x => x.NhanVien).LoadAsync();
@@ -311,6 +350,9 @@ namespace PhoneCare_API.Controllers
             await _db.Entry(item).Collection(x => x.DichVus).LoadAsync();
         }
 
+        /// <summary>
+        /// Ánh xạ entity dịch vụ sang DTO dịch vụ.
+        /// </summary>
         internal static DichVuDto MapService(DichVu item)
         {
             return new DichVuDto
@@ -322,6 +364,9 @@ namespace PhoneCare_API.Controllers
             };
         }
 
+        /// <summary>
+        /// Ánh xạ entity sang DTO chi tiết.
+        /// </summary>
         private static DonHangDetailDto MapDetail(DonHang item)
         {
             var services = item.DichVus?.Where(x => !x.IsDeleted).OrderBy(x => x.Id).Select(MapService).ToList() ?? new List<DichVuDto>();

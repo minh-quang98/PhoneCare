@@ -12,17 +12,26 @@ namespace PhoneCare
         private const int MaxFailedAttempts = 5;
         private static readonly TimeSpan LockoutDuration = TimeSpan.FromMinutes(5);
 
+        /// <summary>
+        /// Khởi tạo đối tượng frmDangNhap.
+        /// </summary>
         public frmDangNhap(Form1 parentForm)
         {
             InitializeComponent();
             _parentForm = parentForm;
         }
 
+        /// <summary>
+        /// Xử lý sự kiện nhấn nút hoặc mục lệnh btnDangNhap_Click.
+        /// </summary>
         private void btnDangNhap_Click(object sender, EventArgs e)
         {
             HandleDangNhap();
         }
 
+        /// <summary>
+        /// Xác thực thông tin đăng nhập, cập nhật trạng thái khóa và mở phiên người dùng.
+        /// </summary>
         private void HandleDangNhap()
         {
             using (var db = new PhoneCareDbContext())
@@ -82,6 +91,9 @@ namespace PhoneCare
             }
         }
 
+        /// <summary>
+        /// Xác thực mật khẩu nhập vào và hỗ trợ dữ liệu mật khẩu cũ chưa được băm.
+        /// </summary>
         private bool IsPasswordValid(string storedPassword, string password)
         {
             if (PasswordHasher.IsHashed(storedPassword))
