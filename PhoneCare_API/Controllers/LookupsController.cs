@@ -25,9 +25,13 @@ namespace PhoneCare_API.Controllers
         /// Trả về danh sách vai trò nhân viên được hỗ trợ.
         /// </summary>
         [HttpGet("roles")]
-        public ActionResult<ApiResponse<IEnumerable<string>>> Roles()
+        public ActionResult<ApiResponse<IEnumerable<LookupItemDto>>> Roles()
         {
-            return Ok(ApiResponse<IEnumerable<string>>.Ok("Lấy danh sách vai trò thành công.", PermissionService.Roles));
+            var data = PermissionService.Roles
+                .Select((role, index) => new LookupItemDto { Id = index + 1, Text = role })
+                .ToList();
+
+            return Ok(ApiResponse<IEnumerable<LookupItemDto>>.Ok("Lấy danh sách vai trò thành công.", data));
         }
 
         /// <summary>

@@ -39,6 +39,11 @@ namespace PhoneCare_API.Controllers
 
             var now = DateTime.Now;
             var user = await _db.NhanViens.FirstOrDefaultAsync(x => x.UserName == request.UserName.Trim() && !x.IsDeleted);
+            if (user != null && user.KhoaTaiKhoan)
+            {
+                return BadRequest(ApiResponse<LoginResponseDto>.BadRequest("Tài khoản này đã bị khóa, vui lòng liên hệ admin để mở khóa tài khoản này."));
+            }
+
             if (user != null && user.LockoutEndAt.HasValue && user.LockoutEndAt.Value > now)
             {
                 return StatusCode(StatusCodes.Status423Locked, ApiResponse<LoginResponseDto>.Create(false, StatusCodes.Status423Locked, $"Tài khoản đang bị khóa tạm thời đến {user.LockoutEndAt.Value:HH:mm:ss}."));

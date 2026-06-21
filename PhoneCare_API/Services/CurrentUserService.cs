@@ -37,11 +37,18 @@ namespace PhoneCare_API.Services
         /// </summary>
         public CurrentUserDto? GetCurrentUser(HttpContext httpContext)
         {
-            var header = httpContext.Request.Headers.Authorization.ToString();
+            var header = httpContext.Request.Headers.Authorization.ToString().Trim();
             const string prefix = "Bearer ";
-            if (!header.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return null;
+            if (string.IsNullOrWhiteSpace(header)) return null;
 
-            return _tokenService.TryValidate(header[prefix.Length..].Trim(), out var user) ? user : null;
+            // Scalar/Postman tự thêm tiền tố Bearer, trong khi một số client gửi trực tiếp
+            // token vào Authorization. Chấp nhận cả hai dạng để tránh từ chối token hợp lệ.
+            while (header.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+            {
+                header = header[prefix.Length..].Trim();
+            }
+
+            return _tokenService.TryValidate(header, out var user) ? user : null;
         }
     }
 }

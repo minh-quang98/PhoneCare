@@ -214,16 +214,16 @@ namespace PhoneCare_API.Controllers
         /// <summary>
         /// Lấy danh sách dịch vụ thuộc đơn hàng được yêu cầu.
         /// </summary>
-        [HttpGet("{id:int}/dich-vu")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<DichVuDto>>>> GetServices(int id)
+        [HttpGet("{donHangId:int}/dich-vu")]
+        public async Task<ActionResult<ApiResponse<IEnumerable<DichVuDto>>>> GetServices(int donHangId)
         {
             var current = _currentUserService.GetCurrentUser(HttpContext);
             if (current == null) return Unauthorized(ApiResponse<IEnumerable<DichVuDto>>.Unauthorized("Vui lòng đăng nhập."));
             if (!PermissionService.CanViewOrders(current.LoaiNhanVien)) return StatusCode(StatusCodes.Status403Forbidden, ApiResponse<IEnumerable<DichVuDto>>.Forbidden("Bạn không có quyền xem đơn hàng."));
 
-            if (!await _db.DonHangs.AnyAsync(x => x.Id == id && !x.IsDeleted)) return NotFound(ApiResponse<IEnumerable<DichVuDto>>.NotFound("Không tìm thấy đơn hàng."));
+            if (!await _db.DonHangs.AnyAsync(x => x.Id == donHangId && !x.IsDeleted)) return NotFound(ApiResponse<IEnumerable<DichVuDto>>.NotFound("Không tìm thấy đơn hàng."));
             var data = await _db.DichVus
-                .Where(x => x.IdDonHang == id && !x.IsDeleted)
+                .Where(x => x.IdDonHang == donHangId && !x.IsDeleted)
                 .OrderBy(x => x.Id)
                 .Select(x => new DichVuDto { Id = x.Id, TenDichVu = x.TenDichVu, DonGia = x.DonGia, IdDonHang = x.IdDonHang })
                 .ToListAsync();
@@ -233,14 +233,14 @@ namespace PhoneCare_API.Controllers
         /// <summary>
         /// Kiểm tra dữ liệu và thêm dịch vụ mới vào đơn hàng.
         /// </summary>
-        [HttpPost("{id:int}/dich-vu")]
-        public async Task<ActionResult<ApiResponse<DichVuDto>>> CreateService(int id, CreateDichVuDto request)
+        [HttpPost("{donHangId:int}/dich-vu")]
+        public async Task<ActionResult<ApiResponse<DichVuDto>>> CreateService(int donHangId, CreateDichVuDto request)
         {
             var current = _currentUserService.GetCurrentUser(HttpContext);
             if (current == null) return Unauthorized(ApiResponse<DichVuDto>.Unauthorized("Vui lòng đăng nhập."));
             if (!PermissionService.CanManageServices(current.LoaiNhanVien)) return StatusCode(StatusCodes.Status403Forbidden, ApiResponse<DichVuDto>.Forbidden("Bạn không có quyền cập nhật dịch vụ."));
 
-            var order = await _db.DonHangs.FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
+            var order = await _db.DonHangs.FirstOrDefaultAsync(x => x.Id == donHangId && !x.IsDeleted);
             if (order == null) return NotFound(ApiResponse<DichVuDto>.NotFound("Không tìm thấy đơn hàng."));
             if (!RepairStatusService.CanEditOrder(order.TinhTrang)) return BadRequest(ApiResponse<DichVuDto>.BadRequest("Không thể cập nhật dịch vụ ở trạng thái hiện tại."));
             var validation = ValidateService(request.TenDichVu, request.DonGia);
@@ -250,7 +250,7 @@ namespace PhoneCare_API.Controllers
             {
                 TenDichVu = request.TenDichVu.Trim(),
                 DonGia = request.DonGia,
-                IdDonHang = id,
+                IdDonHang = donHangId,
                 DateCreated = DateTime.Now,
                 UserCreated = current.Id,
                 IsDeleted = false

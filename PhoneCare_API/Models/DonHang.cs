@@ -14,22 +14,23 @@ namespace PhoneCare.Models
         [Key]
         public int Id { get; set; }
 
-        public string TenKH { get; set; }
-        public string SoDT { get; set; }
-        public string DiaChi { get; set; }
+        public string? TenKH { get; set; }
+        public string? SoDT { get; set; }
+        public string? DiaChi { get; set; }
 
-        public string LoaiMay { get; set; }
+        public string? LoaiMay { get; set; }
+        [MaxLength(50)]
         public string IMEI { get; set; }
-        public string Mau { get; set; }
-        public string Password { get; set; }
+        public string? Mau { get; set; }
+        public string? Password { get; set; }
 
         public int Level { get; set; }
-        public string LoaiKyThuat { get; set; }
+        public string? LoaiKyThuat { get; set; }
 
         public int TinhTrang { get; set; }
-        public string TinhTrangMay { get; set; }
+        public string? TinhTrangMay { get; set; }
 
-        public string LoaiDichVu { get; set; }
+        public string? LoaiDichVu { get; set; }
 
         public DateTime? NgayNhan { get; set; }
 

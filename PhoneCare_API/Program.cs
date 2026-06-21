@@ -55,6 +55,9 @@ var app = builder.Build();
 // Bắt mọi exception chưa được xử lý từ các API phía dưới pipeline.
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
+// Yêu cầu token hợp lệ cho toàn bộ API, ngoại trừ endpoint đăng nhập.
+app.UseMiddleware<ApiAuthenticationMiddleware>();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -1,4 +1,3 @@
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PhoneCare_API.Data;
@@ -24,7 +23,7 @@ namespace PhoneCare_API.Controllers
         }
 
         /// <summary>
-        /// Lọc và xuất danh sách đơn hàng thành tệp CSV.
+        /// Lọc và xuất danh sách đơn hàng thành tệp Excel.
         /// </summary>
         [HttpGet("don-hang")]
         public async Task<IActionResult> ExportDonHang([FromQuery] DonHangQueryDto query)
@@ -51,30 +50,30 @@ namespace PhoneCare_API.Controllers
                 })
                 .ToListAsync();
 
-            var csv = new StringBuilder();
-            csv.AppendLine("STT,ID,Ten KH,SDT,Loai may,IMEI,Ngay nhan,Nguoi nhan,Ky thuat,Trang thai,Level,Co so");
+            var headers = new[] { "STT", "ID", "Tên KH", "SĐT", "Loại máy", "IMEI", "Ngày nhận", "Người nhận", "Kỹ thuật", "Trạng thái", "Level", "Cơ sở" };
+            var rows = new List<IReadOnlyList<object?>>(data.Count);
             for (var i = 0; i < data.Count; i++)
             {
                 var item = data[i];
-                csv.AppendLine(string.Join(",", new[]
+                rows.Add(new object?[]
                 {
-                    Csv(i + 1),
-                    Csv(item.Id),
-                    Csv(item.TenKH),
-                    Csv(item.SoDT),
-                    Csv(item.LoaiMay),
-                    Csv(item.IMEI),
-                    Csv(item.NgayNhan?.ToString("dd/MM/yyyy HH:mm") ?? string.Empty),
-                    Csv(item.NguoiNhan),
-                    Csv(item.LoaiKyThuat),
-                    Csv(RepairStatusService.GetText(item.TinhTrang)),
-                    Csv(item.Level),
-                    Csv(item.CoSo)
-                }));
+                    i + 1,
+                    item.Id,
+                    item.TenKH,
+                    item.SoDT,
+                    item.LoaiMay,
+                    item.IMEI,
+                    item.NgayNhan,
+                    item.NguoiNhan,
+                    item.LoaiKyThuat,
+                    RepairStatusService.GetText(item.TinhTrang),
+                    item.Level,
+                    item.CoSo
+                });
             }
 
-            var bytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(csv.ToString())).ToArray();
-            return File(bytes, "text/csv; charset=utf-8", $"DanhSachDonHang_{DateTime.Now:yyyyMMdd_HHmmss}.csv");
+            var bytes = ExcelExportService.Create("Danh sách đơn hàng", headers, rows);
+            return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"DanhSachDonHang_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
         }
 
         /// <summary>
@@ -128,13 +127,5 @@ namespace PhoneCare_API.Controllers
             return dbQuery;
         }
 
-        /// <summary>
-        /// Chuyển giá trị thành chuỗi CSV an toàn bằng cách xử lý ký tự đặc biệt.
-        /// </summary>
-        private static string Csv(object? value)
-        {
-            var text = Convert.ToString(value) ?? string.Empty;
-            return "\"" + text.Replace("\"", "\"\"") + "\"";
-        }
     }
 }
