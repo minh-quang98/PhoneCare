@@ -52,6 +52,8 @@ namespace PhoneCare_API.Controllers
                     NgayNhan = x.NgayNhan,
                     NguoiNhan = x.NhanVien != null ? x.NhanVien.FullName : string.Empty,
                     LoaiKyThuat = x.LoaiKyThuat,
+                    IdKyThuatVien = x.IdKyThuatVien,
+                    KyThuatVien = x.KyThuatVien != null ? x.KyThuatVien.FullName : x.LoaiKyThuat,
                     TinhTrang = x.TinhTrang,
                     TinhTrangText = RepairStatusService.GetText(x.TinhTrang),
                     Level = x.Level,
@@ -81,6 +83,7 @@ namespace PhoneCare_API.Controllers
 
             var item = await _db.DonHangs
                 .Include(x => x.NhanVien)
+                .Include(x => x.KyThuatVien)
                 .Include(x => x.CoSoCuaHang)
                 .Include(x => x.DichVus)
                 .FirstOrDefaultAsync(x => x.Id == id && !x.IsDeleted);
@@ -102,6 +105,18 @@ namespace PhoneCare_API.Controllers
             var validation = ValidateOrder(request);
             if (validation != null) return BadRequest(ApiResponse<DonHangDetailDto>.BadRequest(validation));
 
+            var technician = await FindTechnicianAsync(request.IdKyThuatVien);
+            if (technician == null)
+            {
+                return BadRequest(ApiResponse<DonHangDetailDto>.BadRequest("Kỹ thuật viên không tồn tại hoặc không còn hoạt động."));
+            }
+
+            var branchId = request.IdCoSo ?? current.CoSoCuaHangId;
+            if (!await IsActiveBranchAsync(branchId))
+            {
+                return BadRequest(ApiResponse<DonHangDetailDto>.BadRequest("Cơ sở cửa hàng không tồn tại hoặc đã ngừng hoạt động."));
+            }
+
             var item = new DonHang
             {
                 TenKH = request.TenKH.Trim(),
@@ -112,13 +127,14 @@ namespace PhoneCare_API.Controllers
                 Mau = request.Mau?.Trim(),
                 Password = request.Password,
                 Level = request.Level,
-                LoaiKyThuat = request.LoaiKyThuat.Trim(),
+                LoaiKyThuat = technician.FullName,
+                IdKyThuatVien = technician.Id,
                 TinhTrang = request.TinhTrang,
                 TinhTrangMay = request.TinhTrangMay.Trim(),
                 LoaiDichVu = request.LoaiDichVu?.Trim(),
                 NgayNhan = DateTime.Now,
                 IdNguoiNhan = current.Id,
-                IdCoSo = current.CoSoCuaHangId,
+                IdCoSo = branchId,
                 DateCreated = DateTime.Now,
                 UserCreated = current.Id,
                 IsDeleted = false
@@ -148,6 +164,18 @@ namespace PhoneCare_API.Controllers
             var validation = ValidateOrder(request);
             if (validation != null) return BadRequest(ApiResponse<DonHangDetailDto>.BadRequest(validation));
 
+            var technician = await FindTechnicianAsync(request.IdKyThuatVien);
+            if (technician == null)
+            {
+                return BadRequest(ApiResponse<DonHangDetailDto>.BadRequest("Kỹ thuật viên không tồn tại hoặc không còn hoạt động."));
+            }
+
+            var branchId = request.IdCoSo ?? item.IdCoSo;
+            if (!await IsActiveBranchAsync(branchId))
+            {
+                return BadRequest(ApiResponse<DonHangDetailDto>.BadRequest("Cơ sở cửa hàng không tồn tại hoặc đã ngừng hoạt động."));
+            }
+
             item.TenKH = request.TenKH.Trim();
             item.SoDT = request.SoDT.Trim();
             item.DiaChi = request.DiaChi?.Trim();
@@ -156,7 +184,9 @@ namespace PhoneCare_API.Controllers
             item.Mau = request.Mau?.Trim();
             item.Password = request.Password;
             item.Level = request.Level;
-            item.LoaiKyThuat = request.LoaiKyThuat.Trim();
+            item.LoaiKyThuat = technician.FullName;
+            item.IdKyThuatVien = technician.Id;
+            item.IdCoSo = branchId;
             item.TinhTrang = request.TinhTrang;
             item.TinhTrangMay = request.TinhTrangMay.Trim();
             item.LoaiDichVu = request.LoaiDichVu?.Trim();
@@ -215,16 +245,24 @@ namespace PhoneCare_API.Controllers
         /// Lấy danh sách dịch vụ thuộc đơn hàng được yêu cầu.
         /// </summary>
         [HttpGet("{donHangId:int}/dich-vu")]
-        public async Task<ActionResult<ApiResponse<IEnumerable<DichVuDto>>>> GetServices(int donHangId)
+        public async Task<ActionResult<ApiResponse<IEnumerable<DichVuDto>>>> GetServices(
+            int donHangId,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
             var current = _currentUserService.GetCurrentUser(HttpContext);
             if (current == null) return Unauthorized(ApiResponse<IEnumerable<DichVuDto>>.Unauthorized("Vui lòng đăng nhập."));
             if (!PermissionService.CanViewOrders(current.LoaiNhanVien)) return StatusCode(StatusCodes.Status403Forbidden, ApiResponse<IEnumerable<DichVuDto>>.Forbidden("Bạn không có quyền xem đơn hàng."));
 
             if (!await _db.DonHangs.AnyAsync(x => x.Id == donHangId && !x.IsDeleted)) return NotFound(ApiResponse<IEnumerable<DichVuDto>>.NotFound("Không tìm thấy đơn hàng."));
+            pageNumber = Math.Max(pageNumber, 1);
+            pageSize = Math.Clamp(pageSize, 1, 100);
+
             var data = await _db.DichVus
                 .Where(x => x.IdDonHang == donHangId && !x.IsDeleted)
                 .OrderBy(x => x.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(x => new DichVuDto { Id = x.Id, TenDichVu = x.TenDichVu, DonGia = x.DonGia, IdDonHang = x.IdDonHang })
                 .ToListAsync();
             return Ok(ApiResponse<IEnumerable<DichVuDto>>.Ok("Lấy danh sách dịch vụ thành công.", data));
@@ -324,7 +362,7 @@ namespace PhoneCare_API.Controllers
             if (string.IsNullOrWhiteSpace(request.IMEI)) return "IMEI không được để trống.";
             if (!request.IMEI.All(char.IsDigit) || request.IMEI.Length < 14 || request.IMEI.Length > 17) return "IMEI phải là dãy số từ 14 đến 17 chữ số.";
             if (string.IsNullOrWhiteSpace(request.TinhTrangMay)) return "Tình trạng máy không được để trống.";
-            if (string.IsNullOrWhiteSpace(request.LoaiKyThuat)) return "Vui lòng chọn kỹ thuật viên.";
+            if (!request.IdKyThuatVien.HasValue || request.IdKyThuatVien.Value <= 0) return "Vui lòng chọn kỹ thuật viên.";
             if (request.Level < 1 || request.Level > 10) return "Level phải từ 1 đến 10.";
             if (!RepairStatusService.IsValid(request.TinhTrang)) return "Trạng thái không hợp lệ.";
             return null;
@@ -346,8 +384,28 @@ namespace PhoneCare_API.Controllers
         private async Task LoadOrderReferences(DonHang item)
         {
             await _db.Entry(item).Reference(x => x.NhanVien).LoadAsync();
+            await _db.Entry(item).Reference(x => x.KyThuatVien).LoadAsync();
             await _db.Entry(item).Reference(x => x.CoSoCuaHang).LoadAsync();
             await _db.Entry(item).Collection(x => x.DichVus).LoadAsync();
+        }
+
+        private Task<NhanVien?> FindTechnicianAsync(int? technicianId)
+        {
+            if (!technicianId.HasValue || technicianId.Value <= 0)
+            {
+                return Task.FromResult<NhanVien?>(null);
+            }
+
+            return _db.NhanViens.FirstOrDefaultAsync(x =>
+                x.Id == technicianId.Value &&
+                !x.IsDeleted &&
+                !x.KhoaTaiKhoan &&
+                x.LoaiNhanVien == PermissionService.KyThuat);
+        }
+
+        private Task<bool> IsActiveBranchAsync(int branchId)
+        {
+            return _db.CoSoCuaHangs.AnyAsync(x => x.Id == branchId && !x.IsDeleted);
         }
 
         /// <summary>
@@ -383,6 +441,8 @@ namespace PhoneCare_API.Controllers
                 NgayNhan = item.NgayNhan,
                 NguoiNhan = item.NhanVien?.FullName ?? string.Empty,
                 LoaiKyThuat = item.LoaiKyThuat,
+                IdKyThuatVien = item.IdKyThuatVien,
+                KyThuatVien = item.KyThuatVien?.FullName ?? item.LoaiKyThuat,
                 TinhTrang = item.TinhTrang,
                 TinhTrangText = RepairStatusService.GetText(item.TinhTrang),
                 TinhTrangMay = item.TinhTrangMay,

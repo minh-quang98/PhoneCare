@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PhoneCare_API.Data;
 
@@ -11,9 +12,11 @@ using PhoneCare_API.Data;
 namespace PhoneCare_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260713042744_MakeOptionalFieldsNullable")]
+    partial class MakeOptionalFieldsNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,9 +139,6 @@ namespace PhoneCare_API.Migrations
                     b.Property<int>("IdCoSo")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IdKyThuatVien")
-                        .HasColumnType("int");
-
                     b.Property<int>("IdNguoiNhan")
                         .HasColumnType("int");
 
@@ -187,8 +187,6 @@ namespace PhoneCare_API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IdCoSo");
-
-                    b.HasIndex("IdKyThuatVien");
 
                     b.HasIndex("IdNguoiNhan");
 
@@ -284,11 +282,6 @@ namespace PhoneCare_API.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("PhoneCare.Models.NhanVien", "KyThuatVien")
-                        .WithMany("DonHangsKyThuat")
-                        .HasForeignKey("IdKyThuatVien")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("PhoneCare.Models.NhanVien", "NhanVien")
                         .WithMany("DonHangsNhan")
                         .HasForeignKey("IdNguoiNhan")
@@ -296,8 +289,6 @@ namespace PhoneCare_API.Migrations
                         .IsRequired();
 
                     b.Navigation("CoSoCuaHang");
-
-                    b.Navigation("KyThuatVien");
 
                     b.Navigation("NhanVien");
                 });
@@ -327,8 +318,6 @@ namespace PhoneCare_API.Migrations
 
             modelBuilder.Entity("PhoneCare.Models.NhanVien", b =>
                 {
-                    b.Navigation("DonHangsKyThuat");
-
                     b.Navigation("DonHangsNhan");
                 });
 #pragma warning restore 612, 618

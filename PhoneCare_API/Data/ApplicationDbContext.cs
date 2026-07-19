@@ -46,6 +46,12 @@ namespace PhoneCare_API.Data
                 .HasForeignKey(dh => dh.IdNguoiNhan)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<DonHang>()
+                .HasOne(dh => dh.KyThuatVien)
+                .WithMany(nv => nv.DonHangsKyThuat)
+                .HasForeignKey(dh => dh.IdKyThuatVien)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // DONHANG - DICHVU
             modelBuilder.Entity<DichVu>()
                 .HasOne(dv => dv.DonHang)

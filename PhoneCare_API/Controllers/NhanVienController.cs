@@ -27,15 +27,23 @@ namespace PhoneCare_API.Controllers
         /// Lấy danh sách bản ghi hợp lệ và trả về cho client.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<NhanVienListItemDto>>>> GetAll()
+        public async Task<ActionResult<ApiResponse<IEnumerable<NhanVienListItemDto>>>> GetAll(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
             var current = _currentUserService.GetCurrentUser(HttpContext);
             if (current == null) return Unauthorized(ApiResponse<IEnumerable<NhanVienListItemDto>>.Unauthorized("Vui lòng đăng nhập."));
             if (!PermissionService.CanManageEmployees(current.LoaiNhanVien)) return StatusCode(StatusCodes.Status403Forbidden, ApiResponse<IEnumerable<NhanVienListItemDto>>.Forbidden("Bạn không có quyền quản lý nhân viên."));
 
+            pageNumber = Math.Max(pageNumber, 1);
+            pageSize = Math.Clamp(pageSize, 1, 100);
+
             var data = await _db.NhanViens
                 .Where(x => !x.IsDeleted)
                 .OrderBy(x => x.FullName)
+                .ThenBy(x => x.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(x => new NhanVienListItemDto
                 {
                     Id = x.Id,

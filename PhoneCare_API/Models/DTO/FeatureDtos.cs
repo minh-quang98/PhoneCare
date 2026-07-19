@@ -86,6 +86,8 @@ namespace PhoneCare_API.Models.DTO
         public DateTime? NgayNhan { get; set; }
         public string NguoiNhan { get; set; } = string.Empty;
         public string? LoaiKyThuat { get; set; }
+        public int? IdKyThuatVien { get; set; }
+        public string? KyThuatVien { get; set; }
         public int TinhTrang { get; set; }
         public string TinhTrangText { get; set; } = string.Empty;
         public int Level { get; set; }
@@ -115,7 +117,9 @@ namespace PhoneCare_API.Models.DTO
         public string? Mau { get; set; }
         public string? Password { get; set; }
         public int Level { get; set; }
-        public string LoaiKyThuat { get; set; } = string.Empty;
+        public string? LoaiKyThuat { get; set; }
+        public int? IdKyThuatVien { get; set; }
+        public int? IdCoSo { get; set; }
         public int TinhTrang { get; set; }
         public string TinhTrangMay { get; set; } = string.Empty;
         public string? LoaiDichVu { get; set; }

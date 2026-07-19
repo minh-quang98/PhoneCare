@@ -36,5 +36,6 @@ namespace PhoneCare.Models
         public virtual CoSoCuaHang CoSoCuaHang { get; set; }
 
         public virtual ICollection<DonHang> DonHangsNhan { get; set; }
+        public virtual ICollection<DonHang> DonHangsKyThuat { get; set; }
     }
 }

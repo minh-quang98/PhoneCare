@@ -25,14 +25,22 @@ namespace PhoneCare_API.Controllers
         }
 
         /// <summary>
-        /// Lấy danh sách bản ghi hợp lệ và trả về cho client.
+        /// Lấy danh sách bản ghi hợp lệ theo từng trang và trả về cho client.
         /// </summary>
         [HttpGet]
-        public async Task<ActionResult<ApiResponse<IEnumerable<CoSoCuaHangDTO>>>> GetAll()
+        public async Task<ActionResult<ApiResponse<IEnumerable<CoSoCuaHangDTO>>>> GetAll(
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
+            pageNumber = Math.Max(pageNumber, 1);
+            pageSize = Math.Clamp(pageSize, 1, 100);
+
             var data = await _db.CoSoCuaHangs
                 .Where(x => !x.IsDeleted)
                 .OrderBy(x => x.Name)
+                .ThenBy(x => x.Id)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
                 .Select(x => new CoSoCuaHangDTO
                 {
                     Id = x.Id,

@@ -35,6 +35,7 @@ namespace PhoneCare.Models
         public DateTime? NgayNhan { get; set; }
 
         public int IdNguoiNhan { get; set; }
+        public int? IdKyThuatVien { get; set; }
 
         public bool IsDeleted { get; set; }
 
@@ -48,6 +49,9 @@ namespace PhoneCare.Models
         // Navigation
         [ForeignKey("IdNguoiNhan")]
         public virtual NhanVien NhanVien { get; set; }
+
+        [ForeignKey("IdKyThuatVien")]
+        public virtual NhanVien? KyThuatVien { get; set; }
 
         [ForeignKey("IdCoSo")]
         public virtual CoSoCuaHang CoSoCuaHang { get; set; }

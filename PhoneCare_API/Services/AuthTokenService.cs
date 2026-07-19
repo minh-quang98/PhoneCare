@@ -8,13 +8,15 @@ namespace PhoneCare_API.Services
     public class AuthTokenService
     {
         private readonly IConfiguration _configuration;
+        private readonly IWebHostEnvironment _environment;
 
         /// <summary>
         /// Khởi tạo dịch vụ tạo và xác thực token từ cấu hình ứng dụng.
         /// </summary>
-        public AuthTokenService(IConfiguration configuration)
+        public AuthTokenService(IConfiguration configuration, IWebHostEnvironment environment)
         {
             _configuration = configuration;
+            _environment = environment;
         }
 
         /// <summary>
@@ -87,14 +89,26 @@ namespace PhoneCare_API.Services
         /// </summary>
         private string Sign(string payloadPart)
         {
+            var secret = GetSecret();
+            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
+            return Base64UrlEncode(hmac.ComputeHash(Encoding.UTF8.GetBytes(payloadPart)));
+        }
+
+        private string GetSecret()
+        {
             var secret = _configuration["Auth:Secret"];
             if (string.IsNullOrWhiteSpace(secret))
             {
-                secret = "PhoneCare_API_Default_Development_Secret_Change_Me";
+                throw new InvalidOperationException("Missing Auth:Secret. Set it with Auth__Secret on the server.");
             }
 
-            using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
-            return Base64UrlEncode(hmac.ComputeHash(Encoding.UTF8.GetBytes(payloadPart)));
+            if (!_environment.IsDevelopment()
+                && secret.Contains("Development", StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException("Auth:Secret is using a development value. Set a production secret.");
+            }
+
+            return secret;
         }
 
         /// <summary>

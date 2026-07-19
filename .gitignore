@@ -351,6 +351,11 @@ ASALocalRun/
 .localhistory/
 App.Local.config
 
+# Local/production ASP.NET Core settings with secrets.
+**/appsettings.Production.json
+**/appsettings.Local.json
+**/appsettings.*.local.json
+
 # BeatPulse healthcheck temp database
 healthchecksdb
 

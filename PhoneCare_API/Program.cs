@@ -10,14 +10,34 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+var phoneCareConnectionString = builder.Configuration.GetConnectionString("PhoneCareDbContext");
+if (string.IsNullOrWhiteSpace(phoneCareConnectionString))
+{
+    throw new InvalidOperationException(
+        "Missing ConnectionStrings:PhoneCareDbContext. Set it with ConnectionStrings__PhoneCareDbContext on the server.");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("PhoneCareDbContext")));
+    options.UseSqlServer(phoneCareConnectionString));
 
 builder.Services.AddAutoMapper(cfg => { }, typeof(MappingProfile).Assembly);
 builder.Services.AddScoped<AuthTokenService>();
 builder.Services.AddScoped<CurrentUserService>();
 
 builder.Services.AddControllers();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        policy.WithOrigins(
+                "http://localhost:3000",
+                "http://localhost:4200",
+                "http://192.168.1.49:8081",
+                "https://phonecare-fe.com")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi(options =>
 {
@@ -54,12 +74,14 @@ var app = builder.Build();
 
 // Bắt mọi exception chưa được xử lý từ các API phía dưới pipeline.
 app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseCors("Frontend");
+
 
 // Yêu cầu token hợp lệ cho toàn bộ API, ngoại trừ endpoint đăng nhập.
 app.UseMiddleware<ApiAuthenticationMiddleware>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.MapOpenApi();
     app.MapScalarApiReference();
